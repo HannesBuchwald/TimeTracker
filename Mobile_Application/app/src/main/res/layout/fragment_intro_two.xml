@@ -3,7 +3,7 @@
     xmlns:float="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.hdm.app.sambia.screens.FragmentIntroTwo"
+    tools:context="org.hdm.app.timetracker.screens.FragmentIntroTwo"
     android:rowCount="3"
     android:columnCount="3"
     android:padding="30dp"

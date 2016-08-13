@@ -9,7 +9,7 @@
 
 
     <fragment
-        android:name="org.hdm.app.sambia.screens.FragmentContainer"
+        android:name="org.hdm.app.timetracker.screens.FragmentContainer"
         android:id="@+id/btn_flip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
