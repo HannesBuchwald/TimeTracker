@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:float="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.hdm.app.sambia.screens.FragmentIntroThird"
+    android:rowCount="3"
+    android:columnCount="3"
+    android:padding="30dp"
+    android:background="@color/yellow">
+
+    <TextView
+        android:id="@+id/intro_three_headline"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Farming"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/forest"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Land Wrapper -->
+    <LinearLayout
+        android:id="@+id/owned_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cultivated_wrapper"
+        >
+
+        <!-- Land Owned -->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_owned"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/white"
+            android:layout_weight="1"
+            >
+
+            <EditText
+                android:id="@+id/input_owned"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Land Owned"
+                android:textColor="@color/white"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <!-- Cultivated Wrapper -->
+    <LinearLayout
+        android:id="@+id/cultivated_wrapper"
+        android:layout_marginTop="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="55dp"
+        >
+
+        <!-- Land Owned -->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_cultivated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/white"
+            android:layout_weight="1"
+            >
+
+            <EditText
+                android:id="@+id/input_cultivated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Land Cultivated"
+                android:textColor="@color/white"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

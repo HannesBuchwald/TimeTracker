@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+
+    >
+
+
+    <ImageView
+        android:id="@+id/iv_background_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="11dp"
+        android:alpha="0.2"
+        android:background="@android:color/holo_blue_bright"></ImageView>
+
+    <ImageView
+        android:id="@+id/iv_background_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="59dp"
+        android:alpha="0.2"
+        android:background="@android:color/holo_blue_bright"></ImageView>
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="right"
+        android:paddingRight="10dp"
+        android:text="Title"
+        android:textSize="18sp" />
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="70dp"
+            android:paddingRight="10dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="11dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+               >
+
+            <android.support.v7.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rv_calender_item_content"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp" />
+
+                <Button
+                    android:id="@+id/btn_calendar_row_add"
+                    android:layout_weight="7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@android:color/holo_red_light"
+                    android:background="@color/transparent"
+                    android:textSize="24sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+</RelativeLayout>

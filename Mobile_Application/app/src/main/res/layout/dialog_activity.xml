@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="300dp"
+    android:layout_height="150dp"
+    android:padding="20dp"
+    android:background="@android:color/holo_red_light"
+    >
+
+
+        <ImageView
+            android:id="@+id/iv_activity_manual"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/shovel"
+            android:padding="5dp"
+            />
+        <ImageView
+            android:id="@+id/iv_activity_animal"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/cow"
+            android:padding="5dp"
+
+            />
+        <ImageView
+            android:id="@+id/iv_activity_tracker"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/tracker"
+            android:padding="5dp"
+
+            />
+
+
+</LinearLayout>
