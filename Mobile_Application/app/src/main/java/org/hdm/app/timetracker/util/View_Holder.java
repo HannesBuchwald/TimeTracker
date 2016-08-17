@@ -136,9 +136,12 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 // lollipop and above
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.green));
             }
-            iv_play.setVisibility(View.VISIBLE);
-            time.setVisibility(View.VISIBLE);
-            if(activityList) runCount();
+
+
+//            iv_play.setVisibility(View.VISIBLE);
+//            time.setVisibility(View.VISIBLE);
+//            if(activityList) runCount();
+
 
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -148,9 +151,13 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 // lollipop and above
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.white));
             }
-            iv_play.setVisibility(View.GONE);
-            time.setVisibility(View.GONE);
-            stopCount();
+
+
+//            iv_play.setVisibility(View.GONE);
+//            time.setVisibility(View.GONE);
+//            stopCount();
+
+
         }
     }
 
