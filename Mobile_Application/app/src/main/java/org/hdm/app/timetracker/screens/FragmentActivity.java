@@ -132,6 +132,8 @@ public class FragmentActivity extends BaseFragemnt implements
     public void didClickOnActivityListItem(String title, View_Holder holder) {
 
 
+
+
         // Get the DataObject which was clicked
         // there are all information stored about the activity object
         // state, names image ect.
@@ -143,7 +145,7 @@ public class FragmentActivity extends BaseFragemnt implements
         } else {
 
             // when Activity is not active
-            if (!activityObject.activeState) {
+            if (!activityObject.activeState && var.activeCount<2) {
 
                 // ToDo Show DialogFragment  -  not at the Moment had to bee discussed in Africa
 //            if(list.get(position).sub_category && list.get(position).activeState) {
@@ -164,9 +166,10 @@ public class FragmentActivity extends BaseFragemnt implements
                 dataManager.activeList.add(activityObject.title);
 
 
-            } else {
+            } else if(activityObject.activeState){
 
-                // Deactivate Activity
+
+                    // Deactivate Activity
                 activityObject.activeState = false;
                 activityObject.count = 0;
 
@@ -221,6 +224,8 @@ public class FragmentActivity extends BaseFragemnt implements
                     + activityObject.activeState + " "
                     + activityObject.timeFrameList.size());
         }
+
+
     }
 
     @Override
