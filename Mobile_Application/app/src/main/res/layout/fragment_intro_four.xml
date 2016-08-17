@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.hdm.app.sambia.screens.FragmentIntroFour"
+    tools:context="org.hdm.app.timetracker.screens.FragmentIntroFour"
     android:rowCount="3"
     android:columnCount="3"
     android:padding="30dp"
