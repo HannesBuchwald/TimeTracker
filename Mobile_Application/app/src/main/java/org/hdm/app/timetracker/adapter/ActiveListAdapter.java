@@ -53,7 +53,7 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         holder.setListener(this);
         holder.title.setText(object.title);
         Log.d(TAG, "size " + list.size());
-        if(object.image != null ) holder.imageView.setImageBitmap(object.image);
+        if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
     }
 
 

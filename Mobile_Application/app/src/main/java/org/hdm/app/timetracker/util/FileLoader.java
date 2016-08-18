@@ -10,6 +10,9 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.main.MainActivity;
@@ -23,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -71,8 +76,6 @@ public class FileLoader {
             copyFileFromAssetToExternal(JSONFILE, path);
         }
 
-        // Check if "temp-activities.json" is in External Folder
-//        if(isExternalFileExists(path + TEMPACTIVITIES)) fileName =  TEMPACTIVITIES;
 
         loadActivityObjects(path, fileName);
     }
@@ -274,22 +277,10 @@ public class FileLoader {
         String jsonString = readStringFromExternalFolder(folderPath, fileName);
         if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
 
+
+
         MyJsonParser jParser = new MyJsonParser();
         ArrayList<ActivityObject> list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
-        if (DEBUGMODE) Log.d(TAG, "list " + list);
-
-        if (list == null) {
-            jsonString = readStringFromExternalFolder(folderPath, JSONFILE);
-            if (DEBUGMODE) Log.d(TAG, "list == null" + jsonString);
-
-            if(jsonString == null) {
-                    jsonString = readFromAssets(context, JSONFILE);
-                    if (DEBUGMODE) Log.d(TAG, "jasonString == null" + jsonString);
-            }
-            list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
-        }
-
-
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ALPHA_8;
         options.inSampleSize = 2; //reduce quality
@@ -307,18 +298,19 @@ public class FileLoader {
 
             // check if Image is in externalFolder available
             // if not than save it from asset to external load again
-            if (isExternalFileExists(objectImgPath)) {
-                activityObject.image = BitmapFactory.decodeFile(objectImgPath, options);
-            } else {
+            if (!isExternalFileExists(objectImgPath)) {
                 // Save Image from Asset to External
                 copyFileFromAssetToExternal(activityObject.imageName, imgPath);
-                activityObject.image = BitmapFactory.decodeFile(objectImgPath, options);
             }
+
+            DataManager.getInstance().imageMap.put(
+                    activityObject.imageName,
+                    BitmapFactory.decodeFile(objectImgPath, options));
             DataManager.getInstance().setActivityObject(activityObject);
         }
-
-
     }
+
+
 
 
     /**************************

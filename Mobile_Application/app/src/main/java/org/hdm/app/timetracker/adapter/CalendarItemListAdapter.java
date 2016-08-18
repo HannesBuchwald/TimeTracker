@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.CalendarItemOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 import org.hdm.app.timetracker.util.Variables;
@@ -64,7 +65,7 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
         if(holder.imageView != null) {
 
             ActivityObject dataa =(ActivityObject) data.get(list.get(position));
-            if(dataa.image != null ) holder.imageView.setImageBitmap(dataa.image);
+            if(DataManager.getInstance().imageMap.get(dataa.imageName) != null ) holder.imageView.setImageBitmap(DataManager.getInstance().imageMap.get(dataa.imageName));
             holder.title.setText(dataa.title);
             holder.setCalendarItemBackground(var.editable);
         }

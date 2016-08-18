@@ -62,6 +62,8 @@ public class MyJsonParser {
 
 
 
+
+
     public String createActivityStateJson() {
 
         ActivityState activityState = new ActivityState();
@@ -69,6 +71,8 @@ public class MyJsonParser {
         logName  = TEMPACTIVITIES;
         return jsonInString;
     }
+
+
 
 
 

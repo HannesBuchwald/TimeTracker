@@ -22,7 +22,6 @@ public class ActivityObject extends Object  {
     public boolean sub_category = false;
 
     public String imageName = "";
-    public Bitmap image = null;
     public ArrayList<TimeFrame> timeFrameList = null;
 
 
@@ -34,6 +33,9 @@ public class ActivityObject extends Object  {
     public Date startTime = null;
     public Date endTime = null;
     private String service = null;
+
+
+
 
     public ActivityObject() {
         timeFrameList = new ArrayList<>();
