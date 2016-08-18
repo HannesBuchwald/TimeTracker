@@ -40,6 +40,7 @@ public class Start extends Application{
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+
                 initNotification();
             }
         };

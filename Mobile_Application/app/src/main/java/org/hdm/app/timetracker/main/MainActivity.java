@@ -1,27 +1,38 @@
 package org.hdm.app.timetracker.main;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
+import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.hdm.app.timetracker.IntroActivity;
 import org.hdm.app.timetracker.R;
+import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.util.FileLoader;
 import org.hdm.app.timetracker.util.Settings;
+import org.hdm.app.timetracker.util.Variables;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.*;
 
@@ -52,14 +63,146 @@ public class MainActivity extends Activity  {
        // initFirstStart();
         initConfiguration();
         initCalenderMap();
+        initDataLogger();
+        initResetRecordedData();
+        loadSavedObjectState();
         setFullScreen(true);
         setContentView(R.layout.activity_main);
+        
+
+
+        Log.d(TAG, "ImageSize " + DataManager.getInstance().imageMap.size());
+
     }
 
 
+    private void initResetRecordedData() {
+
+
+        Calendar calEndTime = Calendar.getInstance();
+        Date endTime = calEndTime.getTime();
+        endTime.setSeconds(00);
+        endTime.setMinutes(30);
+        endTime.setHours(23);
+
+
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                DataManager.getInstance().activeList = new ArrayList<>();
+                DataManager.getInstance().calenderMap = new TreeMap<>();
+                initConfiguration();
+                Log.d(TAG, "restart");
+            }
+        };
+        timer.schedule(timerTask, endTime.getTime());
+
+    }
+
+
+    Handler handler = new Handler();
+
+    private void initDataLogger() {
+
+       final FileLoader fl = new FileLoader(this);
+
+       Timer timer = new Timer();
+       TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                final Date currentDate = Calendar.getInstance().getTime();
+
+                Log.d(TAG, "currentDate " + currentDate.toString());
+
+                Calendar calEndTime = Calendar.getInstance();
+                Date endTime = calEndTime.getTime();
+                endTime.setSeconds(00);
+                endTime.setMinutes(14);
+                endTime.setHours(23);
+                calEndTime.setTime(endTime);
+                final Date time = calEndTime.getTime();
+
+
+                endTime.setHours(4);
+                calEndTime.setTime(endTime);
+                final Date startTime = calEndTime.getTime();
+
+//                Log.d(TAG, "time " + time.toString() );
+//                Log.d(TAG, "timee " + currentDate.toString());
+//                Log.d(TAG, "timeee " + startTime.toString());
+
+                handler.post(new Runnable() {
+                    public void run() {
+
+                        if(currentDate.before(time) && currentDate.after(startTime)){
+                            fl.saveLogsOnExternal();
+                        }
+                    }
+                });
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask,0, 900000);
+    }
+
+
+    private void loadSavedObjectState() {
+        Gson gson = new Gson();
+        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+
+        if(mPrefs.contains("MyObject")){
+
+            String json = mPrefs.getString("MyObject", "");
+            Log.d(TAG, "Jsonnnnnn " + json);
 
 
 
+            Type typeOfHashMap = new TypeToken<LinkedHashMap<String, ActivityObject>>() { }.getType();
+            LinkedHashMap<String, ActivityObject> newMap = gson.fromJson(json, typeOfHashMap); // This type must match TypeToken
+            DataManager.getInstance().activityMap = newMap;
+
+
+            if(mPrefs.contains("ActiveList")){
+                json = mPrefs.getString("ActiveList", "");
+                Type type = new TypeToken<List<String>>(){}.getType();
+                ArrayList<String> activeList = gson.fromJson(json, type);
+                DataManager.getInstance().activeList = activeList;
+
+            }
+
+            if(mPrefs.contains("CalendarMap")){
+                json = mPrefs.getString("CalendarMap", "");
+                Log.d(TAG, "Jsonnnnnn " + json);
+                Type type = new TypeToken<TreeMap<String, ArrayList<String>>>(){}.getType();
+                TreeMap<String, ArrayList<String>> calendarMap = gson.fromJson(json, type);
+                DataManager.getInstance().calenderMap = calendarMap;
+                Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap);
+                Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap.size());
+
+            }
+
+
+
+
+
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.remove("MyObject");
+            editor.remove("ActiveList");
+            editor.remove("CalendarMap");
+            editor.apply();
+        }
+
+
+        Variables.getInstance().activeCount = DataManager.getInstance().activeList.size();
+
+    }
+
+    // Do nothing on backpress - for ui reason - simplify navigation
+    @Override
+    public void onBackPressed() {
+        // Your Code Here. Leave empty if you want nothing to happen on back press.
+    }
 
 
 
@@ -72,8 +215,9 @@ public class MainActivity extends Activity  {
         if(DEBUGMODE) Log.d(TAG, "onStop");
         FileLoader fl = new FileLoader(this);
         fl.saveLogsOnExternal();
-//        fl.saveActivityStateOnExternal();
+        saveCurrentState();
     }
+
 
 
 
@@ -149,7 +293,6 @@ public class MainActivity extends Activity  {
         endTime.setMinutes(startMin);
         endTime.setSeconds(startMin);
         calEndTime.setTime(endTime);
-//        calEndTime.add(Calendar.DAY_OF_WEEK, 1);
         calEndTime.add(Calendar.MINUTE, -15);
         endTime = calEndTime.getTime();
 
@@ -171,6 +314,34 @@ public class MainActivity extends Activity  {
     private void syncWithServer() {
 //        new PullActivitiesTask(this).execute();
 //        new PushActivitiesTask(this).execute();
+    }
+
+
+
+    private void saveCurrentState() {
+
+        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+
+        // Save ObjectActivity Map
+        Map<String, ActivityObject> map = DataManager.getInstance().getObjectMap();
+        String json = gson.toJson(map);
+        prefsEditor.putString("MyObject", json);
+
+
+        // Save ActiveList
+        ArrayList<String> activeList = DataManager.getInstance().activeList;
+        json = gson.toJson(activeList);
+        prefsEditor.putString("ActiveList", json);
+
+
+        // Save CalendarMap
+        TreeMap<String, ArrayList<String>> calendarMap = DataManager.getInstance().calenderMap;
+        json = gson.toJson(calendarMap);
+        prefsEditor.putString("CalendarMap", json);
+
+        prefsEditor.commit();
     }
 
 }

@@ -1,8 +1,10 @@
 package org.hdm.app.timetracker.datastorage;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
@@ -18,16 +20,17 @@ public class DataManager {
     private static DataManager instance = null;
 
 
-    private ArrayList<ActivityObject> mActivityObject = null;
+    public HashMap<String, Bitmap> imageMap = new HashMap<>();
+
 
     // In this Map are all the Activity Objects stored
     // It is used as DataBase from every Screen
-    private LinkedHashMap<String, ActivityObject> activityMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, ActivityObject> activityMap = new LinkedHashMap<>();
 
 
 
     // In this map is stored the activitys for Calender list
-    private TreeMap<String, ArrayList<String>> calenderMap = new TreeMap<>();
+    public TreeMap<String, ArrayList<String>> calenderMap = new TreeMap<>();
 
 
 

@@ -316,7 +316,7 @@ public class FragmentActivity extends BaseFragemnt implements
             recyclerView_activeData.setVisibility(View.VISIBLE);
 
             setMenuTitle("Activity");
-            setMenuBackground(android.R.color.holo_green_dark);
+            setMenuBackground(android.R.color.holo_orange_light);
             setMenuBtn(R.drawable.ic_forward);
         }
     }
