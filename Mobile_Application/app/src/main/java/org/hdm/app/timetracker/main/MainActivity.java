@@ -21,6 +21,7 @@ import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.util.FileLoader;
 import org.hdm.app.timetracker.util.Settings;
+import org.hdm.app.timetracker.util.Variables;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -114,14 +115,17 @@ public class MainActivity extends Activity  {
             editor.remove("CalendarMap");
             editor.apply();
         }
+
+
+        Variables.getInstance().activeCount = DataManager.getInstance().activeList.size();
+
     }
 
     // Do nothing on backpress - for ui reason - simplify navigation
-//    @Override
-//    public void onBackPressed()
-//    {
-//        // Your Code Here. Leave empty if you want nothing to happen on back press.
-//    }
+    @Override
+    public void onBackPressed() {
+        // Your Code Here. Leave empty if you want nothing to happen on back press.
+    }
 
 
 
@@ -259,9 +263,6 @@ public class MainActivity extends Activity  {
 
         // Save CalendarMap
         TreeMap<String, ArrayList<String>> calendarMap = DataManager.getInstance().calenderMap;
-        Log.d(TAG, "Jsonnnnnn " + calendarMap);
-        Log.d(TAG, "Jsonnnnnn " + calendarMap.size());
-
         json = gson.toJson(calendarMap);
         prefsEditor.putString("CalendarMap", json);
 
