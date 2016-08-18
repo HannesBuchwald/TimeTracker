@@ -351,6 +351,7 @@ public class FileLoader {
         String path = enviroment.toString() + "/" + getPropertiesFromAssets(PROPERTIESFILE)
                 .getProperty(LOGFOLDER);
         writeStringOnExternal(logFile, parser.logName, path);
+
     }
 
 

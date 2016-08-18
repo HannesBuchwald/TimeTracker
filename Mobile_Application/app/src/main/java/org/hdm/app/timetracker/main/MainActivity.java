@@ -1,13 +1,13 @@
 package org.hdm.app.timetracker.main;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.*;
@@ -61,16 +63,91 @@ public class MainActivity extends Activity  {
        // initFirstStart();
         initConfiguration();
         initCalenderMap();
+        initDataLogger();
+        initResetRecordedData();
+        loadSavedObjectState();
         setFullScreen(true);
         setContentView(R.layout.activity_main);
-        initStoredFile();
+        
 
 
         Log.d(TAG, "ImageSize " + DataManager.getInstance().imageMap.size());
 
     }
 
-    private void initStoredFile() {
+
+    private void initResetRecordedData() {
+
+
+        Calendar calEndTime = Calendar.getInstance();
+        Date endTime = calEndTime.getTime();
+        endTime.setSeconds(00);
+        endTime.setMinutes(30);
+        endTime.setHours(23);
+
+
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                DataManager.getInstance().activeList = new ArrayList<>();
+                DataManager.getInstance().calenderMap = new TreeMap<>();
+                initConfiguration();
+                Log.d(TAG, "restart");
+            }
+        };
+        timer.schedule(timerTask, endTime.getTime());
+
+    }
+
+
+    Handler handler = new Handler();
+
+    private void initDataLogger() {
+
+       final FileLoader fl = new FileLoader(this);
+
+       Timer timer = new Timer();
+       TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                final Date currentDate = Calendar.getInstance().getTime();
+
+                Log.d(TAG, "currentDate " + currentDate.toString());
+
+                Calendar calEndTime = Calendar.getInstance();
+                Date endTime = calEndTime.getTime();
+                endTime.setSeconds(00);
+                endTime.setMinutes(14);
+                endTime.setHours(23);
+                calEndTime.setTime(endTime);
+                final Date time = calEndTime.getTime();
+
+
+                endTime.setHours(4);
+                calEndTime.setTime(endTime);
+                final Date startTime = calEndTime.getTime();
+
+//                Log.d(TAG, "time " + time.toString() );
+//                Log.d(TAG, "timee " + currentDate.toString());
+//                Log.d(TAG, "timeee " + startTime.toString());
+
+                handler.post(new Runnable() {
+                    public void run() {
+
+                        if(currentDate.before(time) && currentDate.after(startTime)){
+                            fl.saveLogsOnExternal();
+                        }
+                    }
+                });
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask,0, 900000);
+    }
+
+
+    private void loadSavedObjectState() {
         Gson gson = new Gson();
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
@@ -138,7 +215,6 @@ public class MainActivity extends Activity  {
         if(DEBUGMODE) Log.d(TAG, "onStop");
         FileLoader fl = new FileLoader(this);
         fl.saveLogsOnExternal();
-
         saveCurrentState();
     }
 
@@ -217,7 +293,6 @@ public class MainActivity extends Activity  {
         endTime.setMinutes(startMin);
         endTime.setSeconds(startMin);
         calEndTime.setTime(endTime);
-//        calEndTime.add(Calendar.DAY_OF_WEEK, 1);
         calEndTime.add(Calendar.MINUTE, -15);
         endTime = calEndTime.getTime();
 
