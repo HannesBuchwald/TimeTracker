@@ -17,7 +17,7 @@ public class Variables {
 
 
     /***** Activity Screen *****/
-    public int activityListRows = 3;
+    public int activityListRows = 1;
     public int activeListRow = 1;
     public int activeCount = 0;
 

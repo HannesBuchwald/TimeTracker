@@ -4,87 +4,87 @@
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
       "item": "Hand",
-      "title": "1",
-      "_id": "1",
+      "title": "Beverage Preparation",
+      "_id": "01",
       "imageName": "ic-01.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
-      "item": "Hand",
-      "title": "2",
-      "_id": "2",
+      "item": "Animal",
+      "title": "Beverage Preparation",
+      "_id": "02",
       "imageName": "ic-02.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
-      "item": "Hand",
-      "title": "3",
-      "_id": "3",
+      "item": "Machine",
+      "title": "Beverage Preparation",
+      "_id": "03",
       "imageName": "ic-03.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
       "item": "Hand",
-      "title": "4",
-      "_id": "4",
+      "title": "Hoing",
+      "_id": "04",
       "imageName": "ic-04.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
-      "item": "Hand",
-      "title": "5",
-      "_id": "5",
+      "item": "Animal",
+      "title": "Ploughing",
+      "_id": "05",
       "imageName": "ic-05.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
-      "item": "Hand",
-      "title": "6",
-      "_id": "6",
+      "item": "Machine",
+      "title": "Ploughing",
+      "_id": "06",
       "imageName": "ic-06.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
       "item": "Hand",
-      "title": "7",
-      "_id": "7",
+      "title": "Harrowing",
+      "_id": "07",
       "imageName": "ic-07.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
-      "item": "Hand",
-      "title": "8",
-      "_id": "8",
+      "item": "Animal",
+      "title": "Harrowing",
+      "_id": "08",
       "imageName": "ic-08.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
-      "item": "Hand",
-      "title": "9",
-      "_id": "9",
+      "item": "Machine",
+      "title": "Harrowing",
+      "_id": "09",
       "imageName": "ic-09.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
       "item": "Hand",
-      "title": "10",
+      "title": "Dippling",
       "_id": "10",
-      "imageName": "ic-010.png"
+      "imageName": "ic-10.png"
     },
     {
       "group_activity": "On-Farm-Work",
       "sub_activity": "Land Preparation ",
-      "item": "Hand",
-      "title": "11",
+      "item": "",
+      "title": "Ripping",
       "_id": "11",
       "imageName": "ic-11.png"
     },

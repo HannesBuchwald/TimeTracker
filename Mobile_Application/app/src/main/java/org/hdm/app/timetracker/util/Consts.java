@@ -24,7 +24,7 @@ public final class Consts {
     public final static String CONFIGFOLDER = "configFolder";
     public final static String LOGFOLDER = "logFolder";
 
-    public final static String PROPERTIESFILE = "folder.properties";
+    public final static String PROPERTIESFILE = "config.properties";
 
 
 

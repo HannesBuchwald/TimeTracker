@@ -47,6 +47,7 @@ public class FileLoader {
     private File enviroment = Environment.getExternalStorageDirectory();
     private Context context;
     private Properties properties;
+    private String path;
 
 
     /**************************
@@ -57,29 +58,60 @@ public class FileLoader {
     }
 
 
+
+
+
     /**************************
      * Init File Prozess
      *************************/
 
     public void initFiles() {
 
-        initFolder();
 
 
-        String fileName = JSONFILE;
-        String path = enviroment + "/" + getPropertiesFromAssets(PROPERTIESFILE)
+
+        path = enviroment + "/" + getPropertiesFromAssets(PROPERTIESFILE)
                 .getProperty(CONFIGFOLDER);
 
+        if (!isExternalFileExists(path + PROPERTIESFILE)) {
+            copyFileFromAssetToExternal(PROPERTIESFILE, path);
+        }
+
+        initFolder();
+        initJson();
+        initVariables();
+
+
+    }
+
+
+
+
+    private void initJson() {
+        String fileName = JSONFILE;
         // Check if Json File is in External Folder
         // if not than copy Json file from Asset to external Folder
         if (!isExternalFileExists(path + JSONFILE)) {
             copyFileFromAssetToExternal(JSONFILE, path);
         }
 
-
         loadActivityObjects(path, fileName);
     }
 
+    private void initVariables() {
+
+        String path = enviroment + "/" + getPropertiesFromAssets(PROPERTIESFILE)
+                .getProperty(CONFIGFOLDER)+PROPERTIESFILE;
+
+        Properties properties = getPropertiesFromExternal(path);
+
+
+        String amount  = (String) properties.get("listRow");
+        int i = Integer.parseInt(amount);
+
+        Variables.getInstance().activityListRows = i;
+
+    }
 
     /**************************
      * Assets
@@ -252,14 +284,46 @@ public class FileLoader {
     }
 
 
+
+    public Properties getPropertiesFromExternal(String file) {
+
+
+
+
+        Properties properties = new Properties();
+
+        try {
+            InputStream input = new FileInputStream(file);
+            properties.load(input);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return properties;
+    }
+
+
     public void initFolder() {
 
-        Properties properties = getPropertiesFromAssets(PROPERTIESFILE);
+        String path = enviroment + "/" + getPropertiesFromAssets(PROPERTIESFILE)
+                .getProperty(CONFIGFOLDER)+PROPERTIESFILE;
+
+        Properties properties = getPropertiesFromExternal(path);
+        if(properties == null) {
+        properties = getPropertiesFromAssets(PROPERTIESFILE);
+        }
 
         for (Map.Entry<Object, Object> x : properties.entrySet()) {
             createExternalFolder((String) x.getValue());
         }
     }
+
+
+
 
 
     // Load Content

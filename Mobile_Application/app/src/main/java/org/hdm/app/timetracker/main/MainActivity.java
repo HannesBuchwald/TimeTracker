@@ -1,16 +1,21 @@
 package org.hdm.app.timetracker.main;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -50,11 +55,7 @@ public class MainActivity extends Activity  {
     int startMin = 0;
     int startHour = 6;
     int endHour = 24;
-    int vibr = 100;  // in ms
-    int notifytime = 10000;  // in ms
-    private NotificationManager nmgr;
-    private Notification noti;
-    private boolean appIsRunning;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class MainActivity extends Activity  {
         initConfiguration();
         initCalenderMap();
         initDataLogger();
-        initResetRecordedData();
+//        initResetRecordedData();
         loadSavedObjectState();
         setFullScreen(true);
         setContentView(R.layout.activity_main);
@@ -216,9 +217,21 @@ public class MainActivity extends Activity  {
         FileLoader fl = new FileLoader(this);
         fl.saveLogsOnExternal();
         saveCurrentState();
+//        startActivity(new Intent(this, MainActivity.class));
     }
 
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+            Toast.makeText(this, "You pressed the home button!", Toast.LENGTH_LONG).show();
+        if ((keyCode == KeyEvent.KEYCODE_HOME)) {
+//            return true;
+        }
+//        return super.onKeyDown(keyCode, event);
+        return true;
+    }
 
 
     private void setFullScreen(boolean fullscreen) {
@@ -264,6 +277,7 @@ public class MainActivity extends Activity  {
     private void initConfiguration() {
         // Init the Data Structure - there all the created where hosted
         DataManager.init();
+        Variables.init();
 
         FileLoader fl = new FileLoader(this);
         fl.initFiles();
