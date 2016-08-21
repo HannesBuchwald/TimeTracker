@@ -108,7 +108,7 @@ public class FragmentActivity extends BaseFragemnt implements
         recyclerView.setAdapter(objectAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(
-                var.activityListRows, StaggeredGridLayoutManager.VERTICAL));
+                var.listRows, StaggeredGridLayoutManager.VERTICAL));
     }
 
 

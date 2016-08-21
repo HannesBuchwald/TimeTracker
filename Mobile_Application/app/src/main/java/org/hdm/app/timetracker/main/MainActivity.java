@@ -64,7 +64,7 @@ public class MainActivity extends Activity  {
        // initFirstStart();
         initConfiguration();
         initCalenderMap();
-        initDataLogger();
+ //       initDataLogger();
 //        initResetRecordedData();
         loadSavedObjectState();
         setFullScreen(true);
@@ -211,8 +211,8 @@ public class MainActivity extends Activity  {
         // ToDo Save Objects when App is closed
         if(DEBUGMODE) Log.d(TAG, "onStop");
         FileLoader fl = new FileLoader(this);
-        fl.saveLogsOnExternal();
-        saveCurrentState();
+//        fl.saveLogsOnExternal();
+//        saveCurrentState();
 //        startActivity(new Intent(this, MainActivity.class));
     }
 

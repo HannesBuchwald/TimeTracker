@@ -19,7 +19,7 @@ public class Start extends Application{
 
 
     int notifytime = 900000;  // in ms
-    int vibr = 100;  // in ms
+    int vibr = 5000;  // in ms
 
 
     @Override

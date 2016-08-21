@@ -10,9 +10,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.main.MainActivity;
@@ -26,10 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import static org.hdm.app.timetracker.util.Consts.*;
@@ -47,7 +41,6 @@ public class FileLoader {
     private File enviroment = Environment.getExternalStorageDirectory();
     private Context context;
     private Properties properties;
-    private String path;
 
 
     /**************************
@@ -58,9 +51,6 @@ public class FileLoader {
     }
 
 
-
-
-
     /**************************
      * Init File Prozess
      *************************/
@@ -68,50 +58,119 @@ public class FileLoader {
     public void initFiles() {
 
 
+        initFolder();
+        initConfiguration();
+        initJson();
+
+    }
 
 
-        path = enviroment + "/" + getPropertiesFromAssets(PROPERTIESFILE)
-                .getProperty(CONFIGFOLDER);
+    public void initFolder() {
+
+        createExternalFolder(MAIN_FOLDER);
+        createExternalFolder(IMAGE_FOLDER);
+        createExternalFolder(CONFIG_FOLDER);
+        createExternalFolder(LOGS_FOLDER);
+    }
+
+
+    public void initConfiguration() {
+
+        String path = enviroment + "/" + CONFIG_FOLDER;
+
 
         if (!isExternalFileExists(path + PROPERTIESFILE)) {
             copyFileFromAssetToExternal(PROPERTIESFILE, path);
         }
 
-        initFolder();
-        initJson();
-        initVariables();
+        Properties properties = getPropertiesFromExternal(path + PROPERTIESFILE);
 
+//        Log.d(TAG, "variables "
+//                + Variables.getInstance().user_ID + " // "
+//                + Variables.getInstance().setup + " // "
+//                + Variables.getInstance().maxRecordedActivity + " // "
+//                + Variables.getInstance().listRows + " // "
+//                + Variables.getInstance().vibrationTime + " // "
+//                + Variables.getInstance().notificationPeriode + " // "
+//        );
+
+        if (properties.get("user_ID") != null) {
+            Variables.getInstance().user_ID = (String) properties.get("user_ID");
+        }
+
+        if (properties.get("setup") != null) {
+            Variables.getInstance().setup = (String) properties.get("setup");
+        }
+
+        if (properties.get("maxRecordedActivity") != null) {
+            try {
+                int value = Integer.parseInt((String) properties.get("maxRecordedActivity"));
+                Variables.getInstance().maxRecordedActivity = value;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (properties.get("listRows") != null) {
+
+            try {
+                int value = Integer.parseInt((String) properties.get("listRows"));
+                Variables.getInstance().listRows = value;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (properties.get("vibrationTime") != null) {
+            try {
+                int value = Integer.parseInt((String) properties.get("vibrationTime"));
+                Variables.getInstance().vibrationTime = value;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (properties.get("notificationPeriode") != null) {
+
+            try {
+                int value = Integer.parseInt((String) properties.get("notificationPeriode"));
+                Variables.getInstance().notificationPeriode = value;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+//        Log.d(TAG, "variables "
+//                + Variables.getInstance().user_ID + " // "
+//                + Variables.getInstance().setup + " // "
+//                + Variables.getInstance().maxRecordedActivity + " // "
+//                + Variables.getInstance().listRows + " // "
+//                + Variables.getInstance().vibrationTime + " // "
+//                + Variables.getInstance().notificationPeriode + " // "
+//        );
 
     }
-
-
 
 
     private void initJson() {
-        String fileName = JSONFILE;
-        // Check if Json File is in External Folder
-        // if not than copy Json file from Asset to external Folder
-        if (!isExternalFileExists(path + JSONFILE)) {
-            copyFileFromAssetToExternal(JSONFILE, path);
+
+        String path = enviroment + "/" + CONFIG_FOLDER;
+
+        // Copy all Json files from Intern to External Folder if they not exist
+        String fileName = "standard.json";
+        if (!isExternalFileExists(path + fileName)) {
+            copyFileFromAssetToExternal(fileName, path);
         }
 
+        fileName = "activity.json";
+        if (!isExternalFileExists(path + fileName)) {
+            copyFileFromAssetToExternal(fileName, path);
+        }
+
+        fileName = Variables.getInstance().setup;
         loadActivityObjects(path, fileName);
     }
 
-    private void initVariables() {
-
-        String path = enviroment + "/" + getPropertiesFromAssets(PROPERTIESFILE)
-                .getProperty(CONFIGFOLDER)+PROPERTIESFILE;
-
-        Properties properties = getPropertiesFromExternal(path);
-
-
-        String amount  = (String) properties.get("listRow");
-        int i = Integer.parseInt(amount);
-
-        Variables.getInstance().activityListRows = i;
-
-    }
 
     /**************************
      * Assets
@@ -170,7 +229,6 @@ public class FileLoader {
         return sb.toString();
 
     }
-
 
 
     public boolean copyFileFromAssetToExternal(String fileName, String path) {
@@ -284,10 +342,7 @@ public class FileLoader {
     }
 
 
-
     public Properties getPropertiesFromExternal(String file) {
-
-
 
 
         Properties properties = new Properties();
@@ -307,74 +362,64 @@ public class FileLoader {
     }
 
 
-    public void initFolder() {
-
-        String path = enviroment + "/" + getPropertiesFromAssets(PROPERTIESFILE)
-                .getProperty(CONFIGFOLDER)+PROPERTIESFILE;
-
-        Properties properties = getPropertiesFromExternal(path);
-        if(properties == null) {
-        properties = getPropertiesFromAssets(PROPERTIESFILE);
-        }
-
-        for (Map.Entry<Object, Object> x : properties.entrySet()) {
-            createExternalFolder((String) x.getValue());
-        }
-    }
-
-
-
-
-
     // Load Content
     public void loadActivityObjects(String folderPath, String fileName) {
 
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
+        options.inSampleSize = 2; //reduce quality
+
+
+        // Check if Json File is in External Folder
+        // if not than copy Json file from Asset to external Folder
+        if (!isExternalFileExists(folderPath + fileName)) {
+            copyFileFromAssetToExternal(fileName, folderPath);
+        }
+
+
         if (DEBUGMODE) Log.d(TAG, "loadActivityObjects " + folderPath + fileName);
 
-
-//        // Check if JsonFile is in External Folder if not copy them from Asset to External Folder
-//        if (!isExternalFileExists(folderPath + fileName) && fileName.equals(JSONFILE)) {
-//            copyFileFromAssetToExternal(fileName, folderPath);
-//        }
 
         // Read out JsonFile from External Folder
         String jsonString = readStringFromExternalFolder(folderPath, fileName);
         if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
 
 
-
         MyJsonParser jParser = new MyJsonParser();
         ArrayList<ActivityObject> list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
-        options.inSampleSize = 2; //reduce quality
 
 
-        String imgPath = enviroment.toString() + "/" + getPropertiesFromAssets(PROPERTIESFILE)
-                .getProperty(IMAGEFOLDER);
+        if (list == null) {
+            jsonString = readFromAssets(context, "activity.json");
+            list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
+        }
 
 
-        for (int i = 0; i < list.size(); i++) {
-            ActivityObject activityObject = list.get(i);
+        String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
 
-            Log.d(TAG, "imageName " + activityObject.imageName);
-            String objectImgPath = imgPath + activityObject.imageName;
+        if (list != null) {
 
-            // check if Image is in externalFolder available
-            // if not than save it from asset to external load again
-            if (!isExternalFileExists(objectImgPath)) {
-                // Save Image from Asset to External
-                copyFileFromAssetToExternal(activityObject.imageName, imgPath);
+
+            for (int i = 0; i < list.size(); i++) {
+                ActivityObject activityObject = list.get(i);
+
+                Log.d(TAG, "imageName " + activityObject.imageName);
+                String objectImgPath = imgPath + activityObject.imageName;
+
+                // check if Image is in externalFolder available
+                // if not than save it from asset to external load again
+                if (!isExternalFileExists(objectImgPath)) {
+                    // Save Image from Asset to External
+                    copyFileFromAssetToExternal(activityObject.imageName, imgPath);
+                }
+
+                DataManager.getInstance().imageMap.put(
+                        activityObject.imageName,
+                        BitmapFactory.decodeFile(objectImgPath, options));
+                DataManager.getInstance().setActivityObject(activityObject);
             }
-
-            DataManager.getInstance().imageMap.put(
-                    activityObject.imageName,
-                    BitmapFactory.decodeFile(objectImgPath, options));
-            DataManager.getInstance().setActivityObject(activityObject);
         }
     }
-
-
 
 
     /**************************
@@ -415,7 +460,6 @@ public class FileLoader {
         String path = enviroment.toString() + "/" + getPropertiesFromAssets(PROPERTIESFILE)
                 .getProperty(LOGFOLDER);
         writeStringOnExternal(logFile, parser.logName, path);
-
     }
 
 

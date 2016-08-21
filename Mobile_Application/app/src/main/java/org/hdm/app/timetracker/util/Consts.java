@@ -10,14 +10,13 @@ public final class Consts {
 
     public final static int CALENDARITEMROW = 1;
 
-    public final static String JSONFILE = "activitys.json";
+    public final static String JSONFILE = "standard.json";
     public final static String TEMPACTIVITIES = "temp-activities.json";
     public final static String PARENTPATH = "SambiaApp";
     public final static String IMAGEPATH = "Images";
     public final static String CONFIGPATH = "Config";
     public final static String LOGPATH = "Logs";
 
-    public final static String ACTIVITIES = "activitys";
 
     public final static String MAINFOLDER = "mainFolder";
     public final static String IMAGEFOLDER = "imageFolder";
@@ -27,8 +26,15 @@ public final class Consts {
     public final static String PROPERTIESFILE = "config.properties";
 
 
+    public final static String MAIN_FOLDER      = "SambiaApp/";
+    public final static String IMAGE_FOLDER     = MAIN_FOLDER+ "Images/";
+    public final static String CONFIG_FOLDER    = MAIN_FOLDER+ "Config/";
+    public final static String LOGS_FOLDER      = MAIN_FOLDER+ "Logs/";
 
 
+
+    // Name from the Json Object
+    public final static String ACTIVITIES = "activitys";
 
     /**
      The caller references the constants using <tt>Consts.EMPTY_STRING</tt>,

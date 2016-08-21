@@ -11,13 +11,30 @@ public class Variables {
 
 
 
+    // Name of the User
+    public String user_ID = "01";
 
-    private int timeTreshold = 1;
+    // which activity setup should be loaded
+    public String setup = "standard";
+
+    // Amount of maximal recorded activities at the same time
+    public int maxRecordedActivity = 2;
+
+    // amount of rows for the activity list
+    public int listRows = 2;
+
+    // Time of Notification Vibration in ms
+    public int vibrationTime = 5000;
+
+    // Period of notificaton in ms
+    public int notificationPeriode = 900000;
+
+
+
 
 
 
     /***** Activity Screen *****/
-    public int activityListRows = 1;
     public int activeListRow = 1;
     public int activeCount = 0;
 
@@ -34,7 +51,6 @@ public class Variables {
     public static void init() {
         if (instance == null) {
             instance = new Variables();
-
         }
     }
 
@@ -44,6 +60,4 @@ public class Variables {
         }
         return instance;
     }
-
-
 }
