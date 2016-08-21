@@ -152,6 +152,14 @@ public class MainActivity extends Activity  {
         Gson gson = new Gson();
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
+
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.remove("MyObject");
+        editor.remove("ActiveList");
+        editor.remove("CalendarMap");
+        editor.apply();
+
+
         if(mPrefs.contains("MyObject")){
 
             String json = mPrefs.getString("MyObject", "");
@@ -183,20 +191,8 @@ public class MainActivity extends Activity  {
 
             }
 
-
-
-
-
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.remove("MyObject");
-            editor.remove("ActiveList");
-            editor.remove("CalendarMap");
-            editor.apply();
         }
-
-
         Variables.getInstance().activeCount = DataManager.getInstance().activeList.size();
-
     }
 
     // Do nothing on backpress - for ui reason - simplify navigation

@@ -11,7 +11,7 @@
     <color name="red">@android:color/holo_red_light</color>
     <color name="gray">@android:color/darker_gray</color>
 
-    <color name="green">@android:color/holo_green_dark</color>
+    <color name="green">@android:color/holo_green_light</color>
     <color name="transparent">#00000000</color>
 
 </resources>
