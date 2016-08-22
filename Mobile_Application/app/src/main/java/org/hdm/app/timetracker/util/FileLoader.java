@@ -1,5 +1,6 @@
 package org.hdm.app.timetracker.util;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -50,6 +51,10 @@ public class FileLoader {
         context = mainActivity;
     }
 
+
+    public FileLoader(Application mainActivity) {
+        context = mainActivity;
+    }
 
     /**************************
      * Init File Prozess
@@ -457,8 +462,7 @@ public class FileLoader {
 
         MyJsonParser parser = new MyJsonParser();
         String logFile = parser.createLogJsonFromActivityObjects();
-        String path = enviroment.toString() + "/" + getPropertiesFromAssets(PROPERTIESFILE)
-                .getProperty(LOGFOLDER);
+        String path = enviroment.toString() + "/" + LOGS_FOLDER;
         writeStringOnExternal(logFile, parser.logName, path);
     }
 
@@ -466,8 +470,7 @@ public class FileLoader {
     public void saveActivityStateOnExternal() {
         MyJsonParser parser = new MyJsonParser();
         String activityState = parser.createActivityStateJson();
-        String path = enviroment.toString() + "/" + getPropertiesFromAssets(PROPERTIESFILE)
-                .getProperty(CONFIGFOLDER);
+        String path = enviroment.toString() + "/" + CONFIG_FOLDER;
         writeStringOnExternal(activityState, parser.logName, path);
     }
 

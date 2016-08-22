@@ -51,7 +51,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     private long countt;
     public ImageView iv_background_bottom;
     public ImageView iv_background_top;
-    public Button btn_add;
+    public CardView btn_add;
 
     Date startDate;
     public String id ="";
@@ -108,8 +108,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
         rv_content = (RecyclerView) itemView.findViewById(R.id.rv_calender_item_content);
         iv_background_bottom = (ImageView) itemView.findViewById(R.id.iv_background_bottom);
         iv_background_top = (ImageView) itemView.findViewById(R.id.iv_background_top);
-        btn_add = (Button) itemView.findViewById((R.id.btn_calendar_row_add));
-
+        iv_play = (ImageView) itemView.findViewById(R.id.iv_play);
+        btn_add = (CardView) itemView.findViewById((R.id.btn_calendar_row_add));
         btn_add.setOnClickListener(this);
     }
 
@@ -169,18 +169,24 @@ public class View_Holder extends RecyclerView.ViewHolder implements
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lollipop
                 cv.setCardBackgroundColor(Color.RED);
+                iv_play.setVisibility(View.VISIBLE);
+
             } else {
                 // lollipop and above
                 cv.setCardBackgroundColor(cv.getResources().getColor(R.color.red));
+                iv_play.setVisibility(View.VISIBLE);
             }
         } else {
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lillipop
-                cv.setCardBackgroundColor(Color.GRAY);
+                cv.setCardBackgroundColor(Color.TRANSPARENT);
+                iv_play.setVisibility(View.GONE);
+
             } else {
                 // lollipop and above
-                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.gray));
+                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.transparent));
+                iv_play.setVisibility(View.GONE);
             }
         }
     }

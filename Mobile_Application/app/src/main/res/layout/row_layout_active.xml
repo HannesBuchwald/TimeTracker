@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="20dp"
-        app:cardBackgroundColor="@android:color/holo_green_dark"
+        app:cardBackgroundColor="@color/green"
         app:cardCornerRadius="4dp"
         >
 

@@ -8,6 +8,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.hdm.app.timetracker.R;
+import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.util.FileLoader;
+import org.hdm.app.timetracker.util.Variables;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,13 +21,15 @@ import java.util.TimerTask;
 public class Start extends Application{
 
 
-    int notifytime = 900000;  // in ms
-    int vibr = 5000;  // in ms
-
-
     @Override
     public void onCreate() {
         super.onCreate();
+
+        DataManager.init();
+        Variables.init();
+
+        FileLoader fl = new FileLoader(this);
+        fl.initFiles();
 
         initNotif();
 
@@ -33,8 +38,6 @@ public class Start extends Application{
 
 
     private void initNotif(){
-
-
 
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -45,12 +48,11 @@ public class Start extends Application{
             }
         };
 
-        timer.scheduleAtFixedRate(timerTask,notifytime, notifytime);
+        timer.scheduleAtFixedRate(timerTask,Variables.getInstance().notificationPeriode, Variables.getInstance().notificationPeriode);
     }
 
 
     private void initNotification() {
-
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -61,6 +63,7 @@ public class Start extends Application{
                 ;
 
         //Vibration
+        int vibr = Variables.getInstance().vibrationTime;
         mBuilder.setVibrate(new long[] { vibr, vibr, vibr, vibr, vibr });
 
         Intent startIntent = new Intent(this.getBaseContext(), MainActivity.class);

@@ -64,7 +64,7 @@ public class MainActivity extends Activity  {
        // initFirstStart();
         initConfiguration();
         initCalenderMap();
- //       initDataLogger();
+        initDataLogger();
 //        initResetRecordedData();
         loadSavedObjectState();
         setFullScreen(true);
@@ -75,6 +75,8 @@ public class MainActivity extends Activity  {
         Log.d(TAG, "ImageSize " + DataManager.getInstance().imageMap.size());
 
     }
+
+
 
 
     private void initResetRecordedData() {
@@ -192,7 +194,9 @@ public class MainActivity extends Activity  {
             }
 
         }
-        Variables.getInstance().activeCount = DataManager.getInstance().activeList.size();
+        if(DataManager.getInstance().activeList != null) {
+            Variables.getInstance().activeCount = DataManager.getInstance().activeList.size();
+        }
     }
 
     // Do nothing on backpress - for ui reason - simplify navigation
@@ -217,17 +221,6 @@ public class MainActivity extends Activity  {
     }
 
 
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-            Toast.makeText(this, "You pressed the home button!", Toast.LENGTH_LONG).show();
-        if ((keyCode == KeyEvent.KEYCODE_HOME)) {
-//            return true;
-        }
-//        return super.onKeyDown(keyCode, event);
-        return true;
-    }
 
 
     private void setFullScreen(boolean fullscreen) {
@@ -272,11 +265,11 @@ public class MainActivity extends Activity  {
 
     private void initConfiguration() {
         // Init the Data Structure - there all the created where hosted
-        DataManager.init();
-        Variables.init();
-
-        FileLoader fl = new FileLoader(this);
-        fl.initFiles();
+//        DataManager.init();
+//        Variables.init();
+//
+//        FileLoader fl = new FileLoader(this);
+//        fl.initFiles();
     }
 
 
@@ -291,7 +284,6 @@ public class MainActivity extends Activity  {
         time.setHours(startHour);
         time.setMinutes(startMin);
         time.setSeconds(startMin);
-
 
         // Set Calendar with reseted time
         cal.setTime(time);
@@ -353,5 +345,43 @@ public class MainActivity extends Activity  {
 
         prefsEditor.commit();
     }
+
+
+
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (Intent.ACTION_MAIN.equals(intent.getAction())) {
+            Log.i("MyLauncher", "onNewIntent: HOME Key");
+
+        }
+    }
+
+
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//
+//        Log.d(TAG, "event " + event.toString() + " " + keyCode);
+//
+//        if ((keyCode == KeyEvent.KEYCODE_MENU)) {
+//            Log.d(TAG, "Menu");
+////            return true;
+//        }
+////        return super.onKeyDown(keyCode, event);
+//        return true;
+//    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ( keyCode == KeyEvent.KEYCODE_MENU ) {
+            Log.d(TAG, "MENU pressed");
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 }
