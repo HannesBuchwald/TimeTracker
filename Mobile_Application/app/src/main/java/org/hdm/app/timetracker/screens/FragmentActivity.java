@@ -19,6 +19,7 @@ import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
 import org.hdm.app.timetracker.adapter.ObjectListAdapter;
 import org.hdm.app.timetracker.adapter.ActiveListAdapter;
+import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
@@ -145,7 +146,7 @@ public class FragmentActivity extends BaseFragemnt implements
         } else {
 
             // when Activity is not active
-            if (!activityObject.activeState && var.activeCount<2) {
+            if (!activityObject.activeState && var.activeCount< Variables.getInstance().maxRecordedActivity) {
 
                 // ToDo Show DialogFragment  -  not at the Moment had to bee discussed in Africa
 //            if(list.get(position).sub_category && list.get(position).activeState) {
