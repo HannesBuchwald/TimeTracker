@@ -6,4 +6,5 @@ package org.hdm.app.timetracker.util;
 public class TimeStamp {
     public String start;
     public String end;
+    public String whereFrom;
 }
