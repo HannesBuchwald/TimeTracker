@@ -52,8 +52,14 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         ActivityObject object = dataManager.getActivityObject(list.get(position));
         holder.setListener(this);
         holder.title.setText(object.title);
+        holder.activityList = true;
+
         Log.d(TAG, "size " + list.size());
-        if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
+        if(dataManager.imageMap.get(object.imageName) != null ){
+            holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
+        }
+        holder.setBackground(object.activeState);
+
     }
 
 

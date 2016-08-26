@@ -56,7 +56,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         ActivityObject object = dataManager.getActivityObject(list.get(position));
         holder.setListener(this);
         holder.title.setText(object.title);
-        holder.activityList = true;
+        holder.activityList = false;
         if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
         if(!var.editable) holder.setBackground(object.activeState);
         Log.d(TAG, "position " + position + " " + object.title + " "+ object.activeState);

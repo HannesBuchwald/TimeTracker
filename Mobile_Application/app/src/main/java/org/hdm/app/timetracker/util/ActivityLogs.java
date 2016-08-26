@@ -55,6 +55,8 @@ public class ActivityLogs {
                 TimeStamp timeStamp = new TimeStamp();
                 timeStamp.start = frame.startTime.getHours() + ":" + frame.startTime.getMinutes();
                 timeStamp.end = frame.startTime.getHours() + ":" + frame.startTime.getMinutes();
+                timeStamp.whereFrom = frame.whereFrom;
+
                 logs.timeStamps.add(timeStamp);
             }
 

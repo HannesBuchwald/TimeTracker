@@ -142,6 +142,32 @@ public class FragmentActivity extends BaseFragemnt implements
         // If editable Mode - than add activity to selectedTime in CalendearList
         if (var.editable) {
             dataManager.setCalenderMapEntry(var.selectedTime, activityObject.title);
+            String startTime = var.selectedTime;
+
+
+
+            // get Hours
+            int startHour = Integer.parseInt(startTime.substring(11, 13));
+
+            // get Min
+            int startMin = Integer.parseInt(startTime.substring(14, 16));
+
+
+            Date startT = Calendar.getInstance().getTime();
+            startT.setHours(startHour);
+            startT.setMinutes(startMin);
+            startT.setSeconds(00);
+
+            activityObject.startTime = startT;
+            Log.d(TAG,"selcetedTime" + activityObject.startTime);
+
+
+            startT.setMinutes(startMin+15);
+            activityObject.endTime = startT;
+            Log.d(TAG,"selcetedTime" + activityObject.endTime);
+
+            activityObject.saveTimeStamp("passive");
+
             listener.flip();
         } else {
 
@@ -195,7 +221,7 @@ public class FragmentActivity extends BaseFragemnt implements
                 addActivtyObjectForCalenderContent(activityObject);
 
                 // Save Time and subCategory in Dsata
-                activityObject.saveTimeStamp();
+                activityObject.saveTimeStamp("active");
 
                 dataManager.activeList.remove(activityObject.title);
             }
@@ -203,6 +229,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
         // Store edited ActivityObject back in DataManager
         dataManager.setActivityObject(activityObject);
+        if(activityObject.timeFrameList.size()>2)
+        Log.d(TAG, "timeFrame " + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).whereFrom);
 
 
 

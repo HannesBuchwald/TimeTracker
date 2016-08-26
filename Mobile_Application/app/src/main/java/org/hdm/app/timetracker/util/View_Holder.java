@@ -90,16 +90,15 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     private void initActivityItemLayout() {
         cv = (CardView) itemView.findViewById(R.id.cardView);
         title = (TextView) itemView.findViewById(R.id.title);
-
         imageView = (ImageView) itemView.findViewById(R.id.imageView);
         time = (TextView)itemView.findViewById(R.id.tv_time);
-        iv_play = (ImageView) itemView.findViewById(R.id.iv_play);
-        iv_play.setVisibility(View.GONE);
         titleText = title.getText().toString();
 
         cv.setOnClickListener(this);
         cv.setOnLongClickListener(this);
     }
+
+
 
     private void initCalendarLayout() {
         cv = (CardView) itemView.findViewById(R.id.cardView);
@@ -124,8 +123,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     // called from the Activity Screen Interaction
 
     // Change CardView Style of Activitys
-    // Activity == active - green background / PlayIcon visible
-    // Activity != active - white background / PlayIcon not Visible
+    // Activity == active - green background
+    // Activity != active - white background
     public void setBackground(boolean state) {
 
         if(state) {
@@ -137,10 +136,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.green));
             }
 
-
-//            iv_play.setVisibility(View.VISIBLE);
-//            time.setVisibility(View.VISIBLE);
-//            if(activityList) runCount();
+            time.setVisibility(View.VISIBLE);
+            if(activityList) runCount();
 
 
         } else {
@@ -152,10 +149,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.white));
             }
 
-
-//            iv_play.setVisibility(View.GONE);
-//            time.setVisibility(View.GONE);
-//            stopCount();
+            time.setVisibility(View.GONE);
+            stopCount();
 
 
         }
