@@ -74,7 +74,7 @@
                     android:innerRadius="0dp"
                     android:shape="ring"
                     app:cardCornerRadius="25dp"
-                    app:cardBackgroundColor="@color/red"
+                    app:cardBackgroundColor="@color/transparent"
                     app:cardElevation="0dp"
                     >
                     <TextView
@@ -83,7 +83,7 @@
                         android:layout_alignParentRight="true"
                         android:gravity="center"
                         android:text="+"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/black"
                         android:textSize="30sp"/>
                     >
 

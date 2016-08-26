@@ -36,8 +36,8 @@ import java.util.TreeMap;
  */
 public class FragmentCalender extends BaseFragemnt implements
         CalendarItemOnClickListener,
-        View.OnClickListener
-       {
+        View.OnClickListener,
+        View.OnLongClickListener{
 
 
     private String TAG = "DayView";
@@ -66,37 +66,41 @@ public class FragmentCalender extends BaseFragemnt implements
         return view;
     }
 
-    private void initFloatingButton() {
-        fab_calendar = (FloatingActionButton) view.findViewById(R.id.fab_calendar);
-        fab_calendar.setOnClickListener(this);
+
+
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
-           @Override
-           public void onPause() {
-               super.onPause();
-           }
 
-
-
-           @Override
+    @Override
     public void onResume() {
         super.onResume();
         setMenuTitle(TAG);
         setMenuBackground(android.R.color.holo_blue_light);
         setMenuBtn(R.drawable.ic_back);
-        if(!var.editable) scrollListToCurrentTime();
+        if (!var.editable) scrollListToCurrentTime();
     }
 
 
 
 
 
+    private void initFloatingButton() {
+        fab_calendar = (FloatingActionButton) view.findViewById(R.id.fab_calendar);
+//        fab_calendar.setOnClickListener(this);
+        fab_calendar.setOnLongClickListener(this);
+    }
+
     private void initCalenderList() {
         data = DataManager.getInstance().activityMap;
         calendar = DataManager.getInstance().calenderMap;
-        adapter = new CalendarListAdapter(getActivity(),data, calendar);
-        Log.d(TAG, "Jsonnnnnn " +"Calendar "+ calendar.size());
-        Log.d(TAG, "Jsonnnnnn " +"Calendar "+ calendar);
+        adapter = new CalendarListAdapter(getActivity(), data, calendar);
+        Log.d(TAG, "Jsonnnnnn " + "Calendar " + calendar.size());
+        Log.d(TAG, "Jsonnnnnn " + "Calendar " + calendar);
 
         adapter.setListener(this);
         rv_calender = (RecyclerView) view.findViewById(R.id.rv_calender);
@@ -106,66 +110,73 @@ public class FragmentCalender extends BaseFragemnt implements
     }
 
 
-
-
-
     @Override
     public void didOnClick(String time, String s, View_Holder holder) {
 
-        if(DEBUGMODE) Log.d(TAG, "holder " + time + " // String " + s  + " " + holder.id);
+        if (DEBUGMODE) Log.d(TAG, "holder " + time + " // String " + s + " " + holder.id);
 
-        if(var.editable){
+        if (var.editable) {
             // Delete Entry in CalendarMap
             dataManager.deleteCalenderMapEntry(time, s);
 
             // Delete Entry in ActivityObject TimeFrame
             // ToDo Discuss if the TimeFrameList is realy helpful - better way CalendarMap?
             ArrayList<TimeFrame> list = dataManager.getActivityObject(s).timeFrameList;
-            if(DEBUGMODE) Log.d(TAG, "activity " + list.size());
+            if (DEBUGMODE) Log.d(TAG, "activity " + list.size());
         }
     }
 
 
+    @Override
+    public void didOnClickAddBtn(View_Holder holder) {
+        if (DEBUGMODE) Log.d(TAG, "holder " + holder.id);
+        var.selectedTime = holder.id;
+        listener.flip();
+    }
 
 
-
-           @Override
-           public void didOnClickAddBtn(View_Holder holder) {
-               if(DEBUGMODE) Log.d(TAG, "holder " + holder.id);
-               var.selectedTime = holder.id;
-               listener.flip();
-           }
-
-
-
-
-
-           // FloatingActionButton Listener
+    // FloatingActionButton Listener
     @Override
     public void onClick(View v) {
-        lastFirstVisiblePosition = ((LinearLayoutManager)rv_calender.getLayoutManager()).findFirstVisibleItemPosition();
+        lastFirstVisiblePosition = ((LinearLayoutManager) rv_calender.getLayoutManager()).findFirstVisibleItemPosition();
 
-        if(var.editable) {
+        if (var.editable) {
             var.editable = false;
             fab_calendar.setImageResource(android.R.drawable.ic_menu_edit);
 
-        } else  {
+        } else {
             var.editable = true;
             fab_calendar.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
         }
         // Invalidate new
-       adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
-
-
 
 
     // scroll in Calendarlist to current Time
     private void scrollListToCurrentTime() {
         Date currentTime = Calendar.getInstance().getTime();
         int hour = currentTime.getHours();
-        if(hour>=7) hour = hour*3-8;
+        if (hour >= 7) hour = hour * 3 - 8;
         rv_calender.scrollToPosition(hour);
     }
 
+
+
+    @Override
+    public boolean onLongClick(View v) {
+        lastFirstVisiblePosition = ((LinearLayoutManager) rv_calender.getLayoutManager()).findFirstVisibleItemPosition();
+
+        if (var.editable) {
+            var.editable = false;
+            fab_calendar.setImageResource(android.R.drawable.ic_menu_edit);
+
+        } else {
+            var.editable = true;
+            fab_calendar.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+        }
+        // Invalidate new
+        adapter.notifyDataSetChanged();
+        return true;
+    }
 }

@@ -7,7 +7,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,6 +57,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
 
     public boolean activityList;
     private TimerTask timerTask;
+    private ImageView iv_cancel;
 
     /************** Constructors ******************/
 
@@ -93,6 +93,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
         imageView = (ImageView) itemView.findViewById(R.id.imageView);
         time = (TextView)itemView.findViewById(R.id.tv_time);
         titleText = title.getText().toString();
+        iv_cancel = (ImageView) itemView.findViewById(R.id.iv_cancel);
 
         cv.setOnClickListener(this);
         cv.setOnLongClickListener(this);
@@ -107,9 +108,9 @@ public class View_Holder extends RecyclerView.ViewHolder implements
         rv_content = (RecyclerView) itemView.findViewById(R.id.rv_calender_item_content);
         iv_background_bottom = (ImageView) itemView.findViewById(R.id.iv_background_bottom);
         iv_background_top = (ImageView) itemView.findViewById(R.id.iv_background_top);
-        iv_play = (ImageView) itemView.findViewById(R.id.iv_play);
         btn_add = (CardView) itemView.findViewById((R.id.btn_calendar_row_add));
         btn_add.setOnClickListener(this);
+        btn_add.setOnLongClickListener(this);
     }
 
 
@@ -157,6 +158,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
+    // Called from the CalendarView
     public void setCalendarItemBackground(boolean editable) {
 
         if(editable) {
@@ -164,24 +166,24 @@ public class View_Holder extends RecyclerView.ViewHolder implements
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lollipop
                 cv.setCardBackgroundColor(Color.RED);
-                iv_play.setVisibility(View.VISIBLE);
+               iv_cancel.setVisibility(View.VISIBLE);
 
             } else {
                 // lollipop and above
                 cv.setCardBackgroundColor(cv.getResources().getColor(R.color.red));
-                iv_play.setVisibility(View.VISIBLE);
+                iv_cancel.setVisibility(View.VISIBLE);
             }
         } else {
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lillipop
                 cv.setCardBackgroundColor(Color.TRANSPARENT);
-                iv_play.setVisibility(View.GONE);
+                iv_cancel.setVisibility(View.GONE);
 
             } else {
                 // lollipop and above
                 cv.setCardBackgroundColor(cv.getResources().getColor(R.color.transparent));
-                iv_play.setVisibility(View.GONE);
+                iv_cancel.setVisibility(View.GONE);
             }
         }
     }
@@ -245,7 +247,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     @Override
     public void onClick(View v) {
         Log.d(TAG, "longklick ttt " + title.getText()+ " " + v.getId() + " " + listener);
-        if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
+//        if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
     }
 
 
@@ -254,9 +256,9 @@ public class View_Holder extends RecyclerView.ViewHolder implements
 
 
             if(listener != null) {
-
-                listener.didLongClickOnView(v, title.getText().toString(), this);
-                Log.d(TAG, "longklick " + title.getText()+ " " + v.getId() + " " + listener);
+                if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
+//                listener.didLongClickOnView(v, title.getText().toString(), this);
+//                Log.d(TAG, "longklick " + title.getText()+ " " + v.getId() + " " + listener);
                 return true;
             }
 
