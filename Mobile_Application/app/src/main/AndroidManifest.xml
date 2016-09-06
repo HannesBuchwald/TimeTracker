@@ -27,12 +27,6 @@
                 <category android:name="android.intent.category.MENU" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="org.hdm.app.timetracker.IntroActivity"
-            android:label="@string/title_activity_intro"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
