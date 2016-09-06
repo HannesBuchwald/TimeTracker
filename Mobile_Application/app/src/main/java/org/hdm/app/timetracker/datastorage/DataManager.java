@@ -90,6 +90,7 @@ public class DataManager {
 
         // check if key is not null
         if (key != null) {
+
             ArrayList<String> list = null;
 
             if(activity != null && calenderMap.containsKey(key)) {
@@ -108,6 +109,23 @@ public class DataManager {
         }
     }
 
+
+    public boolean setActivityToCalendarList(String key, String activity) {
+
+        // check if key is not null
+        if (key != null && activity != null) {
+
+            if(calenderMap.containsKey(key)) {
+                ArrayList<String> list = calenderMap.get(key);
+                // do not add enty if list contains already activitys
+                if (list.contains(activity)) return false;
+                list.add(activity);
+                calenderMap.put(key, list);
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 

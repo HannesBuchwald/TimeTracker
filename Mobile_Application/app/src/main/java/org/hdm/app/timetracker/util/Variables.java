@@ -21,16 +21,23 @@ public class Variables {
      */
     public String user_ID = "01";
 
+
     /**
      * Which activity setup should be loaded
      */
     public String setup = "standard";
 
 
-    // Amount of maximal recorded activities at the same time
+    /**
+     * Amount of maximal recorded activities at the same time
+     */
     public int maxRecordedActivity = 2;
 
 
+    /**
+     * Log Interval in ms
+     */
+    public long logTimeInterval = 10000;
 
 
 
@@ -64,11 +71,11 @@ public class Variables {
     /**********
      * Calendar Screen Variables
      ************/
-    
+
     // Editable Flag in Calendar Screen
     public boolean editable = false;
     public String selectedTime = "";
-    public long minRecordingTime = 1000;
+    public long minRecordingTime = 100;
 
 
 
@@ -82,7 +89,7 @@ public class Variables {
     /**
      * Backpress flags
      */
-    public boolean backPress = false;
+    public boolean backPress = true;
     public boolean backPressDialog = false;
 
 
@@ -93,6 +100,10 @@ public class Variables {
      * RecordTime Variables
      ***************/
 
+    /**
+     * TimeSlot in calendar screen
+     */
+    public int timeFrame = 30;
 
     /**
      * Start min of recordTime in calendar screen
@@ -102,21 +113,12 @@ public class Variables {
     /**
      * Start hour of recordTime in calendar screen
      */
-    public int startHour = 6;
+    public int startHour = 0;
 
     /**
      * End hour of recordTime in calendar screen
      */
     public int endHour = 24;
-
-
-
-
-
-
-
-
-
 
 
 

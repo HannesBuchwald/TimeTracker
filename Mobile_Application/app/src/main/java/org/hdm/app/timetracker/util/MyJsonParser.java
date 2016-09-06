@@ -48,29 +48,15 @@ public class MyJsonParser {
     }
 
 
-    public String logName;
 
 
     public String createLogJsonFromActivityObjects() {
 
         ActivityLogs activityLogs = new ActivityLogs();
         String jsonInString = convertObjectToJson(activityLogs);
-        logName  = activityLogs.date + "-"+ activityLogs.user_id + "-activities.txt";
-
         return jsonInString;
     }
 
-
-
-
-
-    public String createActivityStateJson() {
-
-        ActivityState activityState = new ActivityState();
-        String jsonInString =  convertObjectToJson(activityState);
-        logName  = TEMPACTIVITIES;
-        return jsonInString;
-    }
 
 
 

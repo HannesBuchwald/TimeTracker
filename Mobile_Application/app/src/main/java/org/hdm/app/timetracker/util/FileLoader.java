@@ -126,33 +126,6 @@ public class FileLoader {
             }
         }
 
-        if (properties.get("vibrationTime") != null) {
-            try {
-                int value = Integer.parseInt((String) properties.get("vibrationTime"));
-                Variables.getInstance().vibrationTime = value;
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (properties.get("notificationPeriode") != null) {
-
-            try {
-                int value = Integer.parseInt((String) properties.get("notificationPeriode"));
-                Variables.getInstance().notificationPeriode = value;
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-
-//        Log.d(TAG, "variables "
-//                + Variables.getInstance().user_ID + " // "
-//                + Variables.getInstance().setup + " // "
-//                + Variables.getInstance().maxRecordedActivity + " // "
-//                + Variables.getInstance().listRows + " // "
-//                + Variables.getInstance().vibrationTime + " // "
-//                + Variables.getInstance().notificationPeriode + " // "
-//        );
 
     }
 
@@ -453,26 +426,18 @@ public class FileLoader {
     }
 
 
-    public File getEnvironment() {
-        return enviroment;
-    }
 
 
-    public void saveLogsOnExternal() {
+    public void saveLogsOnExternal(String fileName) {
 
         MyJsonParser parser = new MyJsonParser();
         String logFile = parser.createLogJsonFromActivityObjects();
         String path = enviroment.toString() + "/" + LOGS_FOLDER;
-        writeStringOnExternal(logFile, parser.logName, path);
+        writeStringOnExternal(logFile, fileName, path);
     }
 
 
-    public void saveActivityStateOnExternal() {
-        MyJsonParser parser = new MyJsonParser();
-        String activityState = parser.createActivityStateJson();
-        String path = enviroment.toString() + "/" + CONFIG_FOLDER;
-        writeStringOnExternal(activityState, parser.logName, path);
-    }
+
 
 
     private void writeStringOnExternal(String stringFile, String fileName, String path) {

@@ -56,8 +56,10 @@ public class ActivityObject extends Object  {
         this.startTime = null;
         this.endTime = null;
         this.service = null;
-
     }
 
-
+    public void saveTimeStamp(String whereFrom, Date startTime, Date endTime) {
+        this.timeFrameList.add(new TimeFrame(startTime, endTime, this.service, whereFrom));
+        Log.d(TAG, "timeStamp " + startTime + " // " + endTime + " // " + service + " // "+ whereFrom);
+    }
 }

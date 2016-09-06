@@ -1,23 +1,16 @@
 package org.hdm.app.timetracker.main;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,7 +19,6 @@ import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.util.FileLoader;
-import org.hdm.app.timetracker.util.Settings;
 import org.hdm.app.timetracker.util.Variables;
 
 import java.lang.reflect.Type;
@@ -45,17 +37,23 @@ import static org.hdm.app.timetracker.util.Consts.*;
 public class MainActivity extends Activity  {
     private final String TAG = "MainActivity";
 
+    // ToDo Implement new Feature Food
+    // ToDo Implement LogFile Handling
+    // ToDo Implement Transmit Data to Server
+    // ToDo Implement Settings Menu
+    // ToDo Fix Display Activitys in CalendarScreen
+    // ToDo How to install the App on the Smartphone
+    // ToDo Change Size of Items in CalendarList
+    // ToDo Change Numbers of 00:30 and 00:48 in CalendarList
+    // ToDo Change Tracking from Title to ID
+    // ToDo Fix TimeCounter in ActiveList (Delete Thread every minute and restart it)
+    // ToDo Fix Blue Background in CalendarList when time is 30 min  or 0 min
+
     /**
      * Constants
      */
     Handler handler = new Handler();
     private Variables var;
-
-
-    /**
-     * Attributes
-     */
-
 
 
 
@@ -64,11 +62,12 @@ public class MainActivity extends Activity  {
         super.onCreate(savedInstanceState);
 
         initConfiguration();
-        initCalenderMap();
         initDataLogger();
-//        initResetRecordedData();
+        initResetRecordedData();
         loadSavedObjectState();
+        initCalenderMap();
         initLayout();
+//        initConfiguration();
     }
 
 
@@ -76,7 +75,6 @@ public class MainActivity extends Activity  {
     @Override
     public void onBackPressed() {
         // ToDo write test cases
-
         // if backPress is true then backpress button in active
         if(Variables.getInstance().backPress) {
 
@@ -103,13 +101,9 @@ public class MainActivity extends Activity  {
     @Override
     public void onStop() {
         super.onStop();
-        // ToDo Save File on External
-        // ToDo Upload to Server
-        // ToDo Save Objects when App is closed
         if(DEBUGMODE) Log.d(TAG, "onStop");
-        FileLoader fl = new FileLoader(this);
-//        fl.saveLogsOnExternal();
-//        saveCurrentState();
+        saveLogFile();
+        saveCurrentState();
 //        startActivity(new Intent(this, MainActivity.class));
     }
 
@@ -126,8 +120,7 @@ public class MainActivity extends Activity  {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (Intent.ACTION_MAIN.equals(intent.getAction())) {
-            Log.i("MyLauncher", "onNewIntent: HOME Key");
-
+            Log.i(TAG, "onNewIntent: HOME Key");
         }
     }
 
@@ -146,34 +139,9 @@ public class MainActivity extends Activity  {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /*****************************
      * Init
      *******************************************/
-
-
-
-
-
 
     private void initConfiguration() {
         // Init the Data Structure - there all the created where hosted
@@ -208,64 +176,42 @@ public class MainActivity extends Activity  {
         endTime.setMinutes(var.startMin);
         endTime.setSeconds(var.startMin);
         calEndTime.setTime(endTime);
-        calEndTime.add(Calendar.MINUTE, -15);
+        calEndTime.add(Calendar.MINUTE, -var.timeFrame);
         endTime = calEndTime.getTime();
 
+        DataManager.getInstance().calenderMap = new TreeMap<>();
 
         while(time.before(endTime)) {
             time = cal.getTime();
-//            Log.d(TAG, "startTime "+  time);
             DataManager.getInstance().setCalenderMapEntry(time.toString(), null);
-            // add 15 minutes to setTime
-            cal.add(Calendar.MINUTE, 15);
-            var.startMin++;
+            // add 30 minutes to setTime
+            cal.add(Calendar.MINUTE, var.timeFrame);
         }
     }
 
 
-
-
+    /**
+     * Save current State every 15 min
+     * Run in TimerTask Thread not on UI Thread
+     */
     private void initDataLogger() {
-
-        final FileLoader fl = new FileLoader(this);
 
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                final Date currentDate = Calendar.getInstance().getTime();
-
-                Log.d(TAG, "currentDate " + currentDate.toString());
-
-                Calendar calEndTime = Calendar.getInstance();
-                Date endTime = calEndTime.getTime();
-                endTime.setSeconds(00);
-                endTime.setMinutes(14);
-                endTime.setHours(23);
-                calEndTime.setTime(endTime);
-                final Date time = calEndTime.getTime();
-
-
-                endTime.setHours(4);
-                calEndTime.setTime(endTime);
-                final Date startTime = calEndTime.getTime();
-
-//                Log.d(TAG, "time " + time.toString() );
-//                Log.d(TAG, "timee " + currentDate.toString());
-//                Log.d(TAG, "timeee " + startTime.toString());
-
                 handler.post(new Runnable() {
                     public void run() {
-
-                        if(currentDate.before(time) && currentDate.after(startTime)){
-                            fl.saveLogsOnExternal();
-                        }
+                        saveLogFile();
                     }
                 });
             }
         };
-        timer.scheduleAtFixedRate(timerTask,0, 10000);
+        timer.scheduleAtFixedRate(timerTask,0, var.logTimeInterval);
     }
+
+
+
 
 
     private void initResetRecordedData() {
@@ -290,7 +236,6 @@ public class MainActivity extends Activity  {
             }
         };
         timer.schedule(timerTask, endTime.getTime());
-
     }
 
 
@@ -324,6 +269,18 @@ public class MainActivity extends Activity  {
     }
 
 
+    private void saveLogFile() {
+        String currentDate = Calendar.getInstance().getTime().toString();
+        int size = currentDate.length();
+        String year = currentDate.substring(size-4, size);
+        String date = currentDate.substring(4, 19);
+        String fileName = var.user_ID + "_" + year+"_"+ date + "_activities.txt";
+        fileName = fileName.replaceAll(" ","_");
+        Log.d(TAG, "currentDate " + fileName);
+        new FileLoader(this).saveLogsOnExternal(fileName);
+    }
+
+
 
 
     private void saveCurrentState() {
@@ -341,6 +298,8 @@ public class MainActivity extends Activity  {
 
         // Save ActiveList
         ArrayList<String> activeList = DataManager.getInstance().activeList;
+//        activeList = new ArrayList<>();
+        Log.d(TAG, "map " + activeList);
         json = gson.toJson(activeList);
         prefsEditor.putString(ACTIVE_LIST, json);
 
@@ -349,8 +308,8 @@ public class MainActivity extends Activity  {
         TreeMap<String, ArrayList<String>> calendarMap = DataManager.getInstance().calenderMap;
         json = gson.toJson(calendarMap);
         prefsEditor.putString(CALENDAR_MAP, json);
-
         prefsEditor.commit();
+
     }
 
 
@@ -361,11 +320,11 @@ public class MainActivity extends Activity  {
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
 
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.remove(ACTIVITY_STATE);
-        editor.remove(ACTIVE_LIST);
-        editor.remove(CALENDAR_MAP);
-        editor.apply();
+//        SharedPreferences.Editor editor = mPrefs.edit();
+//        editor.remove(ACTIVITY_STATE);
+//        editor.remove(ACTIVE_LIST);
+//        editor.remove(CALENDAR_MAP);
+//        editor.apply();
 
 
         if(mPrefs.contains(ACTIVITY_STATE)){
@@ -396,7 +355,6 @@ public class MainActivity extends Activity  {
                 DataManager.getInstance().calenderMap = calendarMap;
                 Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap);
                 Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap.size());
-
             }
 
         }

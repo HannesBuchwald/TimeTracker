@@ -36,7 +36,7 @@ public class ActivityLogs {
                 ":" +  Integer.toString(calendar.get(Calendar.MONTH)+1) +
                 ":" +  Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
 
-        this.user_id = "fdsjhf3738";
+        this.user_id = Variables.getInstance().user_ID;
 
         Map<String, ActivityObject> map = DataManager.getInstance().getObjectMap();
 
@@ -47,21 +47,25 @@ public class ActivityLogs {
 
             // Create new Log Object
             Logs logs = new Logs();
+
+            // Add Activity ID to Log
             logs._id = object._id;
 
-            // Get TimeFrameList - with all tracked timeframes from the activity
+            // Add Activity title to Log
+            logs.title = object.title;
+
+            // Get TimeFrameList - with all recorded timeFrames from the activity
             ArrayList<TimeFrame> list = object.timeFrameList;
-//            if(DEBUGMODUS) Log.d(TAG, object.title + " " + object.timeFrameList.size());
 
             // Inner List add all tracked timeFrame in String format to TimeStamp List
             for(int i = 0; i< list.size(); i++){
                 TimeFrame frame = list.get(i);
                 TimeStamp timeStamp = new TimeStamp();
                 timeStamp.start = frame.startTime.getHours() + ":" + frame.startTime.getMinutes();
+
                 Log.d(TAG, "StartTime" + timeStamp.start);
                 timeStamp.end = frame.endTime.getHours() + ":" + frame.endTime.getMinutes();
                 timeStamp.whereFrom = frame.whereFrom;
-
                 logs.timeStamps.add(timeStamp);
             }
 
