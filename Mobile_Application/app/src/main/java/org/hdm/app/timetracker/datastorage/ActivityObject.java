@@ -1,6 +1,8 @@
 package org.hdm.app.timetracker.datastorage;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -50,9 +52,11 @@ public class ActivityObject extends Object  {
 
     public void saveTimeStamp(String whereFrom) {
         this.timeFrameList.add(new TimeFrame(this.startTime, this.endTime, this.service, whereFrom));
+        Log.d(TAG, "timeStamp " + startTime + " // " + endTime + " // " + service + " // "+ whereFrom);
         this.startTime = null;
         this.endTime = null;
         this.service = null;
+
     }
 
 

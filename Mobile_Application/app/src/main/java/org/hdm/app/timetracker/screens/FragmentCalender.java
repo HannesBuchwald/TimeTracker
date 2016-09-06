@@ -91,7 +91,7 @@ public class FragmentCalender extends BaseFragemnt implements
 
     private void initFloatingButton() {
         fab_calendar = (FloatingActionButton) view.findViewById(R.id.fab_calendar);
-//        fab_calendar.setOnClickListener(this);
+      //  fab_calendar.setOnClickListener(this);
         fab_calendar.setOnLongClickListener(this);
     }
 

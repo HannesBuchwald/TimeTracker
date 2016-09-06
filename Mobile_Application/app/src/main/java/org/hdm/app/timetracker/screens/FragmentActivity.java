@@ -140,6 +140,7 @@ public class FragmentActivity extends BaseFragemnt implements
         // state, names image ect.
         ActivityObject activityObject = dataManager.getActivityObject(title);
         // If editable Mode - than add activity to selectedTime in CalendearList
+
         if (var.editable) {
             dataManager.setCalenderMapEntry(var.selectedTime, activityObject.title);
             String startTime = var.selectedTime;
@@ -161,18 +162,19 @@ public class FragmentActivity extends BaseFragemnt implements
             activityObject.startTime = startT;
             Log.d(TAG,"selcetedTime" + activityObject.startTime);
 
-
+            // TODo finish checking the time
+            Log.d(TAG, "starttTime " + startMin);
             startT.setMinutes(startMin+15);
+            Log.d(TAG, "starttTime " + startMin);
             activityObject.endTime = startT;
             Log.d(TAG,"selcetedTime" + activityObject.endTime);
 
             activityObject.saveTimeStamp("passive");
-
             listener.flip();
         } else {
 
             // when Activity is not active
-            if (!activityObject.activeState && var.activeCount< Variables.getInstance().maxRecordedActivity) {
+            if (!activityObject.activeState && var.activeCount < Variables.getInstance().maxRecordedActivity) {
 
                 // ToDo Show DialogFragment  -  not at the Moment had to bee discussed in Africa
 //            if(list.get(position).sub_category && list.get(position).activeState) {
@@ -186,6 +188,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
                 // set temporary start time
                 activityObject.startTime = Calendar.getInstance().getTime();
+                Log.d(TAG, "activityObject " + activityObject.startTime);
 
                 // Count how many activity are active
                 var.activeCount++;
@@ -196,7 +199,7 @@ public class FragmentActivity extends BaseFragemnt implements
             } else if(activityObject.activeState){
 
 
-                    // Deactivate Activity
+                // Deactivate Activity
                 activityObject.activeState = false;
                 activityObject.count = 0;
 
@@ -204,24 +207,30 @@ public class FragmentActivity extends BaseFragemnt implements
                 activityObject.endTime = Calendar.getInstance().getTime();
 
 
-                Calendar aa = Calendar.getInstance();
-                        aa.setTimeZone(TimeZone.getTimeZone("MESZ"));
-                Log.d(TAG, "new Time " + aa.getTime());
-                Log.d(TAG, "new Time " + aa.getTimeZone().toString());
 
-                Calendar ca = Calendar.getInstance();
-                ca.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-                Log.d(TAG, "new Time " + ca.getTime());
-                //Count how many activitys are active
+                //Count how many activities are active
                 var.activeCount--;
 
                 // ToDo Implement Function when Activity is not longer than 1 Minute active than do not count
-                // add ActivityObject to CalendarContentList
-                addActivtyObjectForCalenderContent(activityObject);
+                Date start = activityObject.startTime;
+                Date end = activityObject.endTime;
+
+                Log.d(TAG, "startTimee " + activityObject.startTime);
+
+                Date startTime = activityObject.startTime;
+                String aTitle = activityObject.title;
 
                 // Save Time and subCategory in Dsata
                 activityObject.saveTimeStamp("active");
+
+
+
+                if ( (end.getTime() - start.getTime())/10000f > var.minRecordingTime) {
+                    // add ActivityObject to CalendarContentList
+                    addActivtyObjectForCalenderContent(aTitle, startTime);
+                }
+
+                Log.d(TAG, "startTimee " + end.getTime() + " // " + start.getTime() + " // " +(end.getTime() - start.getTime())/10000f);
 
                 dataManager.activeList.remove(activityObject.title);
             }
@@ -229,8 +238,12 @@ public class FragmentActivity extends BaseFragemnt implements
 
         // Store edited ActivityObject back in DataManager
         dataManager.setActivityObject(activityObject);
-        if(activityObject.timeFrameList.size()>2)
+
+        if(activityObject.timeFrameList.size()>2) {
         Log.d(TAG, "timeFrame " + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).whereFrom);
+
+        }
+
 
 
 
@@ -263,14 +276,15 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
-    private void addActivtyObjectForCalenderContent(ActivityObject activityObject) {
+    private void addActivtyObjectForCalenderContent(String title, Date time) {
 
-        Date startTime = activityObject.startTime;
+        Date startTime = time;
         int startMin = startTime.getMinutes();
 
-        Date firstDate = activityObject.startTime;
+        Date firstDate = time;
         int firstMin;
 
+        Log.d(TAG, "startTime0 " + time);
 
 
         Calendar calTimeSlot = Calendar.getInstance();
@@ -290,14 +304,14 @@ public class FragmentActivity extends BaseFragemnt implements
         }
 
 
+        Log.d(TAG, "startTime1 " + time);
+
         // Set Current TimeSlot
         firstDate.setSeconds(0);
         firstDate.setMinutes(firstMin);
 
 
-        if (DEBUGMODE) Log.d(TAG, "c "
-                + firstDate + " || s "
-                + activityObject.startTime);
+        if (DEBUGMODE) Log.d(TAG, "startTime1 " + firstDate + " || s " + time);
 
 
 
@@ -314,7 +328,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
 
         while(startTime.before(currentDate)){
-            dataManager.setCalenderMapEntry(firstDate.toString(), activityObject.title);
+
+            dataManager.setCalenderMapEntry(firstDate.toString(), title);
 
             // Count Start + 15 min
             cal.setTime(startTime);
@@ -325,6 +340,8 @@ public class FragmentActivity extends BaseFragemnt implements
             calTimeSlot.setTime(firstDate);
             calTimeSlot.add(Calendar.MINUTE, 15);
             firstDate = calTimeSlot.getTime();
+
+            Log.d(TAG, "startTime3 " + time);
         }
     }
 

@@ -42,6 +42,7 @@ public class Variables {
     // Editable Flag in Calendar Screen
     public boolean editable = false;
     public String selectedTime = "";
+    public long minRecordingTime = 1000;
 
 
     /***********

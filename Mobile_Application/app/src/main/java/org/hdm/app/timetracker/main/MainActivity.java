@@ -146,7 +146,7 @@ public class MainActivity extends Activity  {
                 });
             }
         };
-        timer.scheduleAtFixedRate(timerTask,0, 900000);
+        timer.scheduleAtFixedRate(timerTask,0, 10000);
     }
 
 

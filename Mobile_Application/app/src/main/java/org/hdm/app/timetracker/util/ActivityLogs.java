@@ -1,4 +1,7 @@
+
 package org.hdm.app.timetracker.util;
+
+import android.util.Log;
 
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
@@ -13,6 +16,7 @@ import java.util.Map;
  * Created by Hannes on 30.07.2016.
  */
 public class ActivityLogs {
+    private static final String TAG = "ActivityLogs";
     public String date;
     public String user_id;
     public List<Logs> logs = new ArrayList<>();
@@ -54,7 +58,8 @@ public class ActivityLogs {
                 TimeFrame frame = list.get(i);
                 TimeStamp timeStamp = new TimeStamp();
                 timeStamp.start = frame.startTime.getHours() + ":" + frame.startTime.getMinutes();
-                timeStamp.end = frame.startTime.getHours() + ":" + frame.startTime.getMinutes();
+                Log.d(TAG, "StartTime" + timeStamp.start);
+                timeStamp.end = frame.endTime.getHours() + ":" + frame.endTime.getMinutes();
                 timeStamp.whereFrom = frame.whereFrom;
 
                 logs.timeStamps.add(timeStamp);
