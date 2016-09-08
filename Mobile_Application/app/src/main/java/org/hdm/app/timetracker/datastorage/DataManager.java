@@ -66,6 +66,9 @@ public class DataManager {
                 createActivityObject(title, activityObject);
             }
             activityMap.put(title, activityObject);
+            if(DEBUGMODE && activityObject.timeFrameList.size()>1) {
+                Log.d(TAG, "key:" + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).startTime);
+            }
             return true;
             }
         return false;
@@ -102,7 +105,9 @@ public class DataManager {
                 list = new ArrayList<String>();
             }
             calenderMap.put(key, list);
-            //  Log.d(TAG, "key " + key.toString() + " // value: " + calenderMap.get(key).toString());
+            if (DEBUGMODE) {
+            Log.d(TAG, "key: " + key.toString() + " // value: " + calenderMap.get(key).toString());
+            }
             return true;
         } else {
             return false;
@@ -116,11 +121,16 @@ public class DataManager {
         if (key != null && activity != null) {
 
             if(calenderMap.containsKey(key)) {
+
                 ArrayList<String> list = calenderMap.get(key);
                 // do not add enty if list contains already activitys
                 if (list.contains(activity)) return false;
                 list.add(activity);
                 calenderMap.put(key, list);
+
+                if (DEBUGMODE) {
+                    Log.d(TAG, "keyy: " + key.toString() + " // value: " + calenderMap.get(key).toString());
+                }
                 return true;
             }
         }

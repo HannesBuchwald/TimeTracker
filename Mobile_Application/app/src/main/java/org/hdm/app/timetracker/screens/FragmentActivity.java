@@ -41,7 +41,6 @@ public class FragmentActivity extends BaseFragemnt implements
     private final String TAG = "FragmentActivity";
 
 
-
     private View view;
     private RecyclerView recyclerView;
     private RecyclerView recyclerView_activeData;
@@ -53,8 +52,6 @@ public class FragmentActivity extends BaseFragemnt implements
     private long countt;
 
     List<Timer> timerList = new ArrayList<>();
-
-
 
 
     @Override
@@ -99,7 +96,6 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
-
     private void initObjectList() {
 
         objectAdapter = new ObjectListAdapter((List) new ArrayList<>(dataManager.getObjectMap().keySet()));
@@ -108,7 +104,7 @@ public class FragmentActivity extends BaseFragemnt implements
         recyclerView.setAdapter(objectAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(
-            var.listRows, StaggeredGridLayoutManager.VERTICAL));
+                var.listRows, StaggeredGridLayoutManager.VERTICAL));
     }
 
 
@@ -124,51 +120,28 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
-
-
-
-    // Listener from the ActivityObjectList
+    /**
+     * Listener from the ActivityObjectList
+     * Handled the click on an Activity
+     *
+     */
     @Override
     public void didClickOnActivityListItem(String title, View_Holder holder) {
 
 
-
+        // If editable Mode true - than add activity to selectedTime in CalendearList
+        if (var.editable) {
+            handelEditableActivity(title);
+            return;
+        }
 
         // Get the DataObject which was clicked
         // there are all information stored about the activity object
         // state, names image ect.
         ActivityObject activityObject = dataManager.getActivityObject(title);
 
-        // If editable Mode - than add activity to selectedTime in CalendearList
-        if (var.editable) {
-
-
-            String startTime = var.selectedTime;
-            int startHour = Integer.parseInt(startTime.substring(11, 13));
-            int startMin = Integer.parseInt(startTime.substring(14, 16));
-
-            // StartTime
-            Date startDate = Calendar.getInstance().getTime();
-            startDate.setHours(startHour);
-            startDate.setMinutes(startMin);
-            startDate.setSeconds(00);
-
-
-            Calendar endT = Calendar.getInstance();
-            endT.setTime(startDate);
-            endT.add(Calendar.MINUTE, var.timeFrame);
-
-            // EndTime
-            Date endDate = endT.getTime();
-            activityObject.saveTimeStamp("passive", startDate, endDate);
-
-            // add ActivityObject to CalenderList
-            dataManager.setActivityToCalendarList(var.selectedTime, activityObject.title);
-            listener.flip();
-        } else {
-
-            // when Activity is not active
-            if (!activityObject.activeState && var.activeCount < var.maxRecordedActivity) {
+        // when Activity is not active
+        if (!activityObject.activeState && var.activeCount < var.maxRecordedActivity) {
 
 //            if(list.get(position).sub_category && list.get(position).activeState) {
 //                DFragment dFragment = new DFragment(dsata);
@@ -176,54 +149,55 @@ public class FragmentActivity extends BaseFragemnt implements
 //                dFragment.show(fm, "Dialog Fragment");
 //            }
 
-                // Set State to active
-                activityObject.activeState = true;
+            // Set State to active
+            activityObject.activeState = true;
 
-                // set temporary start time
-                activityObject.startTime = Calendar.getInstance().getTime();
-                Log.d(TAG, "activityObject " + activityObject.startTime);
+            // set temporary start time
+            activityObject.startTime = Calendar.getInstance().getTime();
+            if (DEBUGMODE) Log.d(TAG, "activityObject " + activityObject.startTime);
 
-                // Count how many activity are active
-                var.activeCount++;
-                dataManager.activeList.add(activityObject.title);
+            // Count how many activity are active
+            var.activeCount++;
 
-            } else if(activityObject.activeState){
+            // Add Activity to activeList
+            dataManager.activeList.add(activityObject.title);
 
-
-                // Deactivate Activity
-                activityObject.activeState = false;
-                activityObject.count = 0;
-
-                // set temporary end time
-                activityObject.endTime = Calendar.getInstance().getTime();
+        } else if (activityObject.activeState) {
 
 
+            // Deactivate Activity
+            activityObject.activeState = false;
+            activityObject.count = 0;
 
-                //Count how many activities are active
-                var.activeCount--;
+            // set temporary end time
+            activityObject.endTime = Calendar.getInstance().getTime();
 
-                Date start = activityObject.startTime;
-                Date end = activityObject.endTime;
 
-                Log.d(TAG, "startTimee " + activityObject.startTime);
+            //Count how many activities are active
+            var.activeCount--;
 
-                Date startTime = activityObject.startTime;
-                String aTitle = activityObject.title;
+            Date start = activityObject.startTime;
+            Date end = activityObject.endTime;
 
-                // Save Time and subCategory in ActivityObject
-                activityObject.saveTimeStamp("active");
+            Log.d(TAG, "startTimee " + activityObject.startTime);
 
+            Date startTime = activityObject.startTime;
+            String aTitle = activityObject.title;
+
+            // Save Timestamp and SubCategory in ActivityObject
+            activityObject.saveTimeStamp("active");
 
 
 //                if ((end.getTime() - start.getTime())/10000f > var.minRecordingTime) {
 //                    // add ActivityObject to CalendarContentList
 //                }
-//                addActivityObjectToCalendarList(aTitle, startTime);
 
-                Log.d(TAG, "startTimee " + end.getTime() + " // " + start.getTime() + " // " +(end.getTime() - start.getTime())/10000f);
+            addActivityObjectToCalendarList(aTitle, startTime);
 
-                dataManager.activeList.remove(activityObject.title);
-            }
+            Log.d(TAG, "startTimee " + end.getTime() + " // " + start.getTime() + " // " + (end.getTime() - start.getTime()) / 10000f);
+
+            dataManager.activeList.remove(activityObject.title);
+
         }
 
         // Store edited ActivityObject back in DataManager
@@ -237,15 +211,70 @@ public class FragmentActivity extends BaseFragemnt implements
         }
 
         updateActiveList();
-        if(holder == null) objectAdapter.notifyItemChanged(objectAdapter.list.indexOf(activityObject.title));
 
+        /**
+         * If Activity selected from ActiveList (disable Activity)
+         * than notify the corresponding ActivityObject in the ActivityList
+         */
+        if (holder == null)
+            objectAdapter.notifyItemChanged(objectAdapter.list.indexOf(activityObject.title));
+
+    }
+
+
+
+    /**
+     * This function handle the onClick of an Activity when the Activity
+     * will add manually to specific time in CalendarList.
+     * If the activity is already added to the CalendarLsit
+     * - than the activity will not be added and the timestamp will not be saved
+     *
+     * @param title Name from the selected Activity
+     */
+    private void handelEditableActivity(String title) {
+
+        // Get the DataObject which was clicked
+        // there are all information stored about the activity object
+        // state, names image ect.
+        ActivityObject activityObject = dataManager.getActivityObject(title);
+
+
+
+        String startTime = var.selectedTime;
+        int startHour = Integer.parseInt(startTime.substring(11, 13));
+        int startMin = Integer.parseInt(startTime.substring(14, 16));
+
+        // StartTime
+        Date startDate = Calendar.getInstance().getTime();
+        startDate.setHours(startHour);
+        startDate.setMinutes(startMin);
+        startDate.setSeconds(00);
+
+
+        // EndTime
+        Calendar endT = Calendar.getInstance();
+        endT.setTime(startDate);
+        endT.add(Calendar.MINUTE, var.timeFrame);
+        Date endDate = endT.getTime();
+
+
+        // add ActivityObject to CalenderList
+        boolean add = dataManager.setActivityToCalendarList(var.selectedTime, activityObject.title);
+
+        if (add) {
+            // Add the TimeStamp to the ArrayList in the Activity Object
+            activityObject.saveTimeStamp("passive", startDate, endDate);
+            dataManager.setActivityObject(activityObject);
+        }
+
+        // Flip back the view to CalendarView
+        listener.flip();
     }
 
     @Override
     public void didLongClickOnView(String title, View_Holder view_holder) {
-        didClickOnActivityListItem(title,view_holder);
+        didClickOnActivityListItem(title, view_holder);
     }
-
 
 
     private void addActivityObjectToCalendarList(String title, Date time) {
@@ -263,7 +292,7 @@ public class FragmentActivity extends BaseFragemnt implements
         // find current TimeSlot
         if (startMin < var.timeFrame) {
             firstMin = 0;
-        } else  {
+        } else {
             firstMin = var.timeFrame;
         }
 
@@ -277,15 +306,14 @@ public class FragmentActivity extends BaseFragemnt implements
 
         if (DEBUGMODE) Log.d(TAG, "startTime1 " + firstDate + " || s " + time
                 + " startTime " + dataManager.getActivityObject(title).timeFrameList.get(
-                dataManager.getActivityObject(title).timeFrameList.size()-1).startTime +
-        " " + dataManager.getActivityObject(title).timeFrameList.get(
-                dataManager.getActivityObject(title).timeFrameList.size()-1).endTime);
+                dataManager.getActivityObject(title).timeFrameList.size() - 1).startTime +
+                " " + dataManager.getActivityObject(title).timeFrameList.get(
+                dataManager.getActivityObject(title).timeFrameList.size() - 1).endTime);
 
         dataManager.setActivityToCalendarList(firstDate.toString(), title);
 
 
-
-        while(time.before(currentDate)){
+        while (time.before(currentDate)) {
 
             dataManager.setActivityToCalendarList(firstDate.toString(), title);
 
@@ -306,8 +334,6 @@ public class FragmentActivity extends BaseFragemnt implements
 
 
 
-
-
     // In this mode the user only sees a list of activitys
     // when he selects one than screens flip back to calendar screen
     private void editableMode() {
@@ -324,7 +350,6 @@ public class FragmentActivity extends BaseFragemnt implements
             setMenuBtn(R.drawable.ic_forward);
         }
     }
-
 
 
     // load edited List and update ActivityObjectListAdapter

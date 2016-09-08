@@ -37,18 +37,6 @@ import static org.hdm.app.timetracker.util.Consts.*;
 public class MainActivity extends Activity  {
     private final String TAG = "MainActivity";
 
-    // ToDo Implement new Feature Food
-    // ToDo Implement LogFile Handling
-    // ToDo Implement Transmit Data to Server
-    // ToDo Implement Settings Menu
-    // ToDo Fix Display Activitys in CalendarScreen
-    // ToDo How to install the App on the Smartphone
-    // ToDo Change Size of Items in CalendarList
-    // ToDo Change Numbers of 00:30 and 00:48 in CalendarList
-    // ToDo Change Tracking from Title to ID
-    // ToDo Fix TimeCounter in ActiveList (Delete Thread every minute and restart it)
-    // ToDo Fix Blue Background in CalendarList when time is 30 min  or 0 min
-
     /**
      * Constants
      */
@@ -62,20 +50,23 @@ public class MainActivity extends Activity  {
         super.onCreate(savedInstanceState);
 
         initConfiguration();
+        initCalenderMap();
         initDataLogger();
         initResetRecordedData();
         loadSavedObjectState();
-        initCalenderMap();
         initLayout();
 //        initConfiguration();
     }
 
 
-
+    /**
+     * There are to options for the Backpress Button
+     * 1. if backPress flag is true that allow to use this button as backpress
+     * 2. if backPressDialog is true then show a AlertDialog before quit the app
+     */
     @Override
     public void onBackPressed() {
         // ToDo write test cases
-        // if backPress is true then backpress button in active
         if(Variables.getInstance().backPress) {
 
             // if backPressDialog is true then show a AlertDialog before quit the app
@@ -94,6 +85,7 @@ public class MainActivity extends Activity  {
                 MainActivity.super.onBackPressed();
             }
         }
+
     }
 
 
@@ -108,31 +100,20 @@ public class MainActivity extends Activity  {
     }
 
 
-
-
-
-
-
-
-
-
+    /**
+     * Use the App as Homescreen App
+     * with this feature is the home button override
+     * That means when the user is pressing the homebutton the app will start again
+     * and the user can´t get to the regular homescreen of the smartphone
+     *
+     * @param intent
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (Intent.ACTION_MAIN.equals(intent.getAction())) {
-            Log.i(TAG, "onNewIntent: HOME Key");
         }
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ( keyCode == KeyEvent.KEYCODE_MENU ) {
-            Log.d(TAG, "MENU pressed");
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 
 
 
@@ -143,6 +124,11 @@ public class MainActivity extends Activity  {
      * Init
      *******************************************/
 
+    /**
+     * Init DataManagement Singleton
+     * Init Variables Singleton
+     * Load all used files like activity.json, images
+     */
     private void initConfiguration() {
         // Init the Data Structure - there all the created where hosted
         DataManager.init();
@@ -154,8 +140,10 @@ public class MainActivity extends Activity  {
     }
 
 
-
-
+    /**
+     * Init Content for CalendarList
+     * Every hour is seperatetd in two half hour periods
+     */
     private void initCalenderMap() {
 
         Calendar cal = Calendar.getInstance();
@@ -268,7 +256,9 @@ public class MainActivity extends Activity  {
         }
     }
 
-
+    /**
+     * Save the current activities State on local storage as json format
+     */
     private void saveLogFile() {
         String currentDate = Calendar.getInstance().getTime().toString();
         int size = currentDate.length();
@@ -281,8 +271,10 @@ public class MainActivity extends Activity  {
     }
 
 
-
-
+    /**
+     * Save current activity state, and CalenderMap in internal storage
+     *
+     */
     private void saveCurrentState() {
 
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
@@ -313,18 +305,19 @@ public class MainActivity extends Activity  {
     }
 
 
-
-
+    /**
+     * Load the stored current states after the after the app is opened
+     */
     private void loadSavedObjectState() {
         Gson gson = new Gson();
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
 
-//        SharedPreferences.Editor editor = mPrefs.edit();
-//        editor.remove(ACTIVITY_STATE);
-//        editor.remove(ACTIVE_LIST);
-//        editor.remove(CALENDAR_MAP);
-//        editor.apply();
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.remove(ACTIVITY_STATE);
+        editor.remove(ACTIVE_LIST);
+        editor.remove(CALENDAR_MAP);
+        editor.apply();
 
 
         if(mPrefs.contains(ACTIVITY_STATE)){

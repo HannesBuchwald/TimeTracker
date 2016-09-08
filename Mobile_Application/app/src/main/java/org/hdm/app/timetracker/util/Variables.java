@@ -37,7 +37,7 @@ public class Variables {
     /**
      * Log Interval in ms
      */
-    public long logTimeInterval = 10000;
+    public long logTimeInterval = 50000;
 
 
 
