@@ -313,11 +313,11 @@ public class MainActivity extends Activity  {
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
 
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.remove(ACTIVITY_STATE);
-        editor.remove(ACTIVE_LIST);
-        editor.remove(CALENDAR_MAP);
-        editor.apply();
+//        SharedPreferences.Editor editor = mPrefs.edit();
+//        editor.remove(ACTIVITY_STATE);
+//        editor.remove(ACTIVE_LIST);
+//        editor.remove(CALENDAR_MAP);
+//        editor.apply();
 
 
         if(mPrefs.contains(ACTIVITY_STATE)){

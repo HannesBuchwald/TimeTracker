@@ -75,7 +75,22 @@ public class FragmentActivity extends BaseFragemnt implements
 
     @Override
     public void onPause() {
+
         super.onPause();
+        addActiveActivitysToCalenderList();
+    }
+
+    private void addActiveActivitysToCalenderList() {
+
+        ArrayList<String> activeList = dataManager.activeList;
+
+        if(activeList != null && activeList.size()>0) {
+
+            for (int i = 0; i < activeList.size();i++) {
+                ActivityObject aObject = dataManager.getActivityObject(activeList.get(i));
+                addActivityObjectToCalendarList(aObject.title, aObject.startTime);
+            }
+        }
     }
 
     /*******************
@@ -181,18 +196,16 @@ public class FragmentActivity extends BaseFragemnt implements
 
             Log.d(TAG, "startTimee " + activityObject.startTime);
 
-            Date startTime = activityObject.startTime;
-            String aTitle = activityObject.title;
-
-            // Save Timestamp and SubCategory in ActivityObject
-            activityObject.saveTimeStamp("active");
 
 
 //                if ((end.getTime() - start.getTime())/10000f > var.minRecordingTime) {
 //                    // add ActivityObject to CalendarContentList
 //                }
 
-            addActivityObjectToCalendarList(aTitle, startTime);
+            addActivityObjectToCalendarList(activityObject.title, activityObject.startTime);
+
+            // Save Timestamp and SubCategory in ActivityObject
+            activityObject.saveTimeStamp("active");
 
             Log.d(TAG, "startTimee " + end.getTime() + " // " + start.getTime() + " // " + (end.getTime() - start.getTime()) / 10000f);
 
@@ -277,57 +290,54 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
-    private void addActivityObjectToCalendarList(String title, Date time) {
-
-        int startMin = time.getMinutes();
-        Date firstDate = time;
-        int firstMin;
-
-
-        Calendar calTimeSlot = Calendar.getInstance();
-        Calendar cal = Calendar.getInstance();
-        Date currentDate = cal.getTime();
-
+    private void addActivityObjectToCalendarList(String title, Date startTime) {
 
         // find current TimeSlot
-        if (startMin < var.timeFrame) {
-            firstMin = 0;
-        } else {
-            firstMin = var.timeFrame;
-        }
+        int startMin = startTime.getMinutes();
+        int firstMin = 0;
+        if (startMin > var.timeFrame) firstMin = var.timeFrame;
 
 
-        Log.d(TAG, "startTime1 " + time);
-
+        Calendar calFirstTimeSlot = Calendar.getInstance();
+        calFirstTimeSlot.setTime(startTime);
+        Date firstDate = calFirstTimeSlot.getTime();
         // Set Current TimeSlot
         firstDate.setSeconds(0);
         firstDate.setMinutes(firstMin);
 
 
-        if (DEBUGMODE) Log.d(TAG, "startTime1 " + firstDate + " || s " + time
-                + " startTime " + dataManager.getActivityObject(title).timeFrameList.get(
-                dataManager.getActivityObject(title).timeFrameList.size() - 1).startTime +
-                " " + dataManager.getActivityObject(title).timeFrameList.get(
-                dataManager.getActivityObject(title).timeFrameList.size() - 1).endTime);
 
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR, 2);
+        Date currentDate = cal.getTime();
+
+
+        Log.d(TAG, "time1 " + startTime);
+
+
+        // Store Activity in TimeSlot from CalendarList
         dataManager.setActivityToCalendarList(firstDate.toString(), title);
 
+        if (DEBUGMODE) Log.d(TAG, "time2; " + startTime + " || startTime; " + firstDate);
 
-        while (time.before(currentDate)) {
+
+        calFirstTimeSlot.setTime(firstDate);
+        calFirstTimeSlot.add(Calendar.MINUTE, var.timeFrame);
+        firstDate = calFirstTimeSlot.getTime();
+
+        if (DEBUGMODE) Log.d(TAG, "time3; " + startTime + " || startTime; " + firstDate);
+
+        while (firstDate.before(currentDate)) {
 
             dataManager.setActivityToCalendarList(firstDate.toString(), title);
 
-            // Count Start + 30 min
-            cal.setTime(time);
-            cal.add(Calendar.MINUTE, var.timeFrame);
-            time = cal.getTime();
+            // Count FirstDate + 30 min
+            calFirstTimeSlot.setTime(firstDate);
+            calFirstTimeSlot.add(Calendar.MINUTE, var.timeFrame);
+            firstDate = calFirstTimeSlot.getTime();
 
-            // Count FirstDate + 15 min
-            calTimeSlot.setTime(firstDate);
-            calTimeSlot.add(Calendar.MINUTE, var.timeFrame);
-            firstDate = calTimeSlot.getTime();
+            if (DEBUGMODE) Log.d(TAG, "time4; " + startTime + " || startTime; " + firstDate + " || currentTime; " + currentDate);
 
-            Log.d(TAG, "startTime3 " + time);
         }
     }
 
