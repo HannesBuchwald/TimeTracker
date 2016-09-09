@@ -230,15 +230,16 @@ public class MainActivity extends Activity  {
     }
 
 
+
+    /**
+     * Init the Layout
+     * activate FullScreen Mode
+     *
+     */
     private void initLayout() {
         setFullScreen(true);
         setContentView(R.layout.activity_main);
     }
-
-
-
-
-
 
 
 
