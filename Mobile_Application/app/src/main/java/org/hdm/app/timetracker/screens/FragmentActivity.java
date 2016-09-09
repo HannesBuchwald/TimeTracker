@@ -19,7 +19,6 @@ import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
 import org.hdm.app.timetracker.adapter.ObjectListAdapter;
 import org.hdm.app.timetracker.adapter.ActiveListAdapter;
-import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
@@ -77,21 +76,9 @@ public class FragmentActivity extends BaseFragemnt implements
     public void onPause() {
 
         super.onPause();
-        addActiveActivitysToCalenderList();
+        addActiveActivitiesToCalenderList();
     }
 
-    private void addActiveActivitysToCalenderList() {
-
-        ArrayList<String> activeList = dataManager.activeList;
-
-        if(activeList != null && activeList.size()>0) {
-
-            for (int i = 0; i < activeList.size();i++) {
-                ActivityObject aObject = dataManager.getActivityObject(activeList.get(i));
-                addActivityObjectToCalendarList(aObject.title, aObject.startTime);
-            }
-        }
-    }
 
     /*******************
      * Life Cycle Ende
@@ -138,7 +125,6 @@ public class FragmentActivity extends BaseFragemnt implements
     /**
      * Listener from the ActivityObjectList
      * Handled the click on an Activity
-     *
      */
     @Override
     public void didClickOnActivityListItem(String title, View_Holder holder) {
@@ -197,7 +183,6 @@ public class FragmentActivity extends BaseFragemnt implements
             Log.d(TAG, "startTimee " + activityObject.startTime);
 
 
-
 //                if ((end.getTime() - start.getTime())/10000f > var.minRecordingTime) {
 //                    // add ActivityObject to CalendarContentList
 //                }
@@ -235,7 +220,6 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
-
     /**
      * This function handle the onClick of an Activity when the Activity
      * will add manually to specific time in CalendarList.
@@ -250,7 +234,6 @@ public class FragmentActivity extends BaseFragemnt implements
         // there are all information stored about the activity object
         // state, names image ect.
         ActivityObject activityObject = dataManager.getActivityObject(title);
-
 
 
         String startTime = var.selectedTime;
@@ -306,7 +289,6 @@ public class FragmentActivity extends BaseFragemnt implements
         firstDate.setMinutes(firstMin);
 
 
-
         Calendar cal = Calendar.getInstance();
         // cal.add(Calendar.HOUR, 2); // for Testing purpouse
         Date currentDate = cal.getTime();
@@ -315,33 +297,41 @@ public class FragmentActivity extends BaseFragemnt implements
         Log.d(TAG, "time1 " + startTime);
 
 
-        // Store Activity in TimeSlot from CalendarList
-        dataManager.setActivityToCalendarList(firstDate.toString(), title);
+        long diff = currentDate.getTime() - startTime.getTime();
+        long seconds = diff / 1000;
+        long minutes = seconds / 60;
 
-        if (DEBUGMODE) Log.d(TAG, "time2; " + startTime + " || startTime; " + firstDate);
+        if (minutes >= var.minRecordingTime) {
 
 
-        calFirstTimeSlot.setTime(firstDate);
-        calFirstTimeSlot.add(Calendar.MINUTE, var.timeFrame);
-        firstDate = calFirstTimeSlot.getTime();
-
-        if (DEBUGMODE) Log.d(TAG, "time3; " + startTime + " || startTime; " + firstDate);
-
-        while (firstDate.before(currentDate)) {
-
+            // Store Activity in TimeSlot from CalendarList
             dataManager.setActivityToCalendarList(firstDate.toString(), title);
 
-            // Count FirstDate + 30 min
+            if (DEBUGMODE) Log.d(TAG, "time2; " + startTime + " || startTime; " + firstDate);
+
+
             calFirstTimeSlot.setTime(firstDate);
             calFirstTimeSlot.add(Calendar.MINUTE, var.timeFrame);
             firstDate = calFirstTimeSlot.getTime();
 
-            if (DEBUGMODE) Log.d(TAG, "time4; " + startTime + " || startTime; " + firstDate + " || currentTime; " + currentDate);
+            if (DEBUGMODE) Log.d(TAG, "time3; " + startTime + " || startTime; " + firstDate);
+
+            while (firstDate.before(currentDate)) {
+
+                dataManager.setActivityToCalendarList(firstDate.toString(), title);
+
+                // Count FirstDate + 30 min
+                calFirstTimeSlot.setTime(firstDate);
+                calFirstTimeSlot.add(Calendar.MINUTE, var.timeFrame);
+                firstDate = calFirstTimeSlot.getTime();
+
+                if (DEBUGMODE)
+                    Log.d(TAG, "time4; " + startTime + " || startTime; " + firstDate + " || currentTime; " + currentDate);
+
+            }
 
         }
     }
-
-
 
 
     // In this mode the user only sees a list of activitys
@@ -373,5 +363,22 @@ public class FragmentActivity extends BaseFragemnt implements
         activeAdapter.list = dataManager.activeList;
         Log.d(TAG, "size " + timerList.size());
         activeAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * add all active Activity to CalendarList
+     */
+    private void addActiveActivitiesToCalenderList() {
+
+        ArrayList<String> activeList = dataManager.activeList;
+
+        if (activeList != null && activeList.size() > 0) {
+
+            for (int i = 0; i < activeList.size(); i++) {
+                ActivityObject aObject = dataManager.getActivityObject(activeList.get(i));
+                addActivityObjectToCalendarList(aObject.title, aObject.startTime);
+            }
+        }
     }
 }

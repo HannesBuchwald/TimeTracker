@@ -75,7 +75,13 @@ public class Variables {
     // Editable Flag in Calendar Screen
     public boolean editable = false;
     public String selectedTime = "";
-    public long minRecordingTime = 100;
+    /**
+     * This time is the minimum time which an activity must be recorded
+     * to be displayed in CalendarList.
+     *
+     * the value represent minutes
+     */
+    public long minRecordingTime = 0;
 
 
 
