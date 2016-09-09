@@ -11,38 +11,117 @@ public class Variables {
 
 
 
-    // Name of the User
+
+    /***********
+     * General Variables
+     *************+/
+
+    /**
+     * UserName from the person which is using the application
+     */
     public String user_ID = "01";
 
-    // which activity setup should be loaded
+
+    /**
+     * Which activity setup should be loaded
+     */
     public String setup = "standard";
 
-    // Amount of maximal recorded activities at the same time
+
+    /**
+     * Amount of maximal recorded activities at the same time
+     */
     public int maxRecordedActivity = 2;
 
-    // amount of rows for the activity list
+
+    /**
+     * Log Interval in ms
+     */
+    public long logTimeInterval = 50000;
+
+
+
+
+
+
+
+    /**********
+     * Activity Screen Variables
+     ************/
+
+    /**
+     * Amount of rows for the objectList
+     */
     public int listRows = 2;
 
-    // Time of Notification Vibration in ms
-    public int vibrationTime = 5000;
-
-    // Period of notificaton in ms
-    public int notificationPeriode = 900000;
-
-
-
-
-
-
-    /***** Activity Screen *****/
+    /**
+     * Amount of rows for the activeList
+     */
     public int activeListRow = 1;
+
+    /**
+     * Amount of active Activitys
+     */
     public int activeCount = 0;
 
+
+
+
+
+    /**********
+     * Calendar Screen Variables
+     ************/
 
     // Editable Flag in Calendar Screen
     public boolean editable = false;
     public String selectedTime = "";
-    public long minRecordingTime = 1000;
+    public long minRecordingTime = 100;
+
+
+
+
+
+    /***********
+     * MainActivity Variables
+     ***********/
+
+
+    /**
+     * Backpress flags
+     */
+    public boolean backPress = true;
+    public boolean backPressDialog = false;
+
+
+
+
+
+    /**********
+     * RecordTime Variables
+     ***************/
+
+    /**
+     * TimeSlot in calendar screen
+     */
+    public int timeFrame = 30;
+
+    /**
+     * Start min of recordTime in calendar screen
+     */
+    public int startMin = 0;
+
+    /**
+     * Start hour of recordTime in calendar screen
+     */
+    public int startHour = 0;
+
+    /**
+     * End hour of recordTime in calendar screen
+     */
+    public int endHour = 24;
+
+
+
 
 
     /***********

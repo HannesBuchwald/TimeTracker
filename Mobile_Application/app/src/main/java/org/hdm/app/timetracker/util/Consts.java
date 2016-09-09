@@ -36,6 +36,18 @@ public final class Consts {
     // Name from the Json Object
     public final static String ACTIVITIES = "activitys";
 
+
+
+
+    public final static String ACTIVITY_STATE = "ActivityState";
+    public final static String ACTIVE_LIST = "ActiveList";
+    public final static String CALENDAR_MAP = "CalendarMap";
+
+
+
+
+
+
     /**
      The caller references the constants using <tt>Consts.EMPTY_STRING</tt>,
      and so on. Thus, the caller should be prevented from constructing objects of

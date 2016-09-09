@@ -27,6 +27,9 @@
         android:layout_height="match_parent"
         android:background="#ECEFF1"
         android:layout_below="@+id/frag_menu"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbarSize="10dp"
         />
 
 

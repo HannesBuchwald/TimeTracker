@@ -13,6 +13,7 @@ import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 import org.hdm.app.timetracker.util.View_Holder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,9 +30,8 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     private ActiveActivityListOnClickListener listener;
 
 
-    public ActiveListAdapter(List<String> activityObject) {
+    public ActiveListAdapter(ArrayList<String> activityObject) {
         this.list = activityObject;
-        Log.d(TAG, "size init " + list.size());
     }
 
 
@@ -53,8 +53,6 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         holder.setListener(this);
         holder.title.setText(object.title);
         holder.activityList = true;
-
-        Log.d(TAG, "size " + list.size());
         if(dataManager.imageMap.get(object.imageName) != null ){
             holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
         }
