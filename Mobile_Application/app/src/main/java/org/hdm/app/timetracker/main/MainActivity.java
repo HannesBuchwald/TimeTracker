@@ -198,7 +198,7 @@ public class MainActivity extends Activity  {
                 });
             }
         };
-        timer.scheduleAtFixedRate(timerTask,0, var.logTimeInterval);
+        timer.scheduleAtFixedRate(timerTask,0, var.logTimeInterval*60*1000);
     }
 
 

@@ -35,9 +35,9 @@ public class Variables {
 
 
     /**
-     * Log Interval in ms
+     * Log Interval in minutes
      */
-    public long logTimeInterval = 50000;
+    public long logTimeInterval = 60;
 
 
 
@@ -75,6 +75,7 @@ public class Variables {
     // Editable Flag in Calendar Screen
     public boolean editable = false;
     public String selectedTime = "";
+
     /**
      * This time is the minimum time which an activity must be recorded
      * to be displayed in CalendarList.
