@@ -308,7 +308,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, 2);
+        // cal.add(Calendar.HOUR, 2); // for Testing purpouse
         Date currentDate = cal.getTime();
 
 

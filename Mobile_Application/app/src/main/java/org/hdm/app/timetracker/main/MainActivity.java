@@ -37,6 +37,9 @@ import static org.hdm.app.timetracker.util.Consts.*;
 public class MainActivity extends Activity  {
     private final String TAG = "MainActivity";
 
+    // ToDo Add Logik for Dayshift
+    // ToDo Add Logik to display Activitys on Dayview only after 1 Minute recording
+
     /**
      * Constants
      */
