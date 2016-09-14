@@ -4,6 +4,8 @@ package org.hdm.app.timetracker.screens;
  * Created by Hannes on 13.05.2016.
  */
 
+import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,6 +72,9 @@ public class FragmentActivity extends BaseFragemnt implements
         updateActiveList();
         updateObjectList();
         editableMode();
+
+        Log.d(TAG, "here Im");
+
     }
 
     @Override

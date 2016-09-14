@@ -1,5 +1,8 @@
 package org.hdm.app.timetracker.util;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * Created by Hannes on 06.05.2016.
  */
@@ -96,6 +99,7 @@ public class Variables {
     /**
      * Backpress flags
      */
+    // ToDo change ack to false
     public boolean backPress = true;
     public boolean backPressDialog = false;
 
@@ -128,7 +132,15 @@ public class Variables {
     public int endHour = 24;
 
 
+    /**
+     * Current Timestamp
+     */
+    public Date currentTime;
 
+    /**
+     * active Activities - CashList for active Activities
+     */
+    public ArrayList<String> activeActivities;
 
 
     /***********
