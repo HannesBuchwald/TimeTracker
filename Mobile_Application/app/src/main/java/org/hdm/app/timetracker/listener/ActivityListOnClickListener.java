@@ -7,6 +7,6 @@ import org.hdm.app.timetracker.util.View_Holder;
  */
 public interface ActivityListOnClickListener {
     public void didClickOnActivityListItem(String title, View_Holder holder);
-    public void didLongClickOnView(String title, View_Holder view_holder);
+    public void didLongClickOnActivityListItem(String title, View_Holder view_holder);
 
 }

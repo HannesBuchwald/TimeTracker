@@ -5,6 +5,7 @@ package org.hdm.app.timetracker.screens;
  */
 
 import android.app.Fragment;
+import android.preference.PreferenceFragment;
 import android.view.View;
 
 import org.hdm.app.timetracker.R;

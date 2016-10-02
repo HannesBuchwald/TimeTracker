@@ -109,6 +109,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void didClickOnView(View view, String title, View_Holder holder) {
+
         if(listener != null) listener.didClickOnActivityListItem(title, holder);
 
     }
@@ -116,6 +117,6 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void didLongClickOnView(View view, String title, View_Holder holder) {
-        if(listener != null) listener.didClickOnActivityListItem(title, holder);
+        if(listener != null) listener.didLongClickOnActivityListItem(title, holder);
     }
 }

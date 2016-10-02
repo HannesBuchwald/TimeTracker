@@ -243,18 +243,17 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     @Override
     public void onClick(View v) {
         Log.d(TAG, "longklick ttt " + title.getText()+ " " + v.getId() + " " + listener);
-//        if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
+        if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
     }
 
 
     @Override
     public boolean onLongClick(View v) {
 
+        Log.d(TAG, "longklick ttttttt " + title.getText()+ " " + v.getId() + " " + listener);
 
             if(listener != null) {
-                if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
-//                listener.didLongClickOnView(v, title.getText().toString(), this);
-//                Log.d(TAG, "longklick " + title.getText()+ " " + v.getId() + " " + listener);
+                if(listener!= null) listener.didLongClickOnView(v, title.getText().toString(), this);
                 return true;
             }
 

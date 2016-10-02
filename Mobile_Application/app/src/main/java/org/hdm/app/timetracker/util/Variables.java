@@ -143,6 +143,12 @@ public class Variables {
     public ArrayList<String> activeActivities;
 
 
+    /**
+     * Settings enabler
+     */
+    public boolean enableSettings;
+
+
     /***********
      * Singelton pattern
      ***********/

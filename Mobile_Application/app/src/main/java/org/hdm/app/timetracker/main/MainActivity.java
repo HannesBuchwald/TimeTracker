@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Window;
@@ -17,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.listener.PreferenceListener;
 import org.hdm.app.timetracker.util.FileLoader;
 import org.hdm.app.timetracker.util.Variables;
 
@@ -33,7 +35,8 @@ import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.*;
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity implements
+        PreferenceListener{
     private final String TAG = "MainActivity";
 
     // ToDo Add Logik for Dayshift
@@ -57,7 +60,7 @@ public class MainActivity extends Activity  {
         initCalenderMap(calEndTime.getTime());
 
         initDataLogger();
-        initResetRecordedData();
+//        initResetRecordedData();
 //        loadSavedObjectState();
         initLayout();
     }
@@ -529,4 +532,10 @@ public class MainActivity extends Activity  {
         }
     }
 
+
+
+    @Override
+    public void resetActivities() {
+        // Activity reset process;
+    }
 }

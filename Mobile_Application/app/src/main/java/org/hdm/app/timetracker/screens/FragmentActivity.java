@@ -7,6 +7,7 @@ package org.hdm.app.timetracker.screens;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
@@ -54,6 +56,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
     List<Timer> timerList = new ArrayList<>();
 
+    String currentTitle = "";
+    int settingsCounter = 4;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -133,6 +137,61 @@ public class FragmentActivity extends BaseFragemnt implements
      */
     @Override
     public void didClickOnActivityListItem(String title, View_Holder holder) {
+        Log.d(TAG, "did click on View");
+        handleShortClick(title, holder);
+    }
+
+
+
+    private void handleShortClick(String title, View_Holder holder) {
+
+
+
+        if(currentTitle.equals(title)) {
+
+            settingsCounter--;
+
+            if(settingsCounter<=3) {
+                String displayedText = settingsCounter + " Clicks to unlock Settings";
+
+                if(settingsCounter==0) {
+                    displayedText = "Setting is unlocked";
+                    settingsCounter = 10;
+                    var.enableSettings = true;
+                    currentTitle = "";
+                    listener.displaySettingsFragment();
+                }
+
+                final Toast toast = Toast.makeText(getActivity(), displayedText, Toast.LENGTH_SHORT);
+                toast.show();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast.cancel();
+                    }
+                }, 500);
+            }
+        }else {
+            currentTitle = title;
+            settingsCounter = 4;
+            var.enableSettings = false;
+
+        }
+
+        Log.d(TAG, "Settings Enabler " + currentTitle + " " + var.enableSettings);
+    }
+
+
+    @Override
+    public void didLongClickOnActivityListItem(String title, View_Holder view_holder) {
+        handleActivityClick(title, view_holder);
+    }
+
+
+
+
+    private void handleActivityClick(String title, View_Holder holder) {
 
 
         // If editable Mode true - than add activity to selectedTime in CalendearList
@@ -225,6 +284,9 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
+
+
+
     /**
      * This function handle the onClick of an Activity when the Activity
      * will add manually to specific time in CalendarList.
@@ -271,12 +333,6 @@ public class FragmentActivity extends BaseFragemnt implements
         // Flip back the view to CalendarView
         listener.flip();
     }
-
-    @Override
-    public void didLongClickOnView(String title, View_Holder view_holder) {
-        didClickOnActivityListItem(title, view_holder);
-    }
-
 
     private void addActivityObjectToCalendarList(String title, Date startTime) {
 
@@ -339,6 +395,8 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
+
+
     // In this mode the user only sees a list of activitys
     // when he selects one than screens flip back to calendar screen
     private void editableMode() {
@@ -355,6 +413,8 @@ public class FragmentActivity extends BaseFragemnt implements
             setMenuBtn(R.drawable.ic_forward);
         }
     }
+
+
 
 
     // load edited List and update ActivityObjectListAdapter
