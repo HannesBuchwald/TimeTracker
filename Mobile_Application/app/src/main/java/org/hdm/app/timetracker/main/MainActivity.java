@@ -148,9 +148,6 @@ public class MainActivity extends Activity implements
 
         FileLoader fl = new FileLoader(this);
         fl.initFiles();
-
-
-
     }
 
 
@@ -432,6 +429,8 @@ public class MainActivity extends Activity implements
         }
     }
 
+
+
     /**
      * Save the current activities State on local storage as json format
      */
@@ -537,5 +536,12 @@ public class MainActivity extends Activity implements
     @Override
     public void resetActivities() {
         // Activity reset process;
+        Log.d(TAG, "Click on Reset in Main Activity");
+
+        saveLogFile();
+
+        initConfiguration();
+        Calendar calEndTime = Calendar.getInstance();
+        initCalenderMap(calEndTime.getTime());
     }
 }

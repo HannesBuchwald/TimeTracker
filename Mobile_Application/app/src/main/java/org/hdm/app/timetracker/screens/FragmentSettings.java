@@ -57,6 +57,7 @@ public class FragmentSettings extends BaseFragemnt {
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction().add(R.id.fragment_settings, settings).commit();
         }
+
         return view;
     }
 

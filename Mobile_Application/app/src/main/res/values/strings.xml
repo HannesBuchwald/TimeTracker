@@ -46,9 +46,7 @@
 
     <string name="pref_summary_delete_limit">SMS</string>
     <string name="pref_title_sms_delete">SMS Delete</string>
-
-
-    pref_summary_auto_delete
+    <string name="pref_key_reset_activities">pref_key_reset_activities</string>
 
 
 </resources>
