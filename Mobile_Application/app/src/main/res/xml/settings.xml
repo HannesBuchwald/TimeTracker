@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <PreferenceCategory
+        android:title="Activity Log"
+        android:key="pref_key_activity">
+        <Preference
+            android:key="@string/pref_key_reset_activities"
+            android:summary="Reset the recorded activities"
+            android:title="Reset" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,5 +1,8 @@
 package org.hdm.app.timetracker.util;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * Created by Hannes on 06.05.2016.
  */
@@ -35,9 +38,9 @@ public class Variables {
 
 
     /**
-     * Log Interval in ms
+     * Log Interval in minutes
      */
-    public long logTimeInterval = 50000;
+    public long logTimeInterval = 1;
 
 
 
@@ -75,7 +78,14 @@ public class Variables {
     // Editable Flag in Calendar Screen
     public boolean editable = false;
     public String selectedTime = "";
-    public long minRecordingTime = 100;
+
+    /**
+     * This time is the minimum time which an activity must be recorded
+     * to be displayed in CalendarList.
+     *
+     * the value represent minutes
+     */
+    public long minRecordingTime = 0;
 
 
 
@@ -89,6 +99,7 @@ public class Variables {
     /**
      * Backpress flags
      */
+    // ToDo change ack to false
     public boolean backPress = true;
     public boolean backPressDialog = false;
 
@@ -121,7 +132,21 @@ public class Variables {
     public int endHour = 24;
 
 
+    /**
+     * Current Timestamp
+     */
+    public Date currentTime;
 
+    /**
+     * active Activities - CashList for active Activities
+     */
+    public ArrayList<String> activeActivities;
+
+
+    /**
+     * Settings enabler
+     */
+    public boolean enableSettings;
 
 
     /***********

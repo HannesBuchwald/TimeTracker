@@ -19,15 +19,11 @@ public class FragmentContainer extends Fragment  implements
 		MainListener {
 
 
-	private FragmentActivity activityFragemnt;
+	private FragmentActivity activityFragment;
 	private View view;
 	private boolean mShowingBack = false;
-	private FragmentCalender dayViewFragemnt;
-
-
-
-
-
+	private FragmentCalender dayViewFragment;
+	private FragmentSettings settingsFragment;
 
 
 	@Override
@@ -49,11 +45,13 @@ public class FragmentContainer extends Fragment  implements
 
 
 	private void initFragments() {
-		dayViewFragemnt = new FragmentCalender();
-		activityFragemnt = new FragmentActivity();
+		dayViewFragment = new FragmentCalender();
+		activityFragment = new FragmentActivity();
+		settingsFragment = new FragmentSettings();
 
-		dayViewFragemnt.setContext(this);
-		activityFragemnt.setContext(this);
+		dayViewFragment.setContext(this);
+		activityFragment.setContext(this);
+		settingsFragment.setContext(this);
 	}
 
 
@@ -61,7 +59,7 @@ public class FragmentContainer extends Fragment  implements
 
 	private void loadFragment(Bundle savedInstanceState) {
 		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction().add(R.id.container, activityFragemnt).commit();
+			getFragmentManager().beginTransaction().add(R.id.container, activityFragment).commit();
 		} else {
 			mShowingBack = (getFragmentManager().getBackStackEntryCount() > 0);
 		}
@@ -92,19 +90,18 @@ public class FragmentContainer extends Fragment  implements
 
 			// below lillipop
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, dayViewFragemnt)
+					.replace(R.id.container, dayViewFragment)
 					.addToBackStack(null)
 					.commit();
 			// working for lower questions as per another answer posted here
 
 		} else {
-
 			// lollipop and above
 			getFragmentManager().beginTransaction()
 					.setCustomAnimations(
 							R.animator.card_flip_right_in, R.animator.card_flip_right_out,
 							R.animator.card_flip_left_in, R.animator.card_flip_left_out)
-					.replace(R.id.container, dayViewFragemnt)
+					.replace(R.id.container, dayViewFragment)
 					.addToBackStack(null)
 					.commit();
 			// known to be working for lollipop as per your question
@@ -127,6 +124,32 @@ public class FragmentContainer extends Fragment  implements
 	@Override
 	public void flip() {
 		flipCard();
+	}
+
+
+
+	@Override
+	public void displaySettingsFragment() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+
+			// below lillipop
+			getFragmentManager().beginTransaction()
+					.replace(R.id.container, settingsFragment)
+					.addToBackStack(null)
+					.commit();
+			// working for lower questions as per another answer posted here
+
+		} else {
+			// lollipop and above
+			getFragmentManager().beginTransaction()
+					.setCustomAnimations(
+							R.animator.card_flip_right_in, R.animator.card_flip_right_out,
+							R.animator.card_flip_left_in, R.animator.card_flip_left_out)
+					.replace(R.id.container, settingsFragment)
+					.addToBackStack(null)
+					.commit();
+			// known to be working for lollipop as per your question
+		}
 	}
 
 

@@ -10,14 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:background="@android:color/holo_blue_light"/>
+        android:background="@android:color/holo_blue_light"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/iv_background_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="79dp"
-        android:background="@android:color/holo_blue_light"/>
+        android:background="@android:color/holo_blue_light"
+        android:visibility="gone"/>
 
 
 

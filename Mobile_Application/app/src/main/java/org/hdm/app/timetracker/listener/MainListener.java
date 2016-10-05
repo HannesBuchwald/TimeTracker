@@ -5,4 +5,5 @@ package org.hdm.app.timetracker.listener;
  */
 public interface MainListener {
     void flip();
+    void displaySettingsFragment();
 }

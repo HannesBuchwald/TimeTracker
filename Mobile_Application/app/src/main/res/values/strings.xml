@@ -37,4 +37,16 @@
     <string name="notify_running_content">Checking for Updates</string>
     <string name="notify_running_stop">Cancel check</string>
 
+
+
+    <string name="pref_user_ID">USER ID</string>
+
+    <string name="pref_summary_auto_delete">BackButten</string>
+    <string name="pref_title_auto_delete">BackButten</string>
+
+    <string name="pref_summary_delete_limit">SMS</string>
+    <string name="pref_title_sms_delete">SMS Delete</string>
+    <string name="pref_key_reset_activities">pref_key_reset_activities</string>
+
+
 </resources>

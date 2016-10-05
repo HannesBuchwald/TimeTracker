@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.listener.PreferenceListener;
 import org.hdm.app.timetracker.util.FileLoader;
 import org.hdm.app.timetracker.util.Variables;
 
@@ -34,7 +35,8 @@ import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.*;
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity implements
+        PreferenceListener{
     private final String TAG = "MainActivity";
 
     // ToDo Add Logik for Dayshift
@@ -53,12 +55,14 @@ public class MainActivity extends Activity  {
         super.onCreate(savedInstanceState);
 
         initConfiguration();
-        initCalenderMap();
+
+        Calendar calEndTime = Calendar.getInstance();
+        initCalenderMap(calEndTime.getTime());
+
         initDataLogger();
-        initResetRecordedData();
-        loadSavedObjectState();
+//        initResetRecordedData();
+//        loadSavedObjectState();
         initLayout();
-//        initConfiguration();
     }
 
 
@@ -69,6 +73,7 @@ public class MainActivity extends Activity  {
      */
     @Override
     public void onBackPressed() {
+
         // ToDo write test cases
         if(Variables.getInstance().backPress) {
 
@@ -88,7 +93,6 @@ public class MainActivity extends Activity  {
                 MainActivity.super.onBackPressed();
             }
         }
-
     }
 
 
@@ -138,20 +142,79 @@ public class MainActivity extends Activity  {
         Variables.init();
         var = Variables.getInstance();
 
+        Calendar cal = Calendar.getInstance();
+
+        var.currentTime = cal.getTime();
+
         FileLoader fl = new FileLoader(this);
         fl.initFiles();
     }
 
 
-    /**
-     * Init Content for CalendarList
-     * Every hour is seperatetd in two half hour periods
+//    /**
+//     * Init Content for CalendarList
+//     * Every hour is seperatetd in two half hour periods
+//     */
+//    public void initCalenderMap() {
+//
+//        Calendar cal = Calendar.getInstance();
+//        Date time = cal.getTime();
+//
+//        // Reset Time to 00:00:00
+//        time.setHours(var.startHour);
+//        time.setMinutes(var.startMin);
+//        time.setSeconds(var.startMin);
+//
+//        // Set Calendar with reseted time
+//        cal.setTime(time);
+//
+//
+//        Calendar calEndTime = Calendar.getInstance();
+//        Date endTime = calEndTime.getTime();
+//        endTime.setHours(var.endHour);
+//        endTime.setMinutes(var.startMin);
+//        endTime.setSeconds(var.startMin);
+//        calEndTime.setTime(endTime);
+//        calEndTime.add(Calendar.MINUTE, -var.timeFrame);
+//        endTime = calEndTime.getTime();
+//
+//        Log.d(TAG, "Timeweee " + endTime + "  "  + time);
+//
+//        DataManager.getInstance().calenderMap = new TreeMap<>();
+//
+//        while(time.before(endTime)) {
+//            time = cal.getTime();
+//            DataManager.getInstance().setCalenderMapEntry(time.toString(), null);
+//            // add 30 minutes to setTime
+//            cal.add(Calendar.MINUTE, var.timeFrame);
+//        }
+//    }
+
+
+
+    /*
+     * Init CalendarList with new Entries
+     * In this case add one day to currentDate
+     *
+     * @param calendar current Time in Date
      */
-    private void initCalenderMap() {
+    public void initCalenderMap(Date currentTime) {
+
+        Log.d(TAG, "calendar1 " + currentTime);
 
         Calendar cal = Calendar.getInstance();
-        Date time = cal.getTime();
+        Log.d(TAG, "calendar11 " + cal.getTime());
+        cal.setTime(currentTime);
+        Log.d(TAG, "calendar2 " + cal.getTime());
 
+
+        Calendar calEndTime = Calendar.getInstance();
+        calEndTime.setTime(currentTime);
+        Log.d(TAG, "calendar2 " + calEndTime.getTime());
+
+
+
+        Date time = cal.getTime();
         // Reset Time to 00:00:00
         time.setHours(var.startHour);
         time.setMinutes(var.startMin);
@@ -161,7 +224,6 @@ public class MainActivity extends Activity  {
         cal.setTime(time);
 
 
-        Calendar calEndTime = Calendar.getInstance();
         Date endTime = calEndTime.getTime();
         endTime.setHours(var.endHour);
         endTime.setMinutes(var.startMin);
@@ -170,6 +232,8 @@ public class MainActivity extends Activity  {
         calEndTime.add(Calendar.MINUTE, -var.timeFrame);
         endTime = calEndTime.getTime();
 
+        Log.d(TAG, "Timeweee " + endTime + "  "  + time);
+
         DataManager.getInstance().calenderMap = new TreeMap<>();
 
         while(time.before(endTime)) {
@@ -177,8 +241,11 @@ public class MainActivity extends Activity  {
             DataManager.getInstance().setCalenderMapEntry(time.toString(), null);
             // add 30 minutes to setTime
             cal.add(Calendar.MINUTE, var.timeFrame);
+            Log.d(TAG, "time new " + time.toString());
         }
     }
+
+
 
 
     /**
@@ -198,7 +265,7 @@ public class MainActivity extends Activity  {
                 });
             }
         };
-        timer.scheduleAtFixedRate(timerTask,0, var.logTimeInterval);
+        timer.scheduleAtFixedRate(timerTask,0, var.logTimeInterval*60*1000);
     }
 
 
@@ -208,11 +275,27 @@ public class MainActivity extends Activity  {
     private void initResetRecordedData() {
 
 
-        Calendar calEndTime = Calendar.getInstance();
-        Date endTime = calEndTime.getTime();
-        endTime.setSeconds(00);
-        endTime.setMinutes(30);
-        endTime.setHours(23);
+        // ToDo Check hole function --- last edit
+
+        // Set the alarm to start at approximately 2:00 p.m.
+        final Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.set(Calendar.HOUR_OF_DAY, 23);
+//        calendar.set(Calendar.MINUTE, 59);
+//        calendar.set(Calendar.SECOND, 56);
+        calendar.add(Calendar.SECOND, 10);
+
+        Date currentDate = calendar.getTime();
+        Log.d(TAG, "calendar5 " + currentDate);
+
+
+//        Calendar currentCalendar = Calendar.getInstance();
+//        currentCalendar.add(Calendar.DAY_OF_MONTH, +1);
+//        initCalenderMap(currentCalendar.getTime()); // only for Testing
+
+        Log.d(TAG, "calendar4 " + calendar.getTime());
+        Log.d(TAG, "calendar5 " + currentDate);
+
 
 
         Timer timer = new Timer();
@@ -220,25 +303,112 @@ public class MainActivity extends Activity  {
             @Override
             public void run() {
 
-                DataManager.getInstance().activeList = new ArrayList<>();
-                DataManager.getInstance().calenderMap = new TreeMap<>();
+                //add 24 hours to the calendar Time for the next
+//                calendar.add(Calendar.DAY_OF_MONTH, +1);
+                calendar.add(Calendar.SECOND, 10);
+
+
+
+                // Stop every active Activity and save the time
+
+                // Get ActiveList
+                ArrayList<String> list = DataManager.getInstance().activeList;
+
+                // iterate through the complete list and save the active Activity to Activity Object
+                for(int i=0; i< list.size()-1; i++){
+
+                    String title = list.get(i);
+
+                    ActivityObject activityObject = DataManager.getInstance().getActivityObject(title);
+
+                    // Deactivate Activity
+                    activityObject.activeState = false;
+                    activityObject.count = 0;
+
+                    // set temporary end time
+                    activityObject.endTime = Calendar.getInstance().getTime();
+
+
+                    //Count how many activities are active
+                    var.activeCount--;
+
+                    // Save Timestamp and SubCategory in ActivityObject
+                    activityObject.saveTimeStamp("active");
+                    DataManager.getInstance().setActivityObject(activityObject);
+
+                    // ToDo check background of Activity in objectList and activeList like ActivityFragment
+                   // DataManager.getInstance().activeList.remove(activityObject.title);
+                }
+
+                // Save Log File
+                saveLogFile();
+
+                // Save active Files
+                var.activeActivities = DataManager.getInstance().activeList;
+
+                // Reset all Lists, CalendarList, ObjectActivityList, ActiveActivity
                 initConfiguration();
+
+
+                // Add new CalendarItems
+                calendar.add(Calendar.DAY_OF_MONTH, +1);
+                initCalenderMap(calendar.getTime());
+
+
+
+                //Get active Activities and set them back to active
+                DataManager.getInstance().activeList = var.activeActivities;
+                ArrayList<String> listt = DataManager.getInstance().activeList;
+
+                Log.d(TAG, "listt size " + listt.size());
+
+                // iterate through the complete list and save the active Activity to Activity Object
+                for(int i=0; i< listt.size(); i++){
+
+                    String title = listt.get(i);
+
+                    ActivityObject activityObject = DataManager.getInstance().getActivityObject(title);
+
+                    // Deactivate Activity
+                    activityObject.activeState = true;
+                    activityObject.count = 1;
+
+                    calendar.set(Calendar.SECOND,0);
+                    calendar.set(Calendar.MINUTE, 0);
+                    calendar.set(Calendar.HOUR, 0);
+                    activityObject.startTime = calendar.getTime();
+                    Log.d(TAG, "listt size " +  activityObject.startTime);
+
+
+                    //Count how many activities are active
+                    var.activeCount++;
+
+                    DataManager.getInstance().setActivityObject(activityObject);
+                    // ToDo check background of Activity in objectList and activeList like ActivityFragment
+
+                    Log.d(TAG, "listt size " + DataManager.getInstance().getActivityObject(activityObject.title).startTime);
+                }
+
+
                 Log.d(TAG, "restart");
+                initResetRecordedData();
             }
         };
-        timer.schedule(timerTask, endTime.getTime());
+        timer.schedule(timerTask, calendar.getTime());
+
     }
 
 
+
+    /**
+     * Init the Layout
+     * activate FullScreen Mode
+     *
+     */
     private void initLayout() {
         setFullScreen(true);
         setContentView(R.layout.activity_main);
     }
-
-
-
-
-
 
 
 
@@ -258,6 +428,8 @@ public class MainActivity extends Activity  {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
+
+
 
     /**
      * Save the current activities State on local storage as json format
@@ -316,11 +488,11 @@ public class MainActivity extends Activity  {
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
 
-//        SharedPreferences.Editor editor = mPrefs.edit();
-//        editor.remove(ACTIVITY_STATE);
-//        editor.remove(ACTIVE_LIST);
-//        editor.remove(CALENDAR_MAP);
-//        editor.apply();
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.remove(ACTIVITY_STATE);
+        editor.remove(ACTIVE_LIST);
+        editor.remove(CALENDAR_MAP);
+        editor.apply();
 
 
         if(mPrefs.contains(ACTIVITY_STATE)){
@@ -359,4 +531,17 @@ public class MainActivity extends Activity  {
         }
     }
 
+
+
+    @Override
+    public void resetActivities() {
+        // Activity reset process;
+        Log.d(TAG, "Click on Reset in Main Activity");
+
+        saveLogFile();
+
+        initConfiguration();
+        Calendar calEndTime = Calendar.getInstance();
+        initCalenderMap(calEndTime.getTime());
+    }
 }

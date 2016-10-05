@@ -1,6 +1,7 @@
 
 package org.hdm.app.timetracker.util;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import org.hdm.app.timetracker.datastorage.ActivityObject;
@@ -9,6 +10,7 @@ import org.hdm.app.timetracker.datastorage.TimeFrame;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +68,19 @@ public class ActivityLogs {
                 Log.d(TAG, "StartTime" + timeStamp.start);
                 timeStamp.end = frame.endTime.getHours() + ":" + frame.endTime.getMinutes();
                 timeStamp.whereFrom = frame.whereFrom;
+                logs.timeStamps.add(timeStamp);
+            }
+
+
+            if(DataManager.getInstance().activeList.contains(object.title)) {
+                TimeStamp timeStamp = new TimeStamp();
+
+                Calendar cal = Calendar.getInstance();
+                Date currentTime = cal.getTime();
+
+                timeStamp.start = object.startTime.getHours() + ":" + object.startTime.getMinutes();
+                timeStamp.end = currentTime.getHours() + ":" + currentTime.getMinutes();
+                timeStamp.whereFrom = "recording";
                 logs.timeStamps.add(timeStamp);
             }
 

@@ -106,8 +106,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
         title = (TextView) itemView.findViewById(R.id.title);
 
         rv_content = (RecyclerView) itemView.findViewById(R.id.rv_calender_item_content);
-        iv_background_bottom = (ImageView) itemView.findViewById(R.id.iv_background_bottom);
-        iv_background_top = (ImageView) itemView.findViewById(R.id.iv_background_top);
+//        iv_background_bottom = (ImageView) itemView.findViewById(R.id.iv_background_bottom);
+//        iv_background_top = (ImageView) itemView.findViewById(R.id.iv_background_top);
         btn_add = (CardView) itemView.findViewById((R.id.btn_calendar_row_add));
         btn_add.setOnClickListener(this);
         btn_add.setOnLongClickListener(this);
@@ -243,18 +243,17 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     @Override
     public void onClick(View v) {
         Log.d(TAG, "longklick ttt " + title.getText()+ " " + v.getId() + " " + listener);
-//        if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
+        if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
     }
 
 
     @Override
     public boolean onLongClick(View v) {
 
+        Log.d(TAG, "longklick ttttttt " + title.getText()+ " " + v.getId() + " " + listener);
 
             if(listener != null) {
-                if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
-//                listener.didLongClickOnView(v, title.getText().toString(), this);
-//                Log.d(TAG, "longklick " + title.getText()+ " " + v.getId() + " " + listener);
+                if(listener!= null) listener.didLongClickOnView(v, title.getText().toString(), this);
                 return true;
             }
 
