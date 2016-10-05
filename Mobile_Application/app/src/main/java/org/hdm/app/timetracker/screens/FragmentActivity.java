@@ -5,6 +5,7 @@ package org.hdm.app.timetracker.screens;
  */
 
 import android.app.Application;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.dialogs.DFragment;
 import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
 import org.hdm.app.timetracker.adapter.ObjectListAdapter;
@@ -208,11 +210,12 @@ public class FragmentActivity extends BaseFragemnt implements
         // when Activity is not active
         if (!activityObject.activeState && var.activeCount < var.maxRecordedActivity) {
 
-//            if(list.get(position).sub_category && list.get(position).activeState) {
-//                DFragment dFragment = new DFragment(dsata);
-//                FragmentManager fm = fr.getFragmentManager();
-//                dFragment.show(fm, "Dialog Fragment");
-//            }
+            if(activityObject.title.equals("01")) {
+                DFragment dFragment = new DFragment(activityObject);
+                FragmentManager fm = getFragmentManager();
+                dFragment.show(fm, "Dialog Fragment");
+                return;
+            }
 
             // Set State to active
             activityObject.activeState = true;

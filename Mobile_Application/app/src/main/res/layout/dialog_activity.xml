@@ -1,40 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="300dp"
-    android:layout_height="150dp"
-    android:padding="20dp"
-    android:background="@android:color/holo_red_light"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
     >
 
-
-        <ImageView
-            android:id="@+id/iv_activity_manual"
+        <android.support.v7.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rv_listt"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/shovel"
-            android:padding="5dp"
-            />
-        <ImageView
-            android:id="@+id/iv_activity_animal"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/cow"
-            android:padding="5dp"
-
-            />
-        <ImageView
-            android:id="@+id/iv_activity_tracker"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/tracker"
-            android:padding="5dp"
-
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:scrollbarThumbVertical="@android:color/darker_gray"
+            android:scrollbarSize="10dp"
             />
 
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--&gt;-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_activity_manual"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/shovel"-->
+            <!--android:padding="5dp"-->
+            <!--/>-->
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_activity_animal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/cow"-->
+            <!--android:padding="5dp"-->
+            <!--/>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--&gt;-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_activity_manual1"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:src="@drawable/shovel"-->
+                    <!--android:padding="5dp"-->
+                    <!--/>-->
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_activity_animal2"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:src="@drawable/cow"-->
+                    <!--android:padding="5dp"-->
+                    <!--/>-->
+
+        <!--</LinearLayout>-->
 
 </LinearLayout>

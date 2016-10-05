@@ -2,20 +2,38 @@ package org.hdm.app.timetracker.dialogs;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
+import org.hdm.app.timetracker.adapter.ObjectListAdapter;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
+import org.hdm.app.timetracker.util.Variables;
+import org.hdm.app.timetracker.util.View_Holder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Hannes on 03.06.2016.
  */
-public class DFragment extends DialogFragment {
+public class DFragment extends DialogFragment implements ActivityListOnClickListener{
 
 
     private ActivityObject activityObject;
+    private ObjectListAdapter objectAdapter;
+    private RecyclerView recyclerView;
+
+
+    public Variables var = Variables.getInstance();
+    public DataManager dataManager = DataManager.getInstance();
+
 
     public DFragment(){}
 
@@ -30,9 +48,31 @@ public class DFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_activity, container,
                 false);
-//        getDialog().setTitle("DialogFragment Tutorial");
-        // Do something else
+//        int width = 20;
+//        int height = 100;
+//        getDialog().getWindow().setLayout(width, height);
+
+        getDialog().setTitle("DialogFragment Tutorial");
+
+        objectAdapter = new ObjectListAdapter((List) new ArrayList<>(dataManager.getObjectMap().keySet()));
+        objectAdapter.setListener(this);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_listt);
+        recyclerView.setAdapter(objectAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(
+                var.listRows, StaggeredGridLayoutManager.VERTICAL));
+
         return rootView;
+    }
+
+    @Override
+    public void didClickOnActivityListItem(String title, View_Holder holder) {
+
+    }
+
+    @Override
+    public void didLongClickOnActivityListItem(String title, View_Holder view_holder) {
+
     }
 
 
