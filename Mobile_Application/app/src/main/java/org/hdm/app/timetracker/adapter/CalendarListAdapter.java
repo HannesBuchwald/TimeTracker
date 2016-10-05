@@ -126,17 +126,21 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         givenTime.setHours(hour);
         givenTime.setMinutes(min);
 
+        if(holder.iv_background_top != null){
+
         if(givenTime.before(currentTime)) {
-            holder.iv_background_bottom.setVisibility(View.VISIBLE);
-            holder.iv_background_top.setVisibility(View.VISIBLE);
+
+//            holder.iv_background_bottom.setVisibility(View.VISIBLE);
+//            holder.iv_background_top.setVisibility(View.VISIBLE);
             lastPosition = position+1;
         } else {
-            holder.iv_background_bottom.setVisibility(View.INVISIBLE);
-            holder.iv_background_top.setVisibility(View.INVISIBLE);
+//            holder.iv_background_bottom.setVisibility(View.INVISIBLE);
+//            holder.iv_background_top.setVisibility(View.INVISIBLE);
 
             // make iv_background_top for in currentTime CalendarItem visible
             givenTime.setMinutes(min-15);
-            if(givenTime.before(currentTime))holder.iv_background_top.setVisibility(View.VISIBLE);
+//            if(givenTime.before(currentTime))holder.iv_background_top.setVisibility(View.VISIBLE);
+        }
         }
     }
 

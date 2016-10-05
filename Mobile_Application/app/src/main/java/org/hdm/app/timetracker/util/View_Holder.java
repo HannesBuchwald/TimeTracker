@@ -106,8 +106,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
         title = (TextView) itemView.findViewById(R.id.title);
 
         rv_content = (RecyclerView) itemView.findViewById(R.id.rv_calender_item_content);
-        iv_background_bottom = (ImageView) itemView.findViewById(R.id.iv_background_bottom);
-        iv_background_top = (ImageView) itemView.findViewById(R.id.iv_background_top);
+//        iv_background_bottom = (ImageView) itemView.findViewById(R.id.iv_background_bottom);
+//        iv_background_top = (ImageView) itemView.findViewById(R.id.iv_background_top);
         btn_add = (CardView) itemView.findViewById((R.id.btn_calendar_row_add));
         btn_add.setOnClickListener(this);
         btn_add.setOnLongClickListener(this);
