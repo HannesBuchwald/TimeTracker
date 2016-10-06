@@ -10,6 +10,7 @@ import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
+import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
@@ -19,20 +20,20 @@ import java.util.List;
 /**
  * Created by Hannes on 27.05.2016.
  */
-public class DialogListAdapter extends RecyclerView.Adapter<View_Holder> implements
+public class DialogPortionListAdapter extends RecyclerView.Adapter<View_Holder> implements
         ViewHolderListener {
 
     private final String TAG = "ObjectListAdapter";
 
     public List<String> list = null;
-    private ActivityListOnClickListener listener;
+    private DialogPortionListOnClickListener listener;
     public Variables var = Variables.getInstance();
     public DataManager dataManager = DataManager.getInstance();
     public String activeTime;
     public boolean leave;
 
 
-    public DialogListAdapter(List<String> activityObject) {
+    public DialogPortionListAdapter(List<String> activityObject) {
         this.list = activityObject;
     }
 
@@ -53,12 +54,12 @@ public class DialogListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        ActivityObject object = dataManager.getActivityObject(list.get(position));
+        ActivityObject object = dataManager.getPortionObject((list.get(position)));
         holder.setListener(this);
         holder.title.setText(object.title);
-        holder.activityList = false;
+        holder.id = object._id;
         if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
-        if(!var.editable) holder.setBackground(object.activeState);
+        holder.setBackground(object.activeState);
         Log.d(TAG, "position " + position + " " + object.title + " "+ object.activeState);
     }
 
@@ -101,22 +102,20 @@ public class DialogListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     }
 
 
-    public void setListener (ActivityListOnClickListener listener) {
-        this.listener = listener;
-    }
+    public void setListener (DialogPortionListOnClickListener listener) {this.listener = listener;}
 
 
 
     @Override
     public void didClickOnView(View view, String title, View_Holder holder) {
 
-        if(listener != null) listener.didClickOnActivityListItem(title, holder);
+        if(listener != null) listener.didClickOnPortionListItem(title, holder);
 
     }
 
 
     @Override
     public void didLongClickOnView(View view, String title, View_Holder holder) {
-        if(listener != null) listener.didLongClickOnActivityListItem(title, holder);
+        if(listener != null) listener.didLongClickOnPortionListItem(title, holder);
     }
 }

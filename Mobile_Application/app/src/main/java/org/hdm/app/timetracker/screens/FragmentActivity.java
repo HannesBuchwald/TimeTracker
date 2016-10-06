@@ -4,9 +4,7 @@ package org.hdm.app.timetracker.screens;
  * Created by Hannes on 13.05.2016.
  */
 
-import android.app.Application;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +18,7 @@ import android.widget.Toast;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
-import org.hdm.app.timetracker.dialogs.DFragment;
+import org.hdm.app.timetracker.dialogs.DialogPortionFragment;
 import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
 import org.hdm.app.timetracker.adapter.ObjectListAdapter;
@@ -126,11 +124,14 @@ public class FragmentActivity extends BaseFragemnt implements
      ***********************/
 
 
+
     // Listener from the ActiveActivityObjectList
     @Override
-    public void didOnClickActivityList(String title, View_Holder holder) {
-        didClickOnActivityListItem(title, null);
+    public void didOnClickOnActiveListItem(String title, View_Holder holder) {
+        handleActivityClick(title, null);
     }
+
+
 
 
     /**
@@ -142,6 +143,11 @@ public class FragmentActivity extends BaseFragemnt implements
         Log.d(TAG, "did click on View");
         handleShortClick(title, holder);
     }
+
+
+
+
+
 
 
 
@@ -251,24 +257,25 @@ public class FragmentActivity extends BaseFragemnt implements
             addActivityObjectToCalendarList(activityObject.title, activityObject.startTime);
 
             if(activityObject.title.equals("01")) {
-                DFragment dFragment = new DFragment(activityObject);
+
+                DialogPortionFragment dFragment = new DialogPortionFragment(activityObject);
                 FragmentManager fm = getFragmentManager();
                 dFragment.show(fm, "Dialog Fragment");
-//                return;
+
+            } else {
+                // Save Timestamp and SubCategory in ActivityObject
+                activityObject.saveTimeStamp("active");
             }
 
-
-            // Save Timestamp and SubCategory in ActivityObject
-            activityObject.saveTimeStamp("active");
-
-            Log.d(TAG, "startTimee " + end.getTime() + " // " + start.getTime() + " // " + (end.getTime() - start.getTime()) / 10000f);
-
             dataManager.activeList.remove(activityObject.title);
-
         }
 
+        Log.d(TAG, "where I´m know");
+
         // Store edited ActivityObject back in DataManager
+//        if(!activityObject.title.equals("01"))
         dataManager.setActivityObject(activityObject);
+
 
 
         // Set Background if pressed from AdapterList
@@ -283,8 +290,9 @@ public class FragmentActivity extends BaseFragemnt implements
          * If Activity selected from ActiveList (disable Activity)
          * than notify the corresponding ActivityObject in the ActivityList
          */
-        if (holder == null)
+        if (holder == null) {
             objectAdapter.notifyItemChanged(objectAdapter.list.indexOf(activityObject.title));
+        }
 
     }
 
@@ -331,7 +339,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
         if (add) {
             // Add the TimeStamp to the ArrayList in the Activity Object
-            activityObject.saveTimeStamp("passive", startDate, endDate);
+            // ToDo change "yes" to real parameter
+            activityObject.saveTimeStamp("passive", startDate, endDate, "yes");
             dataManager.setActivityObject(activityObject);
         }
 

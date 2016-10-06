@@ -56,6 +56,8 @@ public class ActivityLogs {
             // Add Activity title to Log
             logs.title = object.title;
 
+            Log.d(TAG, "titleee " + logs.title);
+
             // Get TimeFrameList - with all recorded timeFrames from the activity
             ArrayList<TimeFrame> list = object.timeFrameList;
 
@@ -63,11 +65,16 @@ public class ActivityLogs {
             for(int i = 0; i< list.size(); i++){
                 TimeFrame frame = list.get(i);
                 TimeStamp timeStamp = new TimeStamp();
-                timeStamp.start = frame.startTime.getHours() + ":" + frame.startTime.getMinutes();
-
-                Log.d(TAG, "StartTime" + timeStamp.start);
-                timeStamp.end = frame.endTime.getHours() + ":" + frame.endTime.getMinutes();
+                timeStamp.start = frame.startTime.getHours() + ":"
+                        + frame.startTime.getMinutes() + ":"
+                        + frame.startTime.getSeconds();
+                timeStamp.end = frame.endTime.getHours() + ":"
+                        + frame.endTime.getMinutes() + ":"
+                        + frame.endTime.getSeconds();
                 timeStamp.whereFrom = frame.whereFrom;
+                timeStamp.portion = frame.portion;
+                timeStamp.food = frame.food;
+                timeStamp.ownWork = frame.ownWork;
                 logs.timeStamps.add(timeStamp);
             }
 
@@ -78,9 +85,16 @@ public class ActivityLogs {
                 Calendar cal = Calendar.getInstance();
                 Date currentTime = cal.getTime();
 
-                timeStamp.start = object.startTime.getHours() + ":" + object.startTime.getMinutes();
-                timeStamp.end = currentTime.getHours() + ":" + currentTime.getMinutes();
+                timeStamp.start = object.startTime.getHours() + ":"
+                        + object.startTime.getMinutes()+ ":"
+                        + object.startTime.getSeconds();
+                timeStamp.end = currentTime.getHours() + ":"
+                        + currentTime.getMinutes()+ ":"
+                        + currentTime.getSeconds();
                 timeStamp.whereFrom = "recording";
+                timeStamp.portion = "";
+                timeStamp.food = new ArrayList();
+                timeStamp.ownWork = object.ownWork;
                 logs.timeStamps.add(timeStamp);
             }
 

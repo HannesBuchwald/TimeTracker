@@ -61,7 +61,7 @@ public class MainActivity extends Activity implements
 
         initDataLogger();
 //        initResetRecordedData();
-//        loadSavedObjectState();
+        loadSavedObjectState();
         initLayout();
     }
 
@@ -465,8 +465,6 @@ public class MainActivity extends Activity implements
 
         // Save ActiveList
         ArrayList<String> activeList = DataManager.getInstance().activeList;
-//        activeList = new ArrayList<>();
-        Log.d(TAG, "map " + activeList);
         json = gson.toJson(activeList);
         prefsEditor.putString(ACTIVE_LIST, json);
 
@@ -481,7 +479,7 @@ public class MainActivity extends Activity implements
 
 
     /**
-     * Load the stored current states after the after the app is opened
+     * Load the stored current states after the app is opened
      */
     private void loadSavedObjectState() {
         Gson gson = new Gson();

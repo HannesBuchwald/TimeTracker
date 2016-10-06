@@ -1,6 +1,5 @@
 package org.hdm.app.timetracker.util;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -468,9 +467,9 @@ public class FileLoader {
                 DataManager.getInstance().imageMap.put(
                         activityObject.imageName,
                         BitmapFactory.decodeFile(objectImgPath, options));
-                DataManager.getInstance().setPlateObject(activityObject);
+                DataManager.getInstance().setPortionObject(activityObject);
 
-                Log.d(TAG, "plate " + activityObject.title + "  " + activityObject.imageName + " " + DataManager.getInstance().plateMap.size());
+                Log.d(TAG, "plate " + activityObject.title + "  " + activityObject.imageName + " " + DataManager.getInstance().portionMap.size());
             }
         }
     }

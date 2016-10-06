@@ -33,7 +33,7 @@ public class DataManager {
     public TreeMap<String, ArrayList<String>> calenderMap = new TreeMap<>();
 
 
-    public LinkedHashMap<String, ActivityObject> plateMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, ActivityObject> portionMap = new LinkedHashMap<>();
     public LinkedHashMap<String, ActivityObject> foodMap = new LinkedHashMap<>();
 
 
@@ -104,14 +104,14 @@ public class DataManager {
 
 
 
-    public boolean createPlateObject(String name, ActivityObject activityObject) {
+    public boolean createPortionObject(String name, ActivityObject activityObject) {
         if(name != null) {
-            if(!plateMap.containsKey(name)) {
+            if(!portionMap.containsKey(name)) {
 
                 if(activityObject != null) {
-                    plateMap.put(name, activityObject);
+                    portionMap.put(name, activityObject);
                 } else {
-                    plateMap.put(name, new ActivityObject(name));
+                    portionMap.put(name, new ActivityObject(name));
                 }
                 return true;
             }
@@ -119,15 +119,15 @@ public class DataManager {
         return false;
     }
 
-    public boolean setPlateObject(ActivityObject activityObject) {
+    public boolean setPortionObject(ActivityObject activityObject) {
 
         String title = activityObject.title;
-        if (title != null && plateMap != null) {
+        if (title != null && portionMap != null) {
 
-            if(!plateMap.containsKey(title)) {
+            if(!portionMap.containsKey(title)) {
                 createActivityObject(title, activityObject);
             }
-            plateMap.put(title, activityObject);
+            portionMap.put(title, activityObject);
             if(DEBUGMODE && activityObject.timeFrameList.size()>1) {
                 Log.d(TAG, "key:" + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).startTime);
             }
@@ -136,15 +136,15 @@ public class DataManager {
         return false;
     }
 
-    public ActivityObject getPlateObject(String name) {
-        if(name != null && plateMap.containsKey(name)) {
-            return plateMap.get(name);
+    public ActivityObject getPortionObject(String name) {
+        if(name != null && portionMap.containsKey(name)) {
+            return portionMap.get(name);
         }
         return null;
     }
 
-    public LinkedHashMap getPlateMap() {
-        return plateMap;
+    public LinkedHashMap getPortionMap() {
+        return portionMap;
     }
 
 
@@ -191,7 +191,7 @@ public class DataManager {
         return null;
     }
 
-    public LinkedHashMap getfoodMap() {
+    public LinkedHashMap getFoodMap() {
         return foodMap;
     }
 
