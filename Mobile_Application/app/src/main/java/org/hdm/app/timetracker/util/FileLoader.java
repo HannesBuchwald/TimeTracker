@@ -52,10 +52,6 @@ public class FileLoader {
     }
 
 
-    public FileLoader(Application mainActivity) {
-        context = mainActivity;
-    }
-
     /**************************
      * Init File Prozess
      *************************/
@@ -147,6 +143,21 @@ public class FileLoader {
 
         fileName = Variables.getInstance().setup;
         loadActivityObjects(path, fileName);
+
+
+
+        fileName = "plate.json";
+        if (!isExternalFileExists(path + fileName)) {
+            copyFileFromAssetToExternal(fileName, path);
+        }
+        loadPlateObjects(path, fileName);
+
+        fileName = "food.json";
+        if (!isExternalFileExists(path + fileName)) {
+            copyFileFromAssetToExternal(fileName, path);
+        }
+        loadFoodObjects(path, fileName);
+
     }
 
 
@@ -347,6 +358,7 @@ public class FileLoader {
         options.inPreferredConfig = Bitmap.Config.ALPHA_8;
         options.inSampleSize = 2; //reduce quality
 
+        Log.d(TAG, "listtttt" + fileName + " "+ folderPath);
 
         // Check if Json File is in External Folder
         // if not than copy Json file from Asset to external Folder
@@ -398,6 +410,141 @@ public class FileLoader {
             }
         }
     }
+
+
+
+
+    // Load Content
+    public void loadPlateObjects(String folderPath, String fileName) {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
+        options.inSampleSize = 2; //reduce quality
+
+
+        // Check if Json File is in External Folder
+        // if not than copy Json file from Asset to external Folder
+        if (!isExternalFileExists(folderPath + fileName)) {
+            copyFileFromAssetToExternal(fileName, folderPath);
+        }
+
+
+        if (DEBUGMODE) Log.d(TAG, "loadActivityObjects " + folderPath + fileName);
+
+
+        // Read out JsonFile from External Folder
+        String jsonString = readStringFromExternalFolder(folderPath, fileName);
+        if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
+
+
+        MyJsonParser jParser = new MyJsonParser();
+        ArrayList<ActivityObject> list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
+
+
+        if (list == null) {
+            jsonString = readFromAssets(context, "plate.json");
+            list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
+        }
+
+
+        String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
+
+        if (list != null) {
+
+
+            for (int i = 0; i < list.size(); i++) {
+                ActivityObject activityObject = list.get(i);
+
+                Log.d(TAG, "imageName " + activityObject.imageName);
+                String objectImgPath = imgPath + activityObject.imageName;
+
+                // check if Image is in externalFolder available
+                // if not than save it from asset to external load again
+                if (!isExternalFileExists(objectImgPath)) {
+                    // Save Image from Asset to External
+                    copyFileFromAssetToExternal(activityObject.imageName, imgPath);
+                }
+
+                DataManager.getInstance().imageMap.put(
+                        activityObject.imageName,
+                        BitmapFactory.decodeFile(objectImgPath, options));
+                DataManager.getInstance().setPlateObject(activityObject);
+
+                Log.d(TAG, "plate " + activityObject.title + "  " + activityObject.imageName + " " + DataManager.getInstance().plateMap.size());
+            }
+        }
+    }
+
+
+
+
+
+    // Load Content
+    public void loadFoodObjects(String folderPath, String fileName) {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
+        options.inSampleSize = 2; //reduce quality
+
+
+        // Check if Json File is in External Folder
+        // if not than copy Json file from Asset to external Folder
+        if (!isExternalFileExists(folderPath + fileName)) {
+            copyFileFromAssetToExternal(fileName, folderPath);
+        }
+
+
+        if (DEBUGMODE) Log.d(TAG, "loadActivityObjects " + folderPath + fileName);
+
+
+        // Read out JsonFile from External Folder
+        String jsonString = readStringFromExternalFolder(folderPath, fileName);
+        if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
+
+
+        MyJsonParser jParser = new MyJsonParser();
+        ArrayList<ActivityObject> list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
+
+
+        if (list == null) {
+            jsonString = readFromAssets(context, "food.json");
+            list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
+        }
+
+
+        String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
+
+        if (list != null) {
+
+
+            for (int i = 0; i < list.size(); i++) {
+                ActivityObject activityObject = list.get(i);
+
+                Log.d(TAG, "imageName " + activityObject.imageName);
+                String objectImgPath = imgPath + activityObject.imageName;
+
+                // check if Image is in externalFolder available
+                // if not than save it from asset to external load again
+                if (!isExternalFileExists(objectImgPath)) {
+                    // Save Image from Asset to External
+                    copyFileFromAssetToExternal(activityObject.imageName, imgPath);
+                }
+
+                DataManager.getInstance().imageMap.put(
+                        activityObject.imageName,
+                        BitmapFactory.decodeFile(objectImgPath, options));
+                DataManager.getInstance().setFoodObject(activityObject);
+
+                Log.d(TAG, "food " + activityObject.title + "  " + activityObject.imageName + " " + DataManager.getInstance().foodMap.size());
+            }
+        }
+    }
+
+
+
+
+
+
 
 
     /**************************

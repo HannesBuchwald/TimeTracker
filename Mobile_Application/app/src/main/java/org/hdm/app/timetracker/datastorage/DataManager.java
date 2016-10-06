@@ -33,9 +33,18 @@ public class DataManager {
     public TreeMap<String, ArrayList<String>> calenderMap = new TreeMap<>();
 
 
+    public LinkedHashMap<String, ActivityObject> plateMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, ActivityObject> foodMap = new LinkedHashMap<>();
+
+
 
 
     public ArrayList<String> activeList = new ArrayList<>();
+
+
+
+
+
 
 
 
@@ -53,6 +62,9 @@ public class DataManager {
         }
         return false;
     }
+
+
+
 
 
 
@@ -87,6 +99,106 @@ public class DataManager {
     public LinkedHashMap getObjectMap() {
         return activityMap;
     }
+
+
+
+
+
+    public boolean createPlateObject(String name, ActivityObject activityObject) {
+        if(name != null) {
+            if(!plateMap.containsKey(name)) {
+
+                if(activityObject != null) {
+                    plateMap.put(name, activityObject);
+                } else {
+                    plateMap.put(name, new ActivityObject(name));
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean setPlateObject(ActivityObject activityObject) {
+
+        String title = activityObject.title;
+        if (title != null && plateMap != null) {
+
+            if(!plateMap.containsKey(title)) {
+                createActivityObject(title, activityObject);
+            }
+            plateMap.put(title, activityObject);
+            if(DEBUGMODE && activityObject.timeFrameList.size()>1) {
+                Log.d(TAG, "key:" + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).startTime);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public ActivityObject getPlateObject(String name) {
+        if(name != null && plateMap.containsKey(name)) {
+            return plateMap.get(name);
+        }
+        return null;
+    }
+
+    public LinkedHashMap getPlateMap() {
+        return plateMap;
+    }
+
+
+
+
+
+
+    public boolean createFoodObject(String name, ActivityObject activityObject) {
+        if(name != null) {
+            if(!foodMap.containsKey(name)) {
+
+                if(activityObject != null) {
+                    foodMap.put(name, activityObject);
+                } else {
+                    foodMap.put(name, new ActivityObject(name));
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean setFoodObject(ActivityObject activityObject) {
+
+        String title = activityObject.title;
+        if (title != null && foodMap != null) {
+
+            if(!foodMap.containsKey(title)) {
+                createActivityObject(title, activityObject);
+            }
+            foodMap.put(title, activityObject);
+            if(DEBUGMODE && activityObject.timeFrameList.size()>1) {
+                Log.d(TAG, "key:" + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).startTime);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public ActivityObject getFoodObject(String name) {
+        if(name != null && foodMap.containsKey(name)) {
+            return foodMap.get(name);
+        }
+        return null;
+    }
+
+    public LinkedHashMap getfoodMap() {
+        return foodMap;
+    }
+
+
+
+
+
 
 
     public boolean setCalenderMapEntry(String key, String activity) {

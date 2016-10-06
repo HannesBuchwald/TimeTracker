@@ -35,6 +35,8 @@ public class DFragment extends DialogFragment implements ActivityListOnClickList
     public DataManager dataManager = DataManager.getInstance();
 
 
+    View rootView;
+
     public DFragment(){}
 
 
@@ -46,15 +48,25 @@ public class DFragment extends DialogFragment implements ActivityListOnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.dialog_activity, container,
+        rootView = inflater.inflate(R.layout.dialog_activity, container,
                 false);
-//        int width = 20;
-//        int height = 100;
-//        getDialog().getWindow().setLayout(width, height);
 
-        getDialog().setTitle("DialogFragment Tutorial");
 
-        objectAdapter = new ObjectListAdapter((List) new ArrayList<>(dataManager.getObjectMap().keySet()));
+        initLayout();
+
+
+        return rootView;
+    }
+
+
+
+
+
+    private void initLayout() {
+
+        getDialog().setTitle("Choose Portion of Food");
+
+        objectAdapter = new ObjectListAdapter((List) new ArrayList<>(dataManager.getPlateMap().keySet()));
         objectAdapter.setListener(this);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_listt);
         recyclerView.setAdapter(objectAdapter);
@@ -62,7 +74,8 @@ public class DFragment extends DialogFragment implements ActivityListOnClickList
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(
                 var.listRows, StaggeredGridLayoutManager.VERTICAL));
 
-        return rootView;
+
+
     }
 
     @Override

@@ -210,12 +210,6 @@ public class FragmentActivity extends BaseFragemnt implements
         // when Activity is not active
         if (!activityObject.activeState && var.activeCount < var.maxRecordedActivity) {
 
-            if(activityObject.title.equals("01")) {
-                DFragment dFragment = new DFragment(activityObject);
-                FragmentManager fm = getFragmentManager();
-                dFragment.show(fm, "Dialog Fragment");
-                return;
-            }
 
             // Set State to active
             activityObject.activeState = true;
@@ -255,6 +249,14 @@ public class FragmentActivity extends BaseFragemnt implements
 //                }
 
             addActivityObjectToCalendarList(activityObject.title, activityObject.startTime);
+
+            if(activityObject.title.equals("01")) {
+                DFragment dFragment = new DFragment(activityObject);
+                FragmentManager fm = getFragmentManager();
+                dFragment.show(fm, "Dialog Fragment");
+//                return;
+            }
+
 
             // Save Timestamp and SubCategory in ActivityObject
             activityObject.saveTimeStamp("active");
