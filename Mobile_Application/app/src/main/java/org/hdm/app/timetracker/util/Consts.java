@@ -35,6 +35,9 @@ public final class Consts {
 
     // Name from the Json Object
     public final static String ACTIVITIES = "activitys";
+    public final static String PORTIONS = "portions";
+    public final static String FOOD = "food";
+
 
 
 

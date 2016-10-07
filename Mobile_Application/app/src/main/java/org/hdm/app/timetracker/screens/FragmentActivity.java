@@ -256,7 +256,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
             addActivityObjectToCalendarList(activityObject.title, activityObject.startTime);
 
-            if(activityObject.title.equals("01")) {
+            if(activityObject.title.equals("Eating + Drinking")) {
 
                 DialogPortionFragment dFragment = new DialogPortionFragment(activityObject);
                 FragmentManager fm = getFragmentManager();

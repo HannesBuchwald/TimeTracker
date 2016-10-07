@@ -146,10 +146,10 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
     @Override
     public boolean onLongClick(View v) {
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("01").food.toString());
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("01").portion);
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("01").startTime.toString());
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("01").endTime.toString());
+        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").food.toString());
+        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").portion);
+        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").startTime.toString());
+        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").endTime.toString());
 
         // Save Timestamp and SubCategory in ActivityObject
         activityObject.saveTimeStamp("active", true);

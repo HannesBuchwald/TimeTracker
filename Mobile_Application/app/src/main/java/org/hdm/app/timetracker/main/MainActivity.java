@@ -35,6 +35,9 @@ import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.*;
 
+
+// Version 0.9 - 07.10.2016
+
 public class MainActivity extends Activity implements
         PreferenceListener{
     private final String TAG = "MainActivity";
@@ -486,11 +489,11 @@ public class MainActivity extends Activity implements
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
 
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.remove(ACTIVITY_STATE);
-        editor.remove(ACTIVE_LIST);
-        editor.remove(CALENDAR_MAP);
-        editor.apply();
+//        SharedPreferences.Editor editor = mPrefs.edit();
+//        editor.remove(ACTIVITY_STATE);
+//        editor.remove(ACTIVE_LIST);
+//        editor.remove(CALENDAR_MAP);
+//        editor.apply();
 
 
         if(mPrefs.contains(ACTIVITY_STATE)){

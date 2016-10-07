@@ -34,6 +34,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     public ObjectListAdapter(List<String> activityObject) {
         this.list = activityObject;
+        Log.d(TAG, "listSize " + list.size());
     }
 
 

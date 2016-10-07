@@ -1,100 +1,100 @@
 {
   "activitys": [
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_01",
       "_id": "201",
-      "imageName": "ic-food-01.png"
+      "title": "Cereals",
+      "imageName": "ic_food_01.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_02",
       "_id": "202",
-      "imageName": "ic-food-02.png"
+      "title": "Roots/tubers",
+      "imageName": "ic_food_02.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_03",
       "_id": "203",
-      "imageName": "ic-food-03.png"
+      "title": "Vegetables",
+      "imageName": "ic_food_03.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_04",
       "_id": "204",
-      "imageName": "ic-food-04.png"
+      "title": "Fruits",
+      "imageName": "ic_food_04.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_05",
       "_id": "205",
-      "imageName": "ic-food-05.png"
+      "title": "Meats",
+      "imageName": "ic_food_05.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_06",
       "_id": "206",
-      "imageName": "ic-food-06.png"
+      "title": "Eggs",
+      "imageName": "ic_food_06.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_07",
       "_id": "207",
-      "imageName": "ic-food-07.png"
+      "title": "Fish/seafood",
+      "imageName": "ic_food_07.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_08",
       "_id": "208",
-      "imageName": "ic-food-08.png"
+      "title": "Pulses/legumes/nuts",
+      "imageName": "ic_food_08.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_09",
       "_id": "209",
-      "imageName": "ic-food-09.png"
+      "title": "Milk products",
+      "imageName": "ic_food_09.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_10",
       "_id": "210",
-      "imageName": "ic-food-10.png"
+      "title": "Oils/fats",
+      "imageName": "ic_food_10.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_11",
       "_id": "211",
-      "imageName": "ic-food-11.png"
+      "title": "Sugar/honey",
+      "imageName": "ic_food_11.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     },
     {
-      "group_activity": "",
-      "sub_activity": "",
-      "item": "Food",
-      "title": "food_12",
       "_id": "212",
-      "imageName": "ic-food-12.png"
+      "title": "Tea/coffee",
+      "imageName": "ic_food_12.png",
+      "ownWork": null,
+      "group_activity": "Food Quality",
+      "item": null
     }
   ]
 }

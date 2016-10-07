@@ -19,10 +19,11 @@ public class ActivityObject extends Object {
     public String title = null;
     public String _id = null;
     public String item = null;
-
     public String group_activity = "";
-    public String sub_activity = "";
-    public boolean sub_category = false;
+    public String ownWork = null;
+
+//    public String sub_activity = "";
+//    public boolean sub_category = false;
 
     public String imageName = "";
     public ArrayList<TimeFrame> timeFrameList = null;
@@ -36,7 +37,6 @@ public class ActivityObject extends Object {
     public Date endTime = null;
     private String service = null;
 
-    public String ownWork = null;
     public String portion = null;
     public List<String> food = new ArrayList<>();
 

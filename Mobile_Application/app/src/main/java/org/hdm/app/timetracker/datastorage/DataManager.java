@@ -125,12 +125,12 @@ public class DataManager {
         if (title != null && portionMap != null) {
 
             if(!portionMap.containsKey(title)) {
-                createActivityObject(title, activityObject);
+                createPortionObject(title, activityObject);
             }
             portionMap.put(title, activityObject);
-            if(DEBUGMODE && activityObject.timeFrameList.size()>1) {
-                Log.d(TAG, "key:" + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).startTime);
-            }
+//            if(DEBUGMODE && activityObject.timeFrameList.size()>1) {
+//                Log.d(TAG, "key:" + activityObject.timeFrameList.get(activityObject.timeFrameList.size()-1).startTime);
+//            }
             return true;
         }
         return false;
@@ -173,7 +173,7 @@ public class DataManager {
         if (title != null && foodMap != null) {
 
             if(!foodMap.containsKey(title)) {
-                createActivityObject(title, activityObject);
+                createFoodObject(title, activityObject);
             }
             foodMap.put(title, activityObject);
             if(DEBUGMODE && activityObject.timeFrameList.size()>1) {

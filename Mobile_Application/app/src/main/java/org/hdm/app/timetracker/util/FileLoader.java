@@ -130,32 +130,14 @@ public class FileLoader {
         String path = enviroment + "/" + CONFIG_FOLDER;
 
         // Copy all Json files from Intern to External Folder if they not exist
-        String fileName = "standard.json";
+        String fileName = "activity.json";
         if (!isExternalFileExists(path + fileName)) {
             copyFileFromAssetToExternal(fileName, path);
         }
+        loadActivityObjects(ACTIVITIES, path, fileName);
+        loadActivityObjects(PORTIONS, path, fileName);
+        loadActivityObjects(FOOD, path, fileName);
 
-        fileName = "activity.json";
-        if (!isExternalFileExists(path + fileName)) {
-            copyFileFromAssetToExternal(fileName, path);
-        }
-
-        fileName = Variables.getInstance().setup;
-        loadActivityObjects(path, fileName);
-
-
-
-        fileName = "plate.json";
-        if (!isExternalFileExists(path + fileName)) {
-            copyFileFromAssetToExternal(fileName, path);
-        }
-        loadPlateObjects(path, fileName);
-
-        fileName = "food.json";
-        if (!isExternalFileExists(path + fileName)) {
-            copyFileFromAssetToExternal(fileName, path);
-        }
-        loadFoodObjects(path, fileName);
 
     }
 
@@ -351,7 +333,7 @@ public class FileLoader {
 
 
     // Load Content
-    public void loadActivityObjects(String folderPath, String fileName) {
+    public void loadActivityObjects(String object, String folderPath, String fileName) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ALPHA_8;
@@ -373,21 +355,19 @@ public class FileLoader {
         String jsonString = readStringFromExternalFolder(folderPath, fileName);
         if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
 
-
         MyJsonParser jParser = new MyJsonParser();
-        ArrayList<ActivityObject> list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
+        ArrayList<ActivityObject> list = jParser.createObjectFromJson(object, jsonString);
 
 
         if (list == null) {
             jsonString = readFromAssets(context, "activity.json");
-            list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
+            list = jParser.createObjectFromJson(object, jsonString);
         }
 
 
         String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
 
         if (list != null) {
-
 
             for (int i = 0; i < list.size(); i++) {
                 ActivityObject activityObject = list.get(i);
@@ -405,140 +385,32 @@ public class FileLoader {
                 DataManager.getInstance().imageMap.put(
                         activityObject.imageName,
                         BitmapFactory.decodeFile(objectImgPath, options));
-                DataManager.getInstance().setActivityObject(activityObject);
-            }
-        }
-    }
 
 
+                switch (object) {
+                    case ACTIVITIES:
+                        DataManager.getInstance().setActivityObject(activityObject);
+                        break;
 
+                    case PORTIONS:
+                        DataManager.getInstance().setPortionObject(activityObject);
+                        break;
+                    case FOOD:
+                        DataManager.getInstance().setFoodObject(activityObject);
+                        break;
 
-    // Load Content
-    public void loadPlateObjects(String folderPath, String fileName) {
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
-        options.inSampleSize = 2; //reduce quality
-
-
-        // Check if Json File is in External Folder
-        // if not than copy Json file from Asset to external Folder
-        if (!isExternalFileExists(folderPath + fileName)) {
-            copyFileFromAssetToExternal(fileName, folderPath);
-        }
-
-
-        if (DEBUGMODE) Log.d(TAG, "loadActivityObjects " + folderPath + fileName);
-
-
-        // Read out JsonFile from External Folder
-        String jsonString = readStringFromExternalFolder(folderPath, fileName);
-        if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
-
-
-        MyJsonParser jParser = new MyJsonParser();
-        ArrayList<ActivityObject> list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
-
-
-        if (list == null) {
-            jsonString = readFromAssets(context, "plate.json");
-            list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
-        }
-
-
-        String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
-
-        if (list != null) {
-
-
-            for (int i = 0; i < list.size(); i++) {
-                ActivityObject activityObject = list.get(i);
-
-                Log.d(TAG, "imageName " + activityObject.imageName);
-                String objectImgPath = imgPath + activityObject.imageName;
-
-                // check if Image is in externalFolder available
-                // if not than save it from asset to external load again
-                if (!isExternalFileExists(objectImgPath)) {
-                    // Save Image from Asset to External
-                    copyFileFromAssetToExternal(activityObject.imageName, imgPath);
+                    default:
+                        break;
                 }
 
-                DataManager.getInstance().imageMap.put(
-                        activityObject.imageName,
-                        BitmapFactory.decodeFile(objectImgPath, options));
-                DataManager.getInstance().setPortionObject(activityObject);
+                ActivityObject o = DataManager.getInstance().getActivityObject(activityObject.title);
 
-                Log.d(TAG, "plate " + activityObject.title + "  " + activityObject.imageName + " " + DataManager.getInstance().portionMap.size());
-            }
-        }
-    }
-
-
-
-
-
-    // Load Content
-    public void loadFoodObjects(String folderPath, String fileName) {
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
-        options.inSampleSize = 2; //reduce quality
-
-
-        // Check if Json File is in External Folder
-        // if not than copy Json file from Asset to external Folder
-        if (!isExternalFileExists(folderPath + fileName)) {
-            copyFileFromAssetToExternal(fileName, folderPath);
-        }
-
-
-        if (DEBUGMODE) Log.d(TAG, "loadActivityObjects " + folderPath + fileName);
-
-
-        // Read out JsonFile from External Folder
-        String jsonString = readStringFromExternalFolder(folderPath, fileName);
-        if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
-
-
-        MyJsonParser jParser = new MyJsonParser();
-        ArrayList<ActivityObject> list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
-
-
-        if (list == null) {
-            jsonString = readFromAssets(context, "food.json");
-            list = jParser.createObjectFromJson(ACTIVITIES, jsonString);
-        }
-
-
-        String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
-
-        if (list != null) {
-
-
-            for (int i = 0; i < list.size(); i++) {
-                ActivityObject activityObject = list.get(i);
-
-                Log.d(TAG, "imageName " + activityObject.imageName);
-                String objectImgPath = imgPath + activityObject.imageName;
-
-                // check if Image is in externalFolder available
-                // if not than save it from asset to external load again
-                if (!isExternalFileExists(objectImgPath)) {
-                    // Save Image from Asset to External
-                    copyFileFromAssetToExternal(activityObject.imageName, imgPath);
+                if(o!=null) {
+                    Log.d(TAG, "sizzeee " + o.imageName + " " + o.title);
                 }
-
-                DataManager.getInstance().imageMap.put(
-                        activityObject.imageName,
-                        BitmapFactory.decodeFile(objectImgPath, options));
-                DataManager.getInstance().setFoodObject(activityObject);
-
-                Log.d(TAG, "food " + activityObject.title + "  " + activityObject.imageName + " " + DataManager.getInstance().foodMap.size());
             }
         }
     }
-
 
 
 
