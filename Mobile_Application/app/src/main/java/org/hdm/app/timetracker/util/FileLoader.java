@@ -290,6 +290,21 @@ public class FileLoader {
         return null;
     }
 
+    public String deleteExternalFolder(String folderName) {
+
+        if (!isExternalStorageWritable()) {
+            Toast.makeText(context, " External Storage is not writeble -" +
+                    "folder could not be created", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        File f = new File(enviroment, folderName);
+
+            f.mkdirs();
+            return f.toString();
+
+    }
+
 
     /**************************
      * Property File

@@ -98,6 +98,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         if (preference.equals(preEditableMode)) {
             if(newValue instanceof Boolean){
                 Variables.getInstance().editableMode = (Boolean)newValue;
+                Variables.getInstance().backPress = (Boolean)newValue;
             }
         }
 

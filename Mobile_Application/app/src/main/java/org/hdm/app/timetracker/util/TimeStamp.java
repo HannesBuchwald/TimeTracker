@@ -8,9 +8,9 @@ import java.util.List;
 public class TimeStamp {
     public String start;
     public String end;
-    public String whereFrom;
+    public String date;
+    public String author;
+    public String contractWork;
     public String portion;
     public List food;
-    public String ownWork;
-
 }

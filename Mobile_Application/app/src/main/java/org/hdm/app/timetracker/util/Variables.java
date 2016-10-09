@@ -40,7 +40,7 @@ public class Variables {
     /**
      * Log Interval in minutes
      */
-    public long logTimeInterval = 1;
+    public long logTimeInterval = 15;
 
 
 
@@ -100,7 +100,7 @@ public class Variables {
      * Backpress flags
      */
     // ToDo change ack to false
-    public boolean backPress = true;
+    public boolean backPress = false;
     public boolean backPressDialog = false;
 
 
@@ -150,6 +150,8 @@ public class Variables {
     public int settingsCounter = 10;
 
     public boolean editableMode = false;
+    public int shortClickCounter = 3;
+    public long shortClickCounterResetTime = 4000;
 
     /***********
      * Singelton pattern

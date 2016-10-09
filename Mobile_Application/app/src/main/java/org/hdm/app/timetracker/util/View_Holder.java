@@ -117,6 +117,19 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     /************** Init  End ******************/
 
 
+    public void setBackground(String blue) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                // below lollipop
+                cv.setCardBackgroundColor(Color.BLUE);
+            } else {
+                // lollipop and above
+                cv.setBackgroundColor(cv.getResources().getColor(R.color.blue));
+            }
+            time.setVisibility(View.VISIBLE);
+            if(activityList) runCount();
+
+        Log.d(TAG, "here immm");
+    }
 
 
 
@@ -154,43 +167,16 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
-    // Called from the CalendarView
-    public void setCalendarItemBackground(boolean editable) {
 
-        if(editable) {
+//    public void handleTimeCounter(boolean state) {
+//
+//        if(state) {
+//            runCount();
+//        } else {
+//            stopCount();
+//        }
+//    }
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                // below lollipop
-                cv.setCardBackgroundColor(Color.RED);
-               iv_cancel.setVisibility(View.VISIBLE);
-
-            } else {
-                // lollipop and above
-                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.red));
-                iv_cancel.setVisibility(View.VISIBLE);
-            }
-        } else {
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                // below lillipop
-                cv.setCardBackgroundColor(Color.TRANSPARENT);
-                iv_cancel.setVisibility(View.GONE);
-
-            } else {
-                // lollipop and above
-                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.transparent));
-                iv_cancel.setVisibility(View.GONE);
-            }
-        }
-    }
-
-
-
-
-    public void stopCount() {
-        if(timer != null)timer.cancel();
-        if(timerTask != null) timerTask.cancel();
-    }
 
 
     public void runCount() {
@@ -228,6 +214,50 @@ public class View_Holder extends RecyclerView.ViewHolder implements
         timer.scheduleAtFixedRate(timerTask,0, 1000);
     }
 
+
+    public void stopCount() {
+        if(timer != null)timer.cancel();
+        if(timerTask != null) timerTask.cancel();
+
+        Log.d(TAG, "stop counting");
+    }
+
+
+
+    // Called from the CalendarView
+    public void setCalendarItemBackground(boolean editable) {
+
+        if(editable) {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                // below lollipop
+                cv.setCardBackgroundColor(Color.RED);
+               iv_cancel.setVisibility(View.VISIBLE);
+
+            } else {
+                // lollipop and above
+                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.red));
+                iv_cancel.setVisibility(View.VISIBLE);
+            }
+        } else {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                // below lillipop
+                cv.setCardBackgroundColor(Color.TRANSPARENT);
+                iv_cancel.setVisibility(View.GONE);
+
+            } else {
+                // lollipop and above
+                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.transparent));
+                iv_cancel.setVisibility(View.GONE);
+            }
+        }
+    }
+
+
+
+
+
     
     
 
@@ -242,20 +272,18 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     // Listener Interface with parent class
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "longklick ttt " + title.getText()+ " " + v.getId() + " " + listener);
         if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
     }
 
 
     @Override
     public boolean onLongClick(View v) {
-
-        Log.d(TAG, "longklick ttttttt " + title.getText()+ " " + v.getId() + " " + listener);
-
             if(listener != null) {
                 if(listener!= null) listener.didLongClickOnView(v, title.getText().toString(), this);
                 return true;
             }
         return false;
     }
+
+
 }

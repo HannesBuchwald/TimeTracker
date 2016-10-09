@@ -1,6 +1,5 @@
 package org.hdm.app.timetracker.datastorage;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class ActivityObject extends Object {
     public String _id = null;
     public String item = null;
     public String group_activity = "";
-    public String ownWork = null;
+    public String externalWork = "";
 
 //    public String sub_activity = "";
 //    public boolean sub_category = false;
@@ -35,9 +34,9 @@ public class ActivityObject extends Object {
 
     public Date startTime = null;
     public Date endTime = null;
-    private String service = null;
+    public String service = "";
 
-    public String portion = null;
+    public String portion = "";
     public List<String> food = new ArrayList<>();
 
 
@@ -51,40 +50,40 @@ public class ActivityObject extends Object {
     }
 
     // All Activities
-    public void saveTimeStamp(String whereFrom) {
-        TimeFrame timeFrame = new TimeFrame(this.startTime, this.endTime, this.service, whereFrom);
-        timeFrame.ownWork = this.ownWork;
-        this.timeFrameList.add(timeFrame);
+    public void saveTimeStamp(String editor) {
+        TimeFrame timeFrame = new TimeFrame();
+        timeFrame.startTime = this.startTime;
+        timeFrame.endTime = this.endTime;
 
-        this.ownWork = null;
-        this.startTime = null;
-        this.endTime = null;
-        this.service = null;
-    }
+        timeFrame.contractWork = this.service;
+        timeFrame.author = editor;
 
-    // Food Activity
-    public void saveTimeStamp(String whereFrom, boolean b) {
-
-        TimeFrame timeFrame = new TimeFrame(this.startTime, this.endTime, this.service, whereFrom);
         timeFrame.portion = this.portion;
         timeFrame.food = this.food;
-        timeFrame.ownWork = this.ownWork;
+
         this.timeFrameList.add(timeFrame);
 
-        this.food = new ArrayList<>();
-        this.portion = null;
-
-        this.ownWork = null;
         this.startTime = null;
         this.endTime = null;
         this.service = null;
+        this.portion = null;
+        this.food = new ArrayList<>();
+
+        Log.d(TAG, "timeFrame " + timeFrame.contractWork + " " + timeFrame.startTime + " " + timeFrame.endTime);
     }
 
 
 
-    public void saveTimeStamp(String whereFrom, Date startTime, Date endTime, String ownWork) {
-        TimeFrame timeFrame = new TimeFrame(startTime, endTime, this.service, whereFrom);
-        timeFrame.ownWork = ownWork;
+    public void saveTimeStamp(String author, Date startTime, Date endTime) {
+
+        TimeFrame timeFrame = new TimeFrame();
+        timeFrame.startTime = startTime;
+        timeFrame.endTime = endTime;
+        timeFrame.author = author;
+        timeFrame.contractWork = this.service;
+        timeFrame.portion = this.portion;
+        timeFrame.food = this.food;
+
         this.timeFrameList.add(timeFrame);
     }
 }

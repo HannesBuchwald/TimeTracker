@@ -152,7 +152,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").endTime.toString());
 
         // Save Timestamp and SubCategory in ActivityObject
-        activityObject.saveTimeStamp("active", true);
+        activityObject.saveTimeStamp("user");
         dataManager.setActivityObject(activityObject);
         resetFoodItemState();
         this.dismiss();
