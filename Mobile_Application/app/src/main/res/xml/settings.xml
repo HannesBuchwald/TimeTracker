@@ -3,12 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    <PreferenceCategory
-        android:title="Activity Log"
-        android:key="pref_key_activity">
+    <!--<PreferenceCategory-->
+        <!--android:title="Activity Log"-->
+        <!--android:key="pref_key_activity">-->
         <Preference
             android:key="@string/pref_key_reset_activities"
             android:summary="Reset the recorded activities"
             android:title="Reset" />
-    </PreferenceCategory>
+    <!--</PreferenceCategory>-->
+
+    <!--<PreferenceCategory-->
+        <!--android:title="App Handling"-->
+        <!--android:key="pref_key_app">-->
+
+        <CheckBoxPreference
+            android:key="@string/pref_key_editable_mode"
+            android:summary="Enable Activity Editable Function in CalendarView"
+            android:title="Editable Mode"
+           />
+    <!--</PreferenceCategory>-->
 </PreferenceScreen>

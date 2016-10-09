@@ -3,6 +3,7 @@ package org.hdm.app.timetracker.views;
 
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +11,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.listener.MenuListener;
+import org.hdm.app.timetracker.util.Variables;
+import org.hdm.app.timetracker.util.View_Holder;
 
 
 public class MenuView extends RelativeLayout implements View.OnClickListener{
@@ -29,8 +33,7 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 	private String title = "";
 	private RelativeLayout menu_rl;
 	private ImageView menu_btn_flip;
-
-
+	private int settingsCounter = Variables.getInstance().settingsCounter;
 
 
 	public MenuView(Context context) {
@@ -66,9 +69,9 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 
 
 	private void initListener() {
-		menu_rl.setOnClickListener(this);
-//		menu_btn_flip.setOnClickListener(this);
-//		menu_tv.setOnClickListener(this);
+//		menu_rl.setOnClickListener(this);
+		menu_btn_flip.setOnClickListener(this);
+		menu_tv.setOnClickListener(this);
 //		view.setOnClickListener(this);
 
 	}
@@ -99,11 +102,48 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 
 
 
+	private void handleSettingsClick() {
+
+
+			settingsCounter--;
+
+			if(settingsCounter<=3) {
+				String displayedText = settingsCounter + " Clicks to unlock Settings";
+
+				if(settingsCounter==0) {
+//					displayedText = "Setting is unlocked";
+					settingsCounter = Variables.getInstance().settingsCounter;
+					Variables.getInstance().enableSettings = true;
+					listener.onClickSettingsButton();
+				}
+
+				final Toast toast = Toast.makeText(context, displayedText, Toast.LENGTH_SHORT);
+				toast.show();
+				Handler handler = new Handler();
+				handler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						toast.cancel();
+					}
+				}, 500);
+			}
+
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				settingsCounter = Variables.getInstance().settingsCounter;
+			}
+		}, 10000);
+	}
+
+
 
 	@Override
 	public void onClick(View v) {
-		Log.d(TAG, "click" + v);
-		listener.mClickInteraction(view);
+		if(v.equals(menu_btn_flip)) listener.mClickInteraction(view);
+
+		if(v.equals(menu_tv)) handleSettingsClick();
 	}
 }
 

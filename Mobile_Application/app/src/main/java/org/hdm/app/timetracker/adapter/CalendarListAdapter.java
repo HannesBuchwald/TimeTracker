@@ -76,10 +76,10 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     public void onBindViewHolder(View_Holder holder, int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
 
+
         String title = list.get(position).toString();
         holder.id = title;
         holder.setListener(this);
-
         Log.d(TAG,"title "+ title);
 
         // Display only Hours and Minutes
@@ -200,6 +200,8 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
     @Override
     public void didLongClickOnView(View view, String s, View_Holder view_holder) {
+        Log.d(TAG, "holder ");
+
     }
 
 

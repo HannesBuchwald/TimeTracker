@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Window;
@@ -66,6 +67,7 @@ public class MainActivity extends Activity implements
 //        initResetRecordedData();
         loadSavedObjectState();
         initLayout();
+
     }
 
 
@@ -151,6 +153,13 @@ public class MainActivity extends Activity implements
 
         FileLoader fl = new FileLoader(this);
         fl.initFiles();
+
+
+        // Datenabgleich zwischen SharedMemory und Variables
+        SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        prefs.putBoolean(getString(R.string.pref_key_editable_mode), var.editableMode);
+        prefs.commit();
+        
     }
 
 
@@ -489,12 +498,14 @@ public class MainActivity extends Activity implements
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
 
 
-//        SharedPreferences.Editor editor = mPrefs.edit();
+        SharedPreferences.Editor editor = mPrefs.edit();
 //        editor.remove(ACTIVITY_STATE);
 //        editor.remove(ACTIVE_LIST);
 //        editor.remove(CALENDAR_MAP);
-//        editor.apply();
 
+        // Datenabgleich zwischen SharedMemory und Variables
+        editor.putBoolean(getString(R.string.pref_key_editable_mode), var.editableMode);
+        editor.apply();
 
         if(mPrefs.contains(ACTIVITY_STATE)){
 

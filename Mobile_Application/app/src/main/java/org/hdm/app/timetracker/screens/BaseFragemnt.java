@@ -65,8 +65,15 @@ public class BaseFragemnt extends Fragment implements
         this.listener.flip();
     }
 
+    @Override
+    public void onClickSettingsButton() {
+        if(listener != null) this.listener.displaySettingsFragment();
+    }
+
     public void setContext(FragmentContainer fragmentContainer) {
         this.listener = fragmentContainer;
     }
+
+
 
 }

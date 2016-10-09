@@ -256,9 +256,6 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 if(listener!= null) listener.didLongClickOnView(v, title.getText().toString(), this);
                 return true;
             }
-
-
-
         return false;
     }
 }

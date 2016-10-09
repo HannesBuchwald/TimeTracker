@@ -8,5 +8,6 @@ import android.view.View;
 public interface MenuListener {
 
     void mClickInteraction(View v);
+    void onClickSettingsButton();
 
 }

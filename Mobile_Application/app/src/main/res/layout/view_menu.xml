@@ -9,7 +9,6 @@
     android:orientation="horizontal">
 
 
-
     <ImageView
         android:id="@+id/menu_btn_flip"
         android:layout_weight="5"

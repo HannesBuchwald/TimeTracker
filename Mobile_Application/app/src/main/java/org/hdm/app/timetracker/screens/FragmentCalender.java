@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.DataManager;
@@ -53,19 +54,18 @@ public class FragmentCalender extends BaseFragemnt implements
 
     private DataManager manager = DataManager.getInstance();
     public Variables var = Variables.getInstance();
+    private Button btn_settings;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_calender, container, false);
-
         initMenu(view);
         initCalenderList();
         initFloatingButton();
         return view;
     }
-
 
 
 
@@ -83,6 +83,12 @@ public class FragmentCalender extends BaseFragemnt implements
         setMenuBackground(android.R.color.holo_blue_light);
         setMenuBtn(R.drawable.ic_back);
         if (!var.editable) scrollListToCurrentTime();
+
+        if(var.editableMode) {
+            fab_calendar.setVisibility(View.VISIBLE);
+        }else {
+            fab_calendar.setVisibility(View.GONE);
+        }
     }
 
 
@@ -93,6 +99,7 @@ public class FragmentCalender extends BaseFragemnt implements
         fab_calendar = (FloatingActionButton) view.findViewById(R.id.fab_calendar);
       //  fab_calendar.setOnClickListener(this);
         fab_calendar.setOnLongClickListener(this);
+        fab_calendar.setVisibility(View.INVISIBLE);
     }
 
     private void initCalenderList() {
@@ -106,8 +113,14 @@ public class FragmentCalender extends BaseFragemnt implements
         rv_calender = (RecyclerView) view.findViewById(R.id.rv_calender);
         rv_calender.setAdapter(adapter);
         rv_calender.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_calender.setOnClickListener(this);
         scrollListToCurrentTime();
     }
+
+
+
+
+
 
 
     @Override
@@ -135,30 +148,39 @@ public class FragmentCalender extends BaseFragemnt implements
     }
 
 
-    // FloatingActionButton Listener
-    @Override
-    public void onClick(View v) {
-        lastFirstVisiblePosition = ((LinearLayoutManager) rv_calender.getLayoutManager()).findFirstVisibleItemPosition();
-
-        if (var.editable) {
-            var.editable = false;
-            fab_calendar.setImageResource(android.R.drawable.ic_menu_edit);
-
-        } else {
-            var.editable = true;
-            fab_calendar.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-        }
-        // Invalidate new
-        adapter.notifyDataSetChanged();
-    }
 
 
     // scroll in Calendarlist to current Time
     private void scrollListToCurrentTime() {
         Date currentTime = Calendar.getInstance().getTime();
         int hour = currentTime.getHours();
-        if (hour >= 7) hour = hour * 3 - 8;
+        if (hour > 2) hour = hour * 2 - 2;
         rv_calender.scrollToPosition(hour);
+        Log.d(TAG, "scrollHour " + hour + " " + calendar.size());
+    }
+
+
+
+
+    // FloatingActionButton Listener
+    @Override
+    public void onClick(View v) {
+
+
+        Log.d(TAG, "click " + v.getId());
+
+//        lastFirstVisiblePosition = ((LinearLayoutManager) rv_calender.getLayoutManager()).findFirstVisibleItemPosition();
+//
+//        if (var.editable) {
+//            var.editable = false;
+//            fab_calendar.setImageResource(android.R.drawable.ic_menu_edit);
+//
+//        } else {
+//            var.editable = true;
+//            fab_calendar.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+//        }
+//        // Invalidate new
+//        adapter.notifyDataSetChanged();
     }
 
 

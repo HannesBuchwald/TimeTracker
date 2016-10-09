@@ -153,41 +153,6 @@ public class FragmentActivity extends BaseFragemnt implements
 
     private void handleShortClick(String title, View_Holder holder) {
 
-
-
-        if(currentTitle.equals(title)) {
-
-            settingsCounter--;
-
-            if(settingsCounter<=3) {
-                String displayedText = settingsCounter + " Clicks to unlock Settings";
-
-                if(settingsCounter==0) {
-                    displayedText = "Setting is unlocked";
-                    settingsCounter = 10;
-                    var.enableSettings = true;
-                    currentTitle = "";
-                    listener.displaySettingsFragment();
-                }
-
-                final Toast toast = Toast.makeText(getActivity(), displayedText, Toast.LENGTH_SHORT);
-                toast.show();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        toast.cancel();
-                    }
-                }, 500);
-            }
-        }else {
-            currentTitle = title;
-            settingsCounter = 4;
-            var.enableSettings = false;
-
-        }
-
-        Log.d(TAG, "Settings Enabler " + currentTitle + " " + var.enableSettings);
     }
 
 

@@ -147,7 +147,9 @@ public class Variables {
      * Settings enabler
      */
     public boolean enableSettings;
+    public int settingsCounter = 10;
 
+    public boolean editableMode = false;
 
     /***********
      * Singelton pattern
