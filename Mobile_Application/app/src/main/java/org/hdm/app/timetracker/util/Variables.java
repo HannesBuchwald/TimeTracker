@@ -146,12 +146,25 @@ public class Variables {
     /**
      * Settings enabler
      */
-    public boolean enableSettings;
     public int settingsCounter = 10;
 
+    /**
+     * Flag for editable Mode is active
+     */
     public boolean editableMode = false;
+
     public int shortClickCounter = 3;
     public long shortClickCounterResetTime = 4000;
+
+
+    /**
+     * Status if Smartphone is connected to server
+     */
+    public boolean serverConnection = true;
+
+    public String serverPort = "8080";
+    public String serverIP = "123.34.34";
+
 
     /***********
      * Singelton pattern

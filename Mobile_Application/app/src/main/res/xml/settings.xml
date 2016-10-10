@@ -3,23 +3,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    <!--<PreferenceCategory-->
-        <!--android:title="Activity Log"-->
-        <!--android:key="pref_key_activity">-->
+    <PreferenceCategory
+        android:key="pref_key_user"
+        android:title="User">
+        <EditTextPreference
+            android:key="@string/pref_key_user_user_id"
+            android:summary="Set current user which is using the Smartphone"
+            android:title="User_ID: " />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pref_key_connection"
+        android:title="Connection">
         <Preference
-            android:key="@string/pref_key_reset_activities"
-            android:summary="Reset all: Images, LogFiles, Configuration"
-            android:title="Reset" />
-    <!--</PreferenceCategory>-->
+            android:key="@string/pref_key_connection_send"
+            android:summary="Send Logfile to Laptop"
+            android:title="Sending" />
+        <EditTextPreference
+            android:key="@string/pref_key_connection_ip"
+            android:summary="Set IP from Server"
+            android:title="IP: " />
+        <EditTextPreference
+            android:key="@string/pref_key_connection_port"
+            android:summary="Set Port from Server"
+            android:title="IP: " />
+    </PreferenceCategory>
 
-    <!--<PreferenceCategory-->
-        <!--android:title="App Handling"-->
-        <!--android:key="pref_key_app">-->
+    <PreferenceCategory
+        android:title="Preferneces"
+        android:key="pref_key_activity">
+        <Preference
+            android:key="@string/pref_key_preferences_reset_activities"
+            android:summary="Reset all - Images, LogFiles, Configuration"
+            android:title="Reset all" />
 
-        <CheckBoxPreference
-            android:key="@string/pref_key_editable_mode"
+        <SwitchPreference
+            android:key="@string/pref_key_preferences_editable_mode"
             android:summary="Enable Activity Editable Function in CalendarView"
             android:title="Editable Mode"
            />
-    <!--</PreferenceCategory>-->
+    </PreferenceCategory>
+
+
 </PreferenceScreen>

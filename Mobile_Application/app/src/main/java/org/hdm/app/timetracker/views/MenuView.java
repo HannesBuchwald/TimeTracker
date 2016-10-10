@@ -113,7 +113,6 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 				if(settingsCounter==0) {
 //					displayedText = "Setting is unlocked";
 					settingsCounter = Variables.getInstance().settingsCounter;
-					Variables.getInstance().enableSettings = true;
 					listener.onClickSettingsButton();
 				}
 

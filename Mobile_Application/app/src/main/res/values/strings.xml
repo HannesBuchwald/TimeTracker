@@ -41,13 +41,12 @@
 
     <string name="pref_user_ID">USER ID</string>
 
-    <string name="pref_summary_auto_delete">BackButten</string>
-    <string name="pref_title_auto_delete">BackButten</string>
-
-    <string name="pref_summary_delete_limit">SMS</string>
-    <string name="pref_title_sms_delete">SMS Delete</string>
-    <string name="pref_key_reset_activities">pref_key_reset_activities</string>
-    <string name="pref_key_editable_mode">pref_key_editable_mode</string>
+    <string name="pref_key_preferences_reset_activities">pref_key_reset_activities</string>
+    <string name="pref_key_preferences_editable_mode">pref_key_editable_mode</string>
+    <string name="pref_key_user_user_id">pref_key_user_id</string>
+    <string name="pref_key_connection_send">pref_key_send</string>
+    <string name="pref_key_connection_ip">pref_key_ip</string>
+    <string name="pref_key_connection_port">pref_key_connection_port</string>
 
 
 </resources>

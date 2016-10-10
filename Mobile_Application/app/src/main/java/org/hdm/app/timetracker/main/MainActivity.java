@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -157,7 +156,10 @@ public class MainActivity extends Activity implements
 
         // Datenabgleich zwischen SharedMemory und Variables
         SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        prefs.putBoolean(getString(R.string.pref_key_editable_mode), var.editableMode);
+        prefs.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
+        prefs.putString(getString(R.string.pref_user_ID), var.user_ID);
+        prefs.putString(getString(R.string.pref_key_connection_ip), var.serverIP);
+        prefs.putString(getString(R.string.pref_key_connection_port), var.serverPort);
         prefs.commit();
 
     }
@@ -504,7 +506,7 @@ public class MainActivity extends Activity implements
 //        editor.commit();
 
         // Datenabgleich zwischen SharedMemory und Variables
-        editor.putBoolean(getString(R.string.pref_key_editable_mode), var.editableMode);
+        editor.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
         editor.apply();
 
         if(mPrefs.contains(ACTIVITY_STATE)){
@@ -544,11 +546,13 @@ public class MainActivity extends Activity implements
     }
 
 
+    /**
+     * Listener from SettingsView
+     */
 
     @Override
     public void resetActivities() {
         // Activity reset process;
-        Log.d(TAG, "Click on Reset in Main Activity");
 
         saveLogFile();
         resetAll();
@@ -557,6 +561,19 @@ public class MainActivity extends Activity implements
         Calendar calEndTime = Calendar.getInstance();
         initCalenderMap(calEndTime.getTime());
     }
+
+
+
+    @Override
+    public void sendLogFile() {
+        Log.d(TAG, "Click on Send Files");
+    }
+
+
+
+
+
+
 
     private void resetAll() {
 
