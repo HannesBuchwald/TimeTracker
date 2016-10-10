@@ -59,8 +59,20 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         holder.title.setText(object.title);
         holder.activityList = false;
         if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
-        if(!var.editable) holder.setBackground(object.activeState);
-        Log.d(TAG, "position " + position + " " + object.title + " "+ object.activeState);
+        if(!var.editable) {
+
+
+            if(object.service != null) {
+
+                if(object.service.contains("Yes") && object.activeState) {
+                    holder.setBackground("blue");
+                } else {
+                    holder.setBackground(object.activeState);
+                }
+            } else {
+                holder.setBackground(object.activeState);
+            }
+        }
     }
 
 

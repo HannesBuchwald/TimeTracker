@@ -8,7 +8,7 @@
         <!--android:key="pref_key_activity">-->
         <Preference
             android:key="@string/pref_key_reset_activities"
-            android:summary="Reset the recorded activities"
+            android:summary="Reset all: Images, LogFiles, Configuration"
             android:title="Reset" />
     <!--</PreferenceCategory>-->
 

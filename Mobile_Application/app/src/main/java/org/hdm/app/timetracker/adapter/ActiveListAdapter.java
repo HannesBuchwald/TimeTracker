@@ -10,6 +10,7 @@ import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
+import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
@@ -55,8 +56,12 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         if(dataManager.imageMap.get(object.imageName) != null ){
             holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
         }
-        holder.setBackground(object.activeState);
 
+        if(object.service.equals("Yes")) {
+            holder.setBackground("blue");
+        } else {
+            holder.setBackground(object.activeState);
+        }
     }
 
 
@@ -101,12 +106,13 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void didClickOnView(View view, String s, View_Holder holder) {
+        if (listener != null) listener.didOnClickOnActiveListItem(s, holder);
     }
 
 
     @Override
     public void didLongClickOnView(View view, String s, View_Holder holder) {
-        if (listener != null) listener.didOnClickOnActiveListItem(s, holder);
+        if (listener != null) listener.didOnLongClickOnActiveListItem(s, holder);
 
     }
 

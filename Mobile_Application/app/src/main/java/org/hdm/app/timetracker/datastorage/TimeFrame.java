@@ -11,16 +11,9 @@ public class TimeFrame {
 
     public Date startTime;
     public Date endTime;
-    public String service;
-    public String whereFrom;
-    public String ownWork;
+    public String contractWork;
+    public String author;
     public String portion = "";
     public List food = new ArrayList();
 
-    public TimeFrame(Date startTime, Date endTime, String service, String whereFrom) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.service = service;
-        this.whereFrom = whereFrom;
-    }
 }

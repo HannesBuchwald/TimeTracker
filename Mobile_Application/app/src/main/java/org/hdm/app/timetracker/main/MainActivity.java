@@ -159,7 +159,7 @@ public class MainActivity extends Activity implements
         SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
         prefs.putBoolean(getString(R.string.pref_key_editable_mode), var.editableMode);
         prefs.commit();
-        
+
     }
 
 
@@ -345,7 +345,7 @@ public class MainActivity extends Activity implements
                     var.activeCount--;
 
                     // Save Timestamp and SubCategory in ActivityObject
-                    activityObject.saveTimeStamp("active");
+                    activityObject.saveTimeStamp("user");
                     DataManager.getInstance().setActivityObject(activityObject);
 
                     // ToDo check background of Activity in objectList and activeList like ActivityFragment
@@ -495,13 +495,13 @@ public class MainActivity extends Activity implements
      */
     private void loadSavedObjectState() {
         Gson gson = new Gson();
+
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
-
-
         SharedPreferences.Editor editor = mPrefs.edit();
 //        editor.remove(ACTIVITY_STATE);
 //        editor.remove(ACTIVE_LIST);
 //        editor.remove(CALENDAR_MAP);
+//        editor.commit();
 
         // Datenabgleich zwischen SharedMemory und Variables
         editor.putBoolean(getString(R.string.pref_key_editable_mode), var.editableMode);
@@ -551,9 +551,27 @@ public class MainActivity extends Activity implements
         Log.d(TAG, "Click on Reset in Main Activity");
 
         saveLogFile();
+        resetAll();
 
         initConfiguration();
         Calendar calEndTime = Calendar.getInstance();
         initCalenderMap(calEndTime.getTime());
+    }
+
+    private void resetAll() {
+
+
+        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.remove(ACTIVITY_STATE);
+        editor.remove(ACTIVE_LIST);
+        editor.remove(CALENDAR_MAP);
+        editor.commit();
+
+
+        FileLoader fl = new FileLoader(this);
+        fl.deleteExternalFolder(IMAGE_FOLDER);
+        fl.deleteExternalFolder(CONFIG_FOLDER);
+        fl.deleteExternalFolder(LOGS_FOLDER);
     }
 }
