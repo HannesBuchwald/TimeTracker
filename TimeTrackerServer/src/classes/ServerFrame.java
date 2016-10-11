@@ -15,6 +15,7 @@ public class ServerFrame extends JFrame {
 	private boolean serverRunning = false;
 	private TimeTrackerServer server;
 	private String ip;
+	private int defaultport = 4460;
 
 	private ServerFrame() {
 		createWindow();
@@ -39,7 +40,7 @@ public class ServerFrame extends JFrame {
 
 		textField = new JTextField();
 		textField.setHorizontalAlignment(JTextField.CENTER);
-		textField.setText("4450");
+		textField.setText(String.valueOf(defaultport));
 
 		label = new JLabel("label", SwingConstants.CENTER);
 		label.setText("<html>Server NOT running!<br>Port: "
@@ -90,10 +91,10 @@ public class ServerFrame extends JFrame {
 					Integer.parseInt(textField.getText()));
 		} catch (NumberFormatException e) {
 			System.out.println("Not a number in textfield!");
-			server = new TimeTrackerServer(4450);
-			label.setText("<html>Server running!<br>Port: " + 4450 + "<br>IP: "
+			server = new TimeTrackerServer(defaultport);
+			label.setText("<html>Server running!<br>Port: " + defaultport + "<br>IP: "
 					+ ip + "</html>");
-			textField.setText("4450");
+			textField.setText(String.valueOf(defaultport));
 		}
 		new Thread(server).start();
 	}

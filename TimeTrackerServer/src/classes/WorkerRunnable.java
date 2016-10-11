@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,7 +48,7 @@ public class WorkerRunnable implements Runnable {
 			}
 
 			System.out.println(message);
-			SaveFile(message, null);
+			SaveFile(message);
 			inputStreamReader.close();
 			clientSocket.close();
 		} catch (IOException e) {
@@ -53,31 +57,43 @@ public class WorkerRunnable implements Runnable {
 		}
 	}
 
-	private void SaveFile(String content, File file) {
+	private void SaveFile(String content) {
+
+		String desktopDirectory = System.getProperty("user.home") + "/Desktop";
+		String saveFolder = desktopDirectory + "/TimeTrackerLogs";
+		String uniqueID = UUID.randomUUID().toString();
+
+		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		Calendar cal = Calendar.getInstance();
+		String dateTime = dateFormat.format(cal.getTime());
+
+		saveFolder += " (" + dateTime + ")";
+
+		String fileNameJson = saveFolder + "/Json/savelog json (" + dateTime
+				+ ") id - " + uniqueID + ".txt";
+
+		String fileNameCSV = saveFolder + "/CSV/savelog (" + dateTime
+				+ ") id - " + uniqueID + ".csv";
+
+		String fileNameExcel = saveFolder + "/Excel/savelog (" + dateTime
+				+ ") id - " + uniqueID + ".csv";
+
+		// Write json directly to file:
+		FileWriter fileWriter = null;
 		try {
-			String desktopDirectory = System.getProperty("user.home")
-					+ "/Desktop";
-			String saveFolder = desktopDirectory + "/TimeTrackerLogs";
-			String uniqueID = UUID.randomUUID().toString();
-
-			DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-			Calendar cal = Calendar.getInstance();
-			String dateTime = dateFormat.format(cal.getTime());
-
-			String fileName = saveFolder + "/savelog (" + dateTime + ") id - "
-					+ uniqueID + ".csv";
-
-			FileWriter fileWriter = null;
-			//fileWriter = new FileWriter(fileName);
-			jsonToCSV(content, fileName);
-			// fileWriter.write(content);
+			fileWriter = new FileWriter(fileNameJson);
+			fileWriter.write(content);
 			fileWriter.close();
-		} catch (IOException ex) {
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
+		jsonToCSV(content, fileNameExcel, true);
+
+		jsonToCSV(content, fileNameCSV, false);
 	}
 
-	private void jsonToCSV(String json, String file) {
+	private void jsonToCSV(String json, String file, boolean addSep) {
 		JsonFlattener parser = new JsonFlattener();
 		CSVWriter writer = new CSVWriter();
 
@@ -85,10 +101,23 @@ public class WorkerRunnable implements Runnable {
 		try {
 			flatJson = parser.parseJson(json);
 			writer.writeAsCSV(flatJson, file);
+			if (addSep) {
+				String content = "\"sep=,\"\n\r" + readFile(file);
+
+				try (PrintWriter out = new PrintWriter(file)) {
+					out.println(content);
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	private String readFile(String path) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded);
 	}
 
 }
