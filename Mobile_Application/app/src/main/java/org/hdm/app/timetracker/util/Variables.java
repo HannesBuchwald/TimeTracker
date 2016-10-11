@@ -162,8 +162,15 @@ public class Variables {
      */
     public boolean serverConnection = true;
 
-    public String serverPort = "8080";
-    public String serverIP = "123.34.34";
+    public String serverPort = "4460";
+    public String serverIP = "192.168.2.117";
+
+    /**
+     *  Variable for Date in CalendarView
+     */
+    public Date fistDay;
+    public Date secondDay;
+    public Date thirdDay;
 
 
     /***********

@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.main.MainActivity;
@@ -463,10 +465,15 @@ public class FileLoader {
 
     public void saveLogsOnExternal(String fileName) {
 
-        MyJsonParser parser = new MyJsonParser();
-        String logFile = parser.createLogJsonFromActivityObjects();
+//        MyJsonParser parser = new MyJsonParser();
+//        String logFile = parser.createLogJsonFromActivityObjects();
+
         String path = enviroment.toString() + "/" + LOGS_FOLDER;
-        writeStringOnExternal(logFile, fileName, path);
+        Gson gson = new Gson();
+        String s = gson.toJson(DataManager.getInstance().logList);
+        writeStringOnExternal(s, fileName, path);
+        DataManager.getInstance().lastLog = s;
+        Log.d(TAG, "logFile " + s);
     }
 
 
