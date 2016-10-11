@@ -10,7 +10,7 @@ import javax.swing.*;
 public class ServerFrame extends JFrame {
 
 	private JTextField textField;
-	private JLabel label;
+	public JLabel label;
 	private JButton button;
 	private boolean serverRunning = false;
 	private TimeTrackerServer server;
@@ -34,7 +34,6 @@ public class ServerFrame extends JFrame {
 			IP = InetAddress.getLocalHost();
 			ip = IP.getHostAddress();
 		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -88,10 +87,10 @@ public class ServerFrame extends JFrame {
 	public void startServer() {
 		try {
 			server = new TimeTrackerServer(
-					Integer.parseInt(textField.getText()));
+					Integer.parseInt(textField.getText()),label);
 		} catch (NumberFormatException e) {
 			System.out.println("Not a number in textfield!");
-			server = new TimeTrackerServer(defaultport);
+			server = new TimeTrackerServer(defaultport,label);
 			label.setText("<html>Server running!<br>Port: " + defaultport + "<br>IP: "
 					+ ip + "</html>");
 			textField.setText(String.valueOf(defaultport));

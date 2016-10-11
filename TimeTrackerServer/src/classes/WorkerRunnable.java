@@ -1,5 +1,6 @@
 package classes;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import javafx.scene.control.ListView;
@@ -29,10 +31,12 @@ public class WorkerRunnable implements Runnable {
 	protected Socket clientSocket = null;
 	protected String serverText = null;
 	private String message = "";
+	private JLabel label;
 
-	public WorkerRunnable(Socket clientSocket, String serverText) {
+	public WorkerRunnable(Socket clientSocket, String serverText, JLabel label) {
 		this.clientSocket = clientSocket;
 		this.serverText = serverText;
+		this.label = label;
 	}
 
 	public void run() {
@@ -48,9 +52,19 @@ public class WorkerRunnable implements Runnable {
 			}
 
 			System.out.println(message);
+
 			SaveFile(message);
 			inputStreamReader.close();
 			clientSocket.close();
+
+			label.setBackground(Color.white);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			label.setBackground(Color.green);
+
 		} catch (IOException e) {
 			// report exception somewhere.
 			e.printStackTrace();

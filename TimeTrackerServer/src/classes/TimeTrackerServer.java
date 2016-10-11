@@ -8,15 +8,19 @@ import java.util.Calendar;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JLabel;
+
 public class TimeTrackerServer implements Runnable {
 
 	private int serverPort = 4460;
 	protected ServerSocket serverSocket = null;
 	protected boolean isStopped = false;
 	protected Thread runningThread = null;
+	private JLabel label;
 
-	public TimeTrackerServer(int port) {
+	public TimeTrackerServer(int port,JLabel label) {
 		createSaveFolder();
+		this.label = label;
 		serverPort = port;
 	}
 
@@ -37,7 +41,7 @@ public class TimeTrackerServer implements Runnable {
 				throw new RuntimeException("Error accepting client connection",
 						e);
 			}
-			new Thread(new WorkerRunnable(clientSocket, "Multithreaded Server"))
+			new Thread(new WorkerRunnable(clientSocket, "Multithreaded Server",label))
 					.start();
 		}
 		System.out.println("Server Stopped.");
