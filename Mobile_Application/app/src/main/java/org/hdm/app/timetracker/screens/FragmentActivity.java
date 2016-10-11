@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.dialogs.DialogPortionFragment;
 import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
@@ -282,6 +284,9 @@ public class FragmentActivity extends BaseFragemnt implements
 
             } else {
                 // Save Timestamp and SubCategory in ActivityObject
+
+                saveStateToLogList(activityObject);
+
                 activityObject.saveTimeStamp("user");
             }
 
@@ -314,6 +319,23 @@ public class FragmentActivity extends BaseFragemnt implements
             objectAdapter.notifyItemChanged(objectAdapter.list.indexOf(activityObject.title));
         }
 
+    }
+
+    private void saveStateToLogList(ActivityObject activityObject) {
+
+        Stamp stamp = new Stamp();
+        stamp.user = var.user_ID;
+        stamp.activity = activityObject.title;
+        stamp.date = Calendar.getInstance().getTime().toString();
+        stamp.startTime = activityObject.startTime.toString();
+        stamp.endTime = activityObject.endTime.toString();
+        stamp.time = String.valueOf(activityObject.endTime.getTime() - activityObject.startTime.getTime());
+        stamp.contractWork = activityObject.service;
+        stamp.author = "user";
+        stamp.delete = "no";
+        stamp.portion = "";
+
+        dataManager.logList.add(stamp);
     }
 
 

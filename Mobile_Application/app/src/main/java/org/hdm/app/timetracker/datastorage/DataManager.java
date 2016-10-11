@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
@@ -42,6 +43,9 @@ public class DataManager {
     public ArrayList<String> activeList = new ArrayList<>();
 
 
+
+    public List<Stamp> logList = new ArrayList<Stamp>();
+    public String lastLog = "";
 
 
 

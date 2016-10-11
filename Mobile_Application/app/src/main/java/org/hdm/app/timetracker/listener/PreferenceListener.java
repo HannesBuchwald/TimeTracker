@@ -9,4 +9,6 @@ import org.hdm.app.timetracker.util.View_Holder;
  */
 public interface PreferenceListener {
      void resetActivities();
+     void sendLogFile();
+
 }

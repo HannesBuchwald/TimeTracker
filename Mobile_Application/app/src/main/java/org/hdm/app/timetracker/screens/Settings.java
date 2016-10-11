@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.listener.PreferenceListener;
@@ -18,11 +17,16 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
     private static final String TAG = "Settings";
 
-    PreferenceListener listener;
-    private Preference prefActivitiesReset;
-    private Preference preEditableMode;
+    private PreferenceListener listener;
+    private Activity mainActivity;
 
-    Activity mainActivity;
+    private Preference prefActivitiesReset;
+    private Preference prefEditableMode;
+    private Preference prefUserID;
+    private Preference prefConnectionSend;
+    private Preference prefConnectionIP;
+    private Preference prefConnectionPort;
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -40,31 +44,50 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     }
 
 
-
     private void initXML() {
         addPreferencesFromResource(R.xml.settings);
 
-        prefActivitiesReset = getPreferenceManager().findPreference(getString(R.string.pref_key_reset_activities));
-        preEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_editable_mode));
+        prefActivitiesReset = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_reset_activities));
+        prefEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_editable_mode));
+        prefUserID = getPreferenceManager().findPreference(getString(R.string.pref_key_user_user_id));
+        prefConnectionSend = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_send));
+        prefConnectionIP = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_ip));
+        prefConnectionPort = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_port));
+
     }
 
     private void initListener() {
 
-        if(mainActivity!= null) listener = (PreferenceListener) mainActivity;
+        if (mainActivity != null) listener = (PreferenceListener) mainActivity;
 
         prefActivitiesReset.setOnPreferenceClickListener(this);
-        preEditableMode.setOnPreferenceChangeListener(this);
-    }
+        prefConnectionSend.setOnPreferenceClickListener(this);
 
+        prefEditableMode.setOnPreferenceChangeListener(this);
+        prefUserID.setOnPreferenceChangeListener(this);
+        prefConnectionIP.setOnPreferenceChangeListener(this);
+        prefConnectionPort.setOnPreferenceChangeListener(this);
+
+    }
 
 
     private void initConditions() {
 
-//        if(preEditableMode != null) preEditableMode.(Variables.getInstance().editableMode);
-//
-//        boolean a = getPreferenceManager().getSharedPreferences().getBoolean(getString(R.string.pref_key_editable_mode), true);
-//        Log.d(TAG, "boolean " + a + " " + Variables.getInstance().editableMode);
+        if (prefUserID != null) {
+            prefUserID.setTitle("User ID: " + Variables.getInstance().user_ID);
+        }
 
+        if (prefConnectionSend != null) {
+            prefConnectionSend.setEnabled(Variables.getInstance().serverConnection);
+        }
+
+        if (prefConnectionIP != null) {
+            prefConnectionIP.setTitle("Port: " + Variables.getInstance().serverIP);
+        }
+
+        if (prefConnectionPort != null) {
+            prefConnectionPort.setTitle("Port: " + Variables.getInstance().serverPort);
+        }
     }
 
     @Override
@@ -79,26 +102,51 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     }
 
 
-
     @Override
     public boolean onPreferenceClick(Preference preference) {
 
 
-        if (preference.equals(prefActivitiesReset)) {
-            if(listener != null) listener.resetActivities();
-            Log.d(TAG, "Click on Reset");
+        if (preference.equals(prefActivitiesReset)){
+            if (listener != null) listener.resetActivities();
         }
+
+        if (preference.equals(prefConnectionSend)) {
+            if (listener != null) listener.sendLogFile();
+        }
+
 
         return true;
     }
 
+
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-        if (preference.equals(preEditableMode)) {
-            if(newValue instanceof Boolean){
-                Variables.getInstance().editableMode = (Boolean)newValue;
-                Variables.getInstance().backPress = (Boolean)newValue;
+        if (preference.equals(prefEditableMode)) {
+            if (newValue instanceof Boolean) {
+                Variables.getInstance().editableMode = (Boolean) newValue;
+                Variables.getInstance().backPress = (Boolean) newValue;
+            }
+        }
+
+        else if (preference.equals(prefUserID)) {
+            if (newValue instanceof String) {
+                Variables.getInstance().user_ID = (String) newValue;
+                prefUserID.setTitle("User ID: " + Variables.getInstance().user_ID);
+            }
+        }
+
+        else if (preference.equals(prefConnectionIP)) {
+            if (newValue instanceof String) {
+                Variables.getInstance().serverIP = (String) newValue;
+                prefConnectionIP.setTitle("IP: " + Variables.getInstance().serverIP);
+            }
+        }
+
+        else if (preference.equals(prefConnectionPort)) {
+            if (newValue instanceof String) {
+                Variables.getInstance().serverPort = (String) newValue;
+                prefConnectionPort.setTitle("Port: " + Variables.getInstance().serverPort);
             }
         }
 

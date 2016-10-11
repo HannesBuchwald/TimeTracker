@@ -130,7 +130,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
         if(givenTime.before(currentTime)) {
 
-//            holder.iv_background_bottom.setVisibility(View.VISIBLE);
+            holder.iv_background_bottom.setVisibility(View.VISIBLE);
 //            holder.iv_background_top.setVisibility(View.VISIBLE);
             lastPosition = position+1;
         } else {
