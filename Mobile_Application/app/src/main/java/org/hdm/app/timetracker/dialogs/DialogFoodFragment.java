@@ -15,12 +15,14 @@ import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.adapter.DialogFoodListAdapter;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.datastorage.TimeFrame;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
 import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +46,8 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
     View view;
     private Button btnDialogFood;
 
-    public DialogFoodFragment(){}
+    public DialogFoodFragment() {
+    }
 
 
     public DialogFoodFragment(ActivityObject activityObject) {
@@ -64,9 +67,6 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
         return view;
     }
-
-
-
 
 
     private void initLayout() {
@@ -105,17 +105,17 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         // get clicked PortionObject
         ActivityObject foodObject = dataManager.getFoodObject(title);
 
-        if(foodObject.activeState){
+        if (foodObject.activeState) {
             foodObject.activeState = false;
 
-            if(activityObject.food.contains(foodObject.title)){
+            if (activityObject.food.contains(foodObject.title)) {
                 activityObject.food.remove(foodObject.title);
             }
 
         } else {
             foodObject.activeState = true;
 
-            if(!activityObject.food.contains(foodObject.title)){
+            if (!activityObject.food.contains(foodObject.title)) {
                 activityObject.food.add(foodObject.title);
             }
         }
@@ -126,14 +126,12 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         Log.d(TAG, "foodObject " + foodObject.title);
         Log.d(TAG, "foodObject a" + activityObject.food);
 
-        if(activityObject.food.size()>=1){
+        if (activityObject.food.size() >= 1) {
             btnDialogFood.setVisibility(View.VISIBLE);
         } else {
             btnDialogFood.setVisibility(View.GONE);
         }
     }
-
-
 
 
     private void resetFoodItemState() {
@@ -151,6 +149,8 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").startTime.toString());
         Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").endTime.toString());
 
+
+        saveStateToLogList(activityObject);
         // Save Timestamp and SubCategory in ActivityObject
         activityObject.saveTimeStamp("user");
         dataManager.setActivityObject(activityObject);
@@ -160,6 +160,86 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
     }
 
 
+    public void saveStateToLogList(ActivityObject activityObject) {
 
+        Stamp stamp = new Stamp();
+        stamp.user = Variables.getInstance().user_ID;
+        stamp.activity = activityObject.title;
+        stamp.date = Calendar.getInstance().getTime().toString();
+        stamp.startTime = activityObject.startTime.toString();
+        stamp.endTime = activityObject.endTime.toString();
+        stamp.time = String.valueOf(activityObject.endTime.getTime() - activityObject.startTime.getTime());
+        stamp.contractWork = activityObject.service;
+        stamp.author = "user";
+        stamp.delete = "no";
+        stamp.portion = activityObject.portion;
+
+
+        LinkedHashMap<String, ActivityObject> foodMap = dataManager.getFoodMap();
+        for (Map.Entry<String, ActivityObject> entry : foodMap.entrySet()) {
+
+            boolean activeState = entry.getValue().activeState;
+
+            String title = entry.getValue().title;
+            switch (title) {
+
+                case "Cereals":
+                    stamp.cereals = String.valueOf(activeState);
+                    break;
+
+                case "Roots/tubers":
+                    stamp.roots_tubers = String.valueOf(activeState);
+                    break;
+
+                case "Vegetables":
+                    stamp.vegetables = String.valueOf(activeState);
+                    break;
+
+                case "Fruits":
+                    stamp.fruits = String.valueOf(activeState);
+                    break;
+
+                case "Meats":
+                    stamp.meats = String.valueOf(activeState);
+                    break;
+
+                case "Eggs":
+                    stamp.eggs = String.valueOf(activeState);
+                    break;
+
+                case "Fish/seafood":
+                    stamp.fish_seafood = String.valueOf(activeState);
+                    break;
+
+                case "Pulses/legumes/nuts":
+                    stamp.pulses_legumes_nuts = String.valueOf(activeState);
+                    break;
+
+                case "Milk products":
+                    stamp.milk_products = String.valueOf(activeState);
+                    break;
+
+                case "Oils/fats":
+                    stamp.oils_fats = String.valueOf(activeState);
+                    break;
+
+                case "Sugar/honey":
+                    stamp.sugar_honey = String.valueOf(activeState);
+                    break;
+
+                case "Tea/coffee":
+                    stamp.tea_coffee = String.valueOf(activeState);
+                    break;
+
+                default:
+                    break;
+
+            }
+            entry.getValue().activeState = false;
+        }
+
+
+        dataManager.logList.add(stamp);
+    }
 
 }

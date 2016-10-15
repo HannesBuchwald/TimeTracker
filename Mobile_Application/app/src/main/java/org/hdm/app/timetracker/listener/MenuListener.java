@@ -9,5 +9,5 @@ public interface MenuListener {
 
     void mClickInteraction(View v);
     void onClickSettingsButton();
-
+    void scrollToCurrentTime(View view);
 }

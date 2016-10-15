@@ -33,6 +33,7 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 	private String title = "";
 	private RelativeLayout menu_rl;
 	private ImageView menu_btn_flip;
+	public ImageView menu_btn_currentDate;
 	private int settingsCounter = Variables.getInstance().settingsCounter;
 
 
@@ -63,6 +64,8 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 		menu_rl = (RelativeLayout) view.findViewById(R.id.menu_rl);
 		menu_btn_flip = (ImageView) view.findViewById(R.id.menu_btn_flip);
 		menu_tv = (TextView) view.findViewById(R.id.menu_tv);
+		menu_btn_currentDate = (ImageView) view.findViewById(R.id.menu_btn_currentDate);
+		menu_btn_currentDate.setVisibility(INVISIBLE);
 	}
 
 
@@ -72,6 +75,7 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 //		menu_rl.setOnClickListener(this);
 		menu_btn_flip.setOnClickListener(this);
 		menu_tv.setOnClickListener(this);
+		menu_btn_currentDate.setOnClickListener(this);
 //		view.setOnClickListener(this);
 
 	}
@@ -140,10 +144,18 @@ public class MenuView extends RelativeLayout implements View.OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		if(v.equals(menu_btn_flip)) listener.mClickInteraction(view);
 
-		if(v.equals(menu_tv)) handleSettingsClick();
+		if(v.equals(menu_btn_flip)) {
+			listener.mClickInteraction(view);
+		}else if(v.equals(menu_tv)) {
+			handleSettingsClick();
+		}else if(v.equals(menu_btn_currentDate)){
+			listener.scrollToCurrentTime(view);
+		}
 	}
+
+
+
 }
 
 

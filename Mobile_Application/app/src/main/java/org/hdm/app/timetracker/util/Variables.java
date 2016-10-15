@@ -2,6 +2,7 @@ package org.hdm.app.timetracker.util;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Hannes on 06.05.2016.
@@ -169,8 +170,23 @@ public class Variables {
      *  Variable for Date in CalendarView
      */
     public Date fistDay;
-    public Date secondDay;
-    public Date thirdDay;
+    public List<Date> dateArray;
+    public List<Date> coloredDates;
+
+
+    public int amountOfDays = 4; // set value not under 1
+
+
+    //********* Device Parameter *********/
+
+
+    /**
+     * Device WifiState flag
+     */
+    public boolean wifiState = false;
+    public boolean bluetoothState = false;
+    public int screenOffTimeout = 1;
+    public int displayBrightness = 100;
 
 
     /***********

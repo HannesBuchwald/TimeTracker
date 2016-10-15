@@ -4,6 +4,7 @@ package org.hdm.app.timetracker.screens;
  * Created by Hannes on 13.05.2016.
  */
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,10 +36,11 @@ import java.util.TreeMap;
 /**
  * A fragment representing the front of the card.
  */
+@SuppressLint("NewApi")
 public class FragmentCalender extends BaseFragemnt implements
         CalendarItemOnClickListener,
         View.OnClickListener,
-        View.OnLongClickListener{
+        View.OnLongClickListener {
 
 
     private String TAG = "DayView";
@@ -47,7 +49,7 @@ public class FragmentCalender extends BaseFragemnt implements
     private CalendarListAdapter adapter;
     private int rows = 1;
     private LinkedHashMap data;
-    private TreeMap calendar;
+    private LinkedHashMap calendar;
     private FloatingActionButton fab_calendar;
     private int overallXScroll;
     private int lastFirstVisiblePosition = 0;
@@ -61,7 +63,7 @@ public class FragmentCalender extends BaseFragemnt implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_calender, container, false);
-        initMenu(view);
+        initMenu(view, (RecyclerView) view.findViewById(R.id.rv_calender));
         initCalenderList();
         initFloatingButton();
         return view;
@@ -72,8 +74,11 @@ public class FragmentCalender extends BaseFragemnt implements
 
     @Override
     public void onPause() {
+
+
         super.onPause();
-    }
+        setCalendarIconVisibility(false);
+}
 
 
     @Override
@@ -82,6 +87,7 @@ public class FragmentCalender extends BaseFragemnt implements
         setMenuTitle(TAG);
         setMenuBackground(android.R.color.holo_blue_light);
         setMenuBtn(R.drawable.ic_back);
+        setCalendarIconVisibility(true);
         if (!var.editable) scrollListToCurrentTime();
 
         if(var.editableMode) {
@@ -106,7 +112,7 @@ public class FragmentCalender extends BaseFragemnt implements
         data = DataManager.getInstance().activityMap;
         calendar = DataManager.getInstance().calenderMap;
         adapter = new CalendarListAdapter(getActivity(), data, calendar);
-        Log.d(TAG, "Jsonnnnnn " + "Calendar " + calendar.size());
+        Log.d(TAG, "Jsonnnnnn " + "Calendar " + data);
         Log.d(TAG, "Jsonnnnnn " + "Calendar " + calendar);
 
         adapter.setListener(this);
@@ -147,19 +153,10 @@ public class FragmentCalender extends BaseFragemnt implements
         listener.flip();
     }
 
-
-
-
-    // scroll in Calendarlist to current Time
-    private void scrollListToCurrentTime() {
-        Date currentTime = Calendar.getInstance().getTime();
-        int hour = currentTime.getHours();
-        if (hour > 2) hour = hour * 2 - 2;
-        rv_calender.scrollToPosition(hour);
-        Log.d(TAG, "scrollHour " + hour + " " + calendar.size());
+    @Override
+    public void setCalendarTitle(String s) {
+        setMenuTitle(s);
     }
-
-
 
 
     // FloatingActionButton Listener
@@ -201,4 +198,6 @@ public class FragmentCalender extends BaseFragemnt implements
         adapter.notifyDataSetChanged();
         return true;
     }
+
+
 }

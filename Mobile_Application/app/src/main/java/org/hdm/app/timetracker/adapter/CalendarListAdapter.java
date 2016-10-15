@@ -35,8 +35,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     public Context context;
 
 
-
-    private TreeMap calendarMap;
+    private LinkedHashMap calendarMap;
     public LinkedHashMap data;
     public ArrayList list;
     private CalendarItemOnClickListener listener;
@@ -46,20 +45,16 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     public Variables var = Variables.getInstance();
 
 
-
     private CalendarItemListAdapter resAdapter;
 
 
-    public CalendarListAdapter(Activity activity, LinkedHashMap data, TreeMap calendar) {
+    public CalendarListAdapter(Activity activity, LinkedHashMap data, LinkedHashMap calendar) {
         this.context = activity;
         this.data = data;
         this.calendarMap = calendar;
         list = new ArrayList(calendar.keySet());
-       // removeStrings();
+        // removeStrings();
     }
-
-
-
 
 
     @Override
@@ -71,7 +66,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     }
 
 
-
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
@@ -80,7 +74,9 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         String title = list.get(position).toString();
         holder.id = title;
         holder.setListener(this);
-        Log.d(TAG,"title "+ title);
+        Log.d(TAG, "title " + title);
+
+        int date = Integer.parseInt(title.substring(8, 10));
 
         // Display only Hours and Minutes
         // Cut away the first 14 characters
@@ -89,7 +85,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         title = title.substring(0, 5);
 
 
-        if(!title.contains("00")){
+        if (!title.contains("00")) {
             String subTitle = title;
             holder.title.setText("   " + subTitle.substring(3));
         } else {
@@ -105,43 +101,36 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         holder.rv_content.setAdapter(resAdapter);
         holder.rv_content.setLayoutManager(new LinearLayoutManager(context));
         holder.rv_content.setLayoutManager(new StaggeredGridLayoutManager(
-                CALENDARITEMROW,StaggeredGridLayoutManager.HORIZONTAL));
+                CALENDARITEMROW, StaggeredGridLayoutManager.HORIZONTAL));
 
-        if(var.editable) {
+        if (var.editable) {
             if (holder.btn_add != null) holder.btn_add.setVisibility(View.VISIBLE);
         } else {
             if (holder.btn_add != null) holder.btn_add.setVisibility(View.GONE);
         }
 
+        if (holder.iv_background_top != null) {
 
-        // Set
-        Date currentTime = Calendar.getInstance().getTime();
-        Date givenTime = Calendar.getInstance().getTime();
+            boolean colored = false;
+            if (var.coloredDates != null) {
+                for (int i = 0; i < var.coloredDates.size(); i++) {
+                    Log.d(TAG, "colored " + var.coloredDates.get(i).getDate() + " " + date);
+                    if (var.coloredDates.get(i).getDate() == date) colored = true;
+                }
+            }
 
-
-        int hour =  Integer.parseInt(title.substring(0, 2));
-        int min =  Integer.parseInt(title.substring(3));
-
-        Log.d(TAG, "hour " +hour +" "+ min);
-        givenTime.setHours(hour);
-        givenTime.setMinutes(min);
-
-        if(holder.iv_background_top != null){
-
-        if(givenTime.before(currentTime)) {
-
-            holder.iv_background_bottom.setVisibility(View.VISIBLE);
-//            holder.iv_background_top.setVisibility(View.VISIBLE);
-            lastPosition = position+1;
-        } else {
-//            holder.iv_background_bottom.setVisibility(View.INVISIBLE);
-//            holder.iv_background_top.setVisibility(View.INVISIBLE);
-
-            // make iv_background_top for in currentTime CalendarItem visible
-            givenTime.setMinutes(min-15);
-//            if(givenTime.before(currentTime))holder.iv_background_top.setVisibility(View.VISIBLE);
+            if (colored) {
+                holder.iv_background_bottom.setVisibility(View.VISIBLE);
+                holder.iv_background_top.setVisibility(View.VISIBLE);
+            } else {
+                holder.iv_background_bottom.setVisibility(View.INVISIBLE);
+                holder.iv_background_top.setVisibility(View.INVISIBLE);
+            }
         }
-        }
+
+        String calendarTitleDay = list.get(position).toString().substring(0, 3);
+        String calendarTitleDate = list.get(position).toString().substring(8, 10);
+        if (listener != null) listener.setCalendarTitle(calendarTitleDate + ". " + calendarTitleDay);
     }
 
 
@@ -149,7 +138,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     public long getItemId(int position) {
         return super.getItemId(position);
     }
-
 
 
     @Override
@@ -171,7 +159,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     }
 
 
-
     // Remove a RecyclerView item containing a specified Daata object
     public void remove(ActivityObject activityObject) {
         int position = list.indexOf(activityObject);
@@ -180,21 +167,15 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     }
 
 
-
-
-
-
-
-    public void setListener (CalendarItemOnClickListener listener) {
+    public void setListener(CalendarItemOnClickListener listener) {
         this.listener = listener;
     }
-
 
 
     @Override
     public void didClickOnView(View view, String s, View_Holder holder) {
         Log.d(TAG, "holder " + holder.id);
-        if(listener!= null) listener.didOnClickAddBtn(holder);
+        if (listener != null) listener.didOnClickAddBtn(holder);
     }
 
 
@@ -205,28 +186,29 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     }
 
 
-
-
     private void removeStrings() {
-        for(int i=0; i<list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             String str = (String) list.get(i);
             String strNew = str.substring(11, 17);
-            list.set(i,strNew);
+            list.set(i, strNew);
         }
     }
-
 
 
     @Override
     public void didOnClick(String time, String s, View_Holder holder) {
         Log.d(TAG, "holder " + holder.id);
-        if(listener!= null) listener.didOnClick(time, s, holder);
+        if (listener != null) listener.didOnClick(time, s, holder);
     }
-
 
 
     @Override
     public void didOnClickAddBtn(View_Holder holder) {
+
+    }
+
+    @Override
+    public void setCalendarTitle(String s) {
 
     }
 }

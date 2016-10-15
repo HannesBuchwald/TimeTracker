@@ -21,18 +21,18 @@ public class Stamp {
     public String delete;
 
     public String portion;
-//    public String cereals;
-//    public String roots_tubers;
-//    public String vegetables;
-//    public String fruits;
-//    public String meats;
-//    public String eggs;
-//    public String fish_seafood;
-//    public String pulses_legumes_nuts;
-//    public String milk_products;
-//    public String oils_fats;
-//    public String sugar_honey;
-//    public String tea_coffee;
+    public String cereals;
+    public String roots_tubers;
+    public String vegetables;
+    public String fruits;
+    public String meats;
+    public String eggs;
+    public String fish_seafood;
+    public String pulses_legumes_nuts;
+    public String milk_products;
+    public String oils_fats;
+    public String sugar_honey;
+    public String tea_coffee;
 
 
 }

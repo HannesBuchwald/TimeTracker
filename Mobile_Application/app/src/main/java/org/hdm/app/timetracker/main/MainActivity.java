@@ -1,12 +1,20 @@
 package org.hdm.app.timetracker.main;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Window;
@@ -72,21 +80,24 @@ public class MainActivity extends Activity implements
 
     private void initCalendar() {
 
-        DataManager.getInstance().calenderMap = new TreeMap<>();
-
-
         Calendar calEndTime = Calendar.getInstance();
-        Variables.getInstance().fistDay = calEndTime.getTime();
-        initCalenderMap(calEndTime.getTime());
+        var.fistDay = calEndTime.getTime();
+        var.dateArray = new ArrayList<>();
+        var.coloredDates = new ArrayList<>();
 
-//        calEndTime.add(Calendar.DAY_OF_MONTH, 1);
-//        Variables.getInstance().secondDay = calEndTime.getTime();
-//
-//        initCalenderMap(calEndTime.getTime());
-//
-//        calEndTime.add(Calendar.DAY_OF_MONTH, 1);
-//        Variables.getInstance().thirdDay = calEndTime.getTime();
-//        initCalenderMap(calEndTime.getTime());
+        int size = var.amountOfDays;
+        if(var.amountOfDays < 1) size = 1;
+
+        for(int i=0;i<size ;i++) {
+            var.dateArray.add(calEndTime.getTime());
+            if(i%2 == 1) var.coloredDates.add((calEndTime.getTime()));
+            calEndTime.add(Calendar.DAY_OF_MONTH, 1);
+        Log.d(TAG, "mod " + i%2);
+
+        }
+
+        Log.d(TAG, "size " + var.coloredDates.size() + " // " + var.dateArray.size());
+        initCalenderMap(var.dateArray.get(0));
     }
 
 
@@ -126,7 +137,6 @@ public class MainActivity extends Activity implements
         if (DEBUGMODE) Log.d(TAG, "onStop");
         saveLogFile();
         saveCurrentState();
-//        startActivity(new Intent(this, MainActivity.class));
     }
 
 
@@ -177,7 +187,70 @@ public class MainActivity extends Activity implements
         prefs.putString(getString(R.string.pref_key_connection_port), var.serverPort);
         prefs.commit();
 
+
+        initDeviceModies();
+
+
     }
+
+    private void initDeviceModies() {
+
+        // Set Wifi state
+        WifiManager wifiManager = (WifiManager) this.getSystemService(this.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(var.wifiState);
+
+        // Set Bluetooth state
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(var.bluetoothState) {
+            bluetoothAdapter.enable();
+        } else  {
+            bluetoothAdapter.disable();
+        }
+
+
+        float brightness = var.displayBrightness / (float)255;
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.screenBrightness = brightness;
+        getWindow().setAttributes(lp);
+
+        setTimeout(var.screenOffTimeout);
+
+    }
+
+
+    // Set Device Sleep Mode
+    private void setTimeout(int screenOffTimeout) {
+        int time;
+        switch (screenOffTimeout) {
+            case 0:
+                time = 15000;
+                break;
+            case 1:
+                time = 30000;
+                break;
+            case 2:
+                time = 60000;
+                break;
+            case 3:
+                time = 120000;
+                break;
+            case 4:
+                time = 600000;
+                break;
+            case 5:
+                time = 1800000;
+                break;
+            default:
+                time = -1;
+        }
+
+
+        android.provider.Settings.System.putInt(getContentResolver(),
+                Settings.System.SCREEN_OFF_TIMEOUT, time);
+    }
+
+
+
 
 
 //    /**
@@ -250,7 +323,7 @@ public class MainActivity extends Activity implements
         cal.setTime(time);
 
 
-        Date endTime = calEndTime.getTime();
+        Date endTime = var.dateArray.get(var.dateArray.size()-1);
         endTime.setHours(var.endHour);
         endTime.setMinutes(var.startMin);
         endTime.setSeconds(var.startMin);
@@ -268,6 +341,9 @@ public class MainActivity extends Activity implements
             cal.add(Calendar.MINUTE, var.timeFrame);
             Log.d(TAG, "calendar time new " + time.toString() + " " + DataManager.getInstance().calenderMap.size());
         }
+
+
+
 
 
     }
@@ -480,7 +556,7 @@ public class MainActivity extends Activity implements
 
 
         // Save CalendarMap
-        TreeMap<String, ArrayList<String>> calendarMap = DataManager.getInstance().calenderMap;
+        LinkedHashMap<String, ArrayList<String>> calendarMap = DataManager.getInstance().calenderMap;
         json = gson.toJson(calendarMap);
         prefsEditor.putString(CALENDAR_MAP, json);
         prefsEditor.commit();
@@ -529,11 +605,11 @@ public class MainActivity extends Activity implements
             if (mPrefs.contains(CALENDAR_MAP)) {
                 json = mPrefs.getString(CALENDAR_MAP, "");
                 Log.d(TAG, "Jsonnnnnn " + json);
-                Type type = new TypeToken<TreeMap<String, ArrayList<String>>>() {
+                Type type = new TypeToken<LinkedHashMap<String, ArrayList<String>>>() {
                 }.getType();
-                TreeMap<String, ArrayList<String>> calendarMap = gson.fromJson(json, type);
+                LinkedHashMap<String, ArrayList<String>> calendarMap = gson.fromJson(json, type);
                 DataManager.getInstance().calenderMap = calendarMap;
-                Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap);
+                Log.d(TAG, "Jsonnnnnnnnnn " + DataManager.getInstance().calenderMap);
                 Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap.size());
             }
 
@@ -555,8 +631,6 @@ public class MainActivity extends Activity implements
         saveLogFile();
         resetAll();
         initConfiguration();
-//        Calendar calEndTime = Calendar.getInstance();
-//        initCalenderMap(calEndTime.getTime());
         initCalendar();
     }
 

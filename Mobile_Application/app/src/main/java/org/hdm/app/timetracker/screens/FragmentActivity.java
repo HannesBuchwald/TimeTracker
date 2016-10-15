@@ -286,7 +286,6 @@ public class FragmentActivity extends BaseFragemnt implements
                 // Save Timestamp and SubCategory in ActivityObject
 
                 saveStateToLogList(activityObject);
-
                 activityObject.saveTimeStamp("user");
             }
 
@@ -320,6 +319,7 @@ public class FragmentActivity extends BaseFragemnt implements
         }
 
     }
+
 
     private void saveStateToLogList(ActivityObject activityObject) {
 

@@ -3,10 +3,14 @@ package org.hdm.app.timetracker.datastorage;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import org.hdm.app.timetracker.util.Variables;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
@@ -31,7 +35,7 @@ public class DataManager {
 
 
     // In this map is stored the activitys for Calender list
-    public TreeMap<String, ArrayList<String>> calenderMap = new TreeMap<>();
+    public LinkedHashMap<String, ArrayList<String>> calenderMap = new LinkedHashMap<>();
 
 
     public LinkedHashMap<String, ActivityObject> portionMap = new LinkedHashMap<>();
@@ -222,7 +226,9 @@ public class DataManager {
             }
             calenderMap.put(key, list);
             if (DEBUGMODE) {
-            Log.d(TAG, "key: " + key.toString() + " // value: " + calenderMap.get(key).toString());
+//            Log.d(TAG, "key: " + key.toString() + " // value: " + calenderMap.get(key).toString());
+                Log.d(TAG, "key: " + calenderMap.keySet());
+
             }
             return true;
         } else {
@@ -274,9 +280,18 @@ public class DataManager {
         return false;
     }
 
-    public TreeMap<String, ArrayList<String>> getCalendarMap() {
+    public LinkedHashMap<String, ArrayList<String>> getCalendarMap() {
         return calenderMap;
     }
+
+
+
+
+
+
+
+
+
 
 
     /***********

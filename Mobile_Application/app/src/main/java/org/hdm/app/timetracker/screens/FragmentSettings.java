@@ -5,6 +5,8 @@ package org.hdm.app.timetracker.screens;
  */
 
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceFragment;
@@ -43,6 +45,7 @@ public class FragmentSettings extends BaseFragemnt {
 
 
     private View view;
+    private WifiManager wifiManager;
 
 
     @Override
@@ -58,6 +61,9 @@ public class FragmentSettings extends BaseFragemnt {
             getFragmentManager().beginTransaction().add(R.id.fragment_settings, settings).commit();
         }
 
+
+        initWifi();
+
         return view;
     }
 
@@ -70,12 +76,22 @@ public class FragmentSettings extends BaseFragemnt {
         setMenuBtn(R.drawable.ic_forward);
         menuView.findViewById(R.id.menu_tv).setOnClickListener(null);
         Log.d(TAG, "Settings on Resume");
+
+        if(wifiManager!= null) wifiManager.setWifiEnabled(true);
+        Log.d(TAG, "Wifi is on" + wifiManager.isWifiEnabled());
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log.d(TAG, "Settings on Pause");
+
+        if(wifiManager!= null) wifiManager.setWifiEnabled(false);
+        Log.d(TAG, "Wifi is on" + wifiManager.isWifiEnabled());
+
+
+
 
     }
 
@@ -93,6 +109,9 @@ public class FragmentSettings extends BaseFragemnt {
 
     }
 
+    private void initWifi() {
+        wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+    }
 
 
     /*******************

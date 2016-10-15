@@ -1,9 +1,12 @@
 package org.hdm.app.timetracker.screens;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.listener.PreferenceListener;
@@ -26,6 +29,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     private Preference prefConnectionSend;
     private Preference prefConnectionIP;
     private Preference prefConnectionPort;
+    private WifiManager wifiManager;
 
 
     @Override
@@ -41,7 +45,25 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
         initXML();
         initListener();
+
+
     }
+
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initConditions();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
 
 
     private void initXML() {
@@ -71,6 +93,9 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     }
 
 
+
+
+
     private void initConditions() {
 
         if (prefUserID != null) {
@@ -90,16 +115,6 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        initConditions();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 
 
     @Override
