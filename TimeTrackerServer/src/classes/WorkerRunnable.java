@@ -75,22 +75,31 @@ public class WorkerRunnable implements Runnable {
 
 		String desktopDirectory = System.getProperty("user.home") + "/Desktop";
 		String saveFolder = desktopDirectory + "/TimeTrackerLogs";
-		String uniqueID = UUID.randomUUID().toString();
+		// String uniqueID = UUID.randomUUID().toString();
 
 		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		DateFormat fileDateFormat = new SimpleDateFormat("dd.MM.yyyy  HH.mm.ss");
 		Calendar cal = Calendar.getInstance();
 		String dateTime = dateFormat.format(cal.getTime());
+		String fileDateTime = fileDateFormat.format(cal.getTime());
+		System.out.println("Begin Index: " + content.indexOf("\"author\":\""));
+		System.out.println("End Index: "
+				+ content.indexOf("\",\"contractWork\""));
+		String author = content.substring(
+				content.indexOf("\"author\":\"") + 10,
+				content.indexOf("\",\"contractWork\""));
+		System.out.println("author: " + author);
 
 		saveFolder += " (" + dateTime + ")";
 
-		String fileNameJson = saveFolder + "/Json/savelog json (" + dateTime
-				+ ") id - " + uniqueID + ".txt";
+		String fileNameJson = saveFolder + "/Json/savelog json ("
+				+ fileDateTime + ") user - " + author + ".txt";
 
-		String fileNameCSV = saveFolder + "/CSV/savelog (" + dateTime
-				+ ") id - " + uniqueID + ".csv";
+		String fileNameCSV = saveFolder + "/CSV/savelog (" + fileDateTime
+				+ ") user - " + author + ".csv";
 
-		String fileNameExcel = saveFolder + "/Excel/savelog (" + dateTime
-				+ ") id - " + uniqueID + ".csv";
+		String fileNameExcel = saveFolder + "/Excel/savelog (" + fileDateTime
+				+ ") user - " + author + ".csv";
 
 		// Write json directly to file:
 		FileWriter fileWriter = null;
