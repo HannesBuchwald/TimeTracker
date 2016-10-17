@@ -16,6 +16,8 @@ import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.List;
 
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+
 /**
  * Created by Hannes on 27.05.2016.
  */
@@ -34,7 +36,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     public ObjectListAdapter(List<String> activityObject) {
         this.list = activityObject;
-        Log.d(TAG, "listSize " + list.size());
+        if(DEBUGMODE)Log.d(TAG, "listSize " + list.size());
     }
 
 

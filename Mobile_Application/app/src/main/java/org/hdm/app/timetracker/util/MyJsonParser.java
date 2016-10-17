@@ -35,7 +35,7 @@ public class MyJsonParser {
             ActivityObjectMap activityObjectMap = objectMapper.readValue(jsonString, ActivityObjectMap.class);
             ArrayList arrayList = activityObjectMap.get(objects);
             ActivityObject a =(ActivityObject) arrayList.get(1);
-            Log.d(TAG,"object " + a.title + " done");
+            if(DEBUGMODE) Log.d(TAG,"object " + a.title + " done");
             return arrayList;
         } catch (JsonParseException e) {
             e.printStackTrace();

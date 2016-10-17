@@ -20,6 +20,8 @@ import org.hdm.app.timetracker.views.MenuView;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+
 /**
  * A fragment representing the front of the card.
  */
@@ -92,7 +94,7 @@ public class BaseFragemnt extends Fragment implements
 
     @Override
     public void scrollToCurrentTime(View view) {
-        if (!var.editable) scrollListToCurrentTime();
+        scrollListToCurrentTime();
     }
 
     public void setContext(FragmentContainer fragmentContainer) {
@@ -111,7 +113,7 @@ public class BaseFragemnt extends Fragment implements
         int difference = currentTime.getDate()-var.fistDay.getDate();
         int offSet = difference*48;
         int hour = currentTime.getHours();
-        Log.d(TAG, "offSet " + offSet + " // hour " + hour);
+        if(DEBUGMODE) Log.d(TAG, "offSet " + offSet + " // hour " + hour);
         int position = offSet+(hour*2+3);
 
         if(offSet == 0 && hour < 2) position = 0;

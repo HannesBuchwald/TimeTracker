@@ -61,7 +61,7 @@ public class FileLoader {
 
 
         initFolder();
-        initConfiguration();
+//        initConfiguration();
         initJson();
 
     }
@@ -87,7 +87,7 @@ public class FileLoader {
 
         Properties properties = getPropertiesFromExternal(path + PROPERTIESFILE);
 
-//        Log.d(TAG, "variables "
+//        if(DEBUGMODE) Log.d(TAG, "variables "
 //                + Variables.getInstance().user_ID + " // "
 //                + Variables.getInstance().setup + " // "
 //                + Variables.getInstance().maxRecordedActivity + " // "
@@ -140,6 +140,9 @@ public class FileLoader {
         loadActivityObjects(PORTIONS, path, fileName);
         loadActivityObjects(FOOD, path, fileName);
 
+        DataManager.getInstance().logList = new ArrayList<>();
+        DataManager.getInstance().lastLog = "";
+        DataManager.getInstance().activeList = new ArrayList<>();
 
     }
 
@@ -215,7 +218,7 @@ public class FileLoader {
                 out = new FileOutputStream(outFile);
                 copyFile(in, out);
             } catch (IOException e) {
-                Log.d(TAG, "Failed to copy asset file: " + fileName, e);
+                if(DEBUGMODE) Log.d(TAG, "Failed to copy asset file: " + fileName, e);
                 return false;
             } finally {
                 if (in != null) {
@@ -292,19 +295,40 @@ public class FileLoader {
         return null;
     }
 
-    public String deleteExternalFolder(String folderName) {
+//    public boolean deleteExternalFolder(String folderName) {
+//
+//
+//
+//
+//
+//
+//            if (f.isDirectory()) {
+//                File[] files = f.listFiles();
+//                if (files != null)
+//                    for (File f : files) delete(f);
+//            }
+//            return file.delete();
+//        }
+//
+//        return false;
+//
+//    }
+
+
+    public boolean delete(File file) {
 
         if (!isExternalStorageWritable()) {
             Toast.makeText(context, " External Storage is not writeble -" +
                     "folder could not be created", Toast.LENGTH_SHORT).show();
-            return null;
+            return false;
         }
 
-        File f = new File(enviroment, folderName);
-
-            f.mkdirs();
-            return f.toString();
-
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null)
+                for (File f : files) delete(f);
+        }
+        return file.delete();
     }
 
 
@@ -322,7 +346,7 @@ public class FileLoader {
             InputStream inputStream = assetManager.open(file);
             properties.load(inputStream);
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
+            if(DEBUGMODE) Log.d(TAG, e.getMessage());
             return null;
         }
         return properties;
@@ -356,7 +380,7 @@ public class FileLoader {
         options.inPreferredConfig = Bitmap.Config.ALPHA_8;
         options.inSampleSize = 2; //reduce quality
 
-        Log.d(TAG, "listtttt" + fileName + " "+ folderPath);
+        if(DEBUGMODE) Log.d(TAG, "listtttt" + fileName + " "+ folderPath);
 
         // Check if Json File is in External Folder
         // if not than copy Json file from Asset to external Folder
@@ -389,7 +413,7 @@ public class FileLoader {
             for (int i = 0; i < list.size(); i++) {
                 ActivityObject activityObject = list.get(i);
 
-                Log.d(TAG, "imageName " + activityObject.imageName);
+                if(DEBUGMODE) Log.d(TAG, "imageName " + activityObject.imageName);
                 String objectImgPath = imgPath + activityObject.imageName;
 
                 // check if Image is in externalFolder available
@@ -423,7 +447,7 @@ public class FileLoader {
                 ActivityObject o = DataManager.getInstance().getActivityObject(activityObject.title);
 
                 if(o!=null) {
-                    Log.d(TAG, "sizzeee " + o.imageName + " " + o.title);
+                    if(DEBUGMODE) Log.d(TAG, "sizzeee " + o.imageName + " " + o.title);
                 }
             }
         }
@@ -473,7 +497,8 @@ public class FileLoader {
         String s = gson.toJson(DataManager.getInstance().logList);
         writeStringOnExternal(s, fileName, path);
         DataManager.getInstance().lastLog = s;
-        Log.d(TAG, "logFile " + s);
+        if(DEBUGMODE) Log.d(TAG, "logFile " + s);
+
     }
 
 

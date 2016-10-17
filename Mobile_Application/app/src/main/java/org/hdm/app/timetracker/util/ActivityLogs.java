@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.hdm.app.timetracker.util.Consts.*;
 /**
  * Created by Hannes on 30.07.2016.
  */
@@ -53,7 +54,7 @@ public class ActivityLogs {
             // Add Activity title to Log
             logs.title = object.title;
 
-            Log.d(TAG, "titleee " + logs.title);
+            if(DEBUGMODE) Log.d(TAG, "titleee " + logs.title);
 
             // Get TimeFrameList - with all recorded timeFrames from the activity
             ArrayList<TimeFrame> list = object.timeFrameList;

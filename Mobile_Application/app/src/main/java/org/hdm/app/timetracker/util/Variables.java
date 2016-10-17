@@ -23,7 +23,7 @@ public class Variables {
     /**
      * UserName from the person which is using the application
      */
-    public String user_ID = "01";
+    public String user_ID = "xxx";
 
 
     /**
@@ -35,7 +35,7 @@ public class Variables {
     /**
      * Amount of maximal recorded activities at the same time
      */
-    public int maxRecordedActivity = 2;
+    public int maxRecordedActivity = 3;
 
 
     /**
@@ -100,7 +100,6 @@ public class Variables {
     /**
      * Backpress flags
      */
-    // ToDo change ack to false
     public boolean backPress = false;
     public boolean backPressDialog = false;
 
@@ -152,7 +151,7 @@ public class Variables {
     /**
      * Flag for editable Mode is active
      */
-    public boolean editableMode = false;
+    public boolean editableMode = true;
 
     public int shortClickCounter = 3;
     public long shortClickCounterResetTime = 4000;
@@ -162,7 +161,6 @@ public class Variables {
      * Status if Smartphone is connected to server
      */
     public boolean serverConnection = true;
-
     public String serverPort = "4460";
     public String serverIP = "192.168.2.117";
 

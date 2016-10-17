@@ -88,7 +88,7 @@ public class FragmentCalender extends BaseFragemnt implements
         setMenuBackground(android.R.color.holo_blue_light);
         setMenuBtn(R.drawable.ic_back);
         setCalendarIconVisibility(true);
-        if (!var.editable) scrollListToCurrentTime();
+//        if (!var.editable) scrollListToCurrentTime();
 
         if(var.editableMode) {
             fab_calendar.setVisibility(View.VISIBLE);
@@ -112,15 +112,15 @@ public class FragmentCalender extends BaseFragemnt implements
         data = DataManager.getInstance().activityMap;
         calendar = DataManager.getInstance().calenderMap;
         adapter = new CalendarListAdapter(getActivity(), data, calendar);
-        Log.d(TAG, "Jsonnnnnn " + "Calendar " + data);
-        Log.d(TAG, "Jsonnnnnn " + "Calendar " + calendar);
+        if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + "Calendar " + data);
+        if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + "Calendar " + calendar);
 
         adapter.setListener(this);
         rv_calender = (RecyclerView) view.findViewById(R.id.rv_calender);
         rv_calender.setAdapter(adapter);
         rv_calender.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_calender.setOnClickListener(this);
-        scrollListToCurrentTime();
+//        scrollListToCurrentTime();
     }
 
 
@@ -164,7 +164,7 @@ public class FragmentCalender extends BaseFragemnt implements
     public void onClick(View v) {
 
 
-        Log.d(TAG, "click " + v.getId());
+        if(DEBUGMODE) Log.d(TAG, "click " + v.getId());
 
 //        lastFirstVisiblePosition = ((LinearLayoutManager) rv_calender.getLayoutManager()).findFirstVisibleItemPosition();
 //

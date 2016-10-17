@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.listener.PreferenceListener;
 import org.hdm.app.timetracker.util.Variables;
 
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 
 /**
  * Created by Hannes on 14.09.2016.
@@ -29,7 +31,8 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     private Preference prefConnectionSend;
     private Preference prefConnectionIP;
     private Preference prefConnectionPort;
-    private WifiManager wifiManager;
+    private Preference prefMaxActivities;
+    private Preference prefThreshold;
 
 
     @Override
@@ -42,11 +45,8 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initXML();
         initListener();
-
-
     }
 
 
@@ -67,14 +67,21 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
 
     private void initXML() {
+
         addPreferencesFromResource(R.xml.settings);
 
-        prefActivitiesReset = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_reset_activities));
-        prefEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_editable_mode));
         prefUserID = getPreferenceManager().findPreference(getString(R.string.pref_key_user_user_id));
+
+        prefEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_editable_mode));
+        prefMaxActivities = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_max_active_activities));
+        prefThreshold = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_threshold));
+        prefActivitiesReset = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_reset_activities));
+
         prefConnectionSend = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_send));
         prefConnectionIP = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_ip));
         prefConnectionPort = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_port));
+
+
 
     }
 
@@ -82,14 +89,16 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
         if (mainActivity != null) listener = (PreferenceListener) mainActivity;
 
-        prefActivitiesReset.setOnPreferenceClickListener(this);
-        prefConnectionSend.setOnPreferenceClickListener(this);
-
-        prefEditableMode.setOnPreferenceChangeListener(this);
         prefUserID.setOnPreferenceChangeListener(this);
+
+        prefConnectionSend.setOnPreferenceClickListener(this);
         prefConnectionIP.setOnPreferenceChangeListener(this);
         prefConnectionPort.setOnPreferenceChangeListener(this);
 
+        prefEditableMode.setOnPreferenceChangeListener(this);
+        prefMaxActivities.setOnPreferenceChangeListener(this);
+        prefThreshold.setOnPreferenceChangeListener(this);
+        prefActivitiesReset.setOnPreferenceClickListener(this);
     }
 
 
@@ -113,6 +122,14 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         if (prefConnectionPort != null) {
             prefConnectionPort.setTitle("Port: " + Variables.getInstance().serverPort);
         }
+
+        if (prefMaxActivities != null) {
+            prefMaxActivities.setTitle("Max. active Activities: " + Variables.getInstance().maxRecordedActivity);
+        }
+
+        if (prefThreshold != null) {
+            prefThreshold.setTitle("Threshold Minutes: " + Variables.getInstance().minRecordingTime);
+        }
     }
 
 
@@ -128,8 +145,6 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         if (preference.equals(prefConnectionSend)) {
             if (listener != null) listener.sendLogFile();
         }
-
-
         return true;
     }
 
@@ -148,6 +163,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
             if (newValue instanceof String) {
                 Variables.getInstance().user_ID = (String) newValue;
                 prefUserID.setTitle("User ID: " + Variables.getInstance().user_ID);
+                if(DEBUGMODE) Log.d(TAG, "User ID: " + Variables.getInstance().user_ID);
             }
         }
 
@@ -159,9 +175,39 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         }
 
         else if (preference.equals(prefConnectionPort)) {
+
             if (newValue instanceof String) {
                 Variables.getInstance().serverPort = (String) newValue;
                 prefConnectionPort.setTitle("Port: " + Variables.getInstance().serverPort);
+            }
+
+        } else if(preference.equals(prefMaxActivities)) {
+
+            if (newValue instanceof String){
+                int value = Integer.valueOf((String) newValue);
+                if(value >= 1 && value<=100) {
+                    Variables.getInstance().maxRecordedActivity = value;
+                    prefMaxActivities.setTitle("Max. active Activities: " + value);
+                } else {
+                    Toast.makeText(getActivity(),
+                            "Only a number between 1 - 100 is allowed",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        } else if(preference.equals(prefThreshold)) {
+
+            if (newValue instanceof String) {
+                int value = Integer.valueOf((String) newValue);
+                if (value >= 0 && value <= 30) {
+                    Variables.getInstance().minRecordingTime = value;
+                    prefThreshold.setTitle("Threshold Minutes: " + value);
+                } else {
+                    Toast.makeText(getActivity(),
+                            "Only a number between 0 - 30 is allowed",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         }
 
