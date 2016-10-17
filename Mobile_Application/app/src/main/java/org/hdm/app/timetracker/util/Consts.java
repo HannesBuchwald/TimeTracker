@@ -30,6 +30,8 @@ public final class Consts {
     public final static String ACTIVITY_STATE   = "ActivityState";
     public final static String ACTIVE_LIST      = "ActiveList";
     public final static String CALENDAR_MAP     = "CalendarMap";
+    public final static String LOG_LIST        = "LogList";
+
 
 
     /**

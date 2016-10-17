@@ -32,7 +32,7 @@
             android:id="@+id/iv_cancel"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="70dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:src="@android:drawable/ic_menu_close_clear_cancel"

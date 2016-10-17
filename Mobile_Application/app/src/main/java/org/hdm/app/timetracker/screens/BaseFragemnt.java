@@ -94,7 +94,7 @@ public class BaseFragemnt extends Fragment implements
 
     @Override
     public void scrollToCurrentTime(View view) {
-        if (!var.editable) scrollListToCurrentTime();
+        scrollListToCurrentTime();
     }
 
     public void setContext(FragmentContainer fragmentContainer) {

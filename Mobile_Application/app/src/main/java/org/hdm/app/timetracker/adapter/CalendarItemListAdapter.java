@@ -121,14 +121,14 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
 
     @Override
     public void didClickOnView(View view, String s, View_Holder view_holder) {
-            if(var.editable) remove(s);
-            if(listener!=null) listener.didOnClick(time, s, view_holder);
     }
 
 
 
     @Override
     public void didLongClickOnView(View view, String s, View_Holder view_holder) {
+            if(var.editable) remove(s);
+            if(listener!=null) listener.didOnClick(time, s, view_holder);
     }
 
 }

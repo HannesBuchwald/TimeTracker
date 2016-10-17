@@ -176,13 +176,13 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     @Override
     public void didClickOnView(View view, String s, View_Holder holder) {
         if(DEBUGMODE) Log.d(TAG, "holder " + holder.id);
-        if (listener != null) listener.didOnClickAddBtn(holder);
     }
 
 
     @Override
     public void didLongClickOnView(View view, String s, View_Holder view_holder) {
         if(DEBUGMODE) Log.d(TAG, "holder ");
+        if (listener != null) listener.didOnClickAddBtn(view_holder);
 
     }
 

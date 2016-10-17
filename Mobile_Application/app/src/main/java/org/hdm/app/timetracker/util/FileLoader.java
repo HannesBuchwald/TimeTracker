@@ -140,6 +140,9 @@ public class FileLoader {
         loadActivityObjects(PORTIONS, path, fileName);
         loadActivityObjects(FOOD, path, fileName);
 
+        DataManager.getInstance().logList = new ArrayList<>();
+        DataManager.getInstance().lastLog = "";
+        DataManager.getInstance().activeList = new ArrayList<>();
 
     }
 
@@ -495,6 +498,7 @@ public class FileLoader {
         writeStringOnExternal(s, fileName, path);
         DataManager.getInstance().lastLog = s;
         if(DEBUGMODE) Log.d(TAG, "logFile " + s);
+
     }
 
 

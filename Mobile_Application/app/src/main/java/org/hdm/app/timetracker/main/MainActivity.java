@@ -22,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.listener.PreferenceListener;
 import org.hdm.app.timetracker.util.FileLoader;
 import org.hdm.app.timetracker.util.Variables;
@@ -91,6 +92,17 @@ public class MainActivity extends Activity implements PreferenceListener {
     protected void onResume() {
         super.onResume();
         initSaveCurrentState();
+
+        if(DEBUGMODE) {
+
+            SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);
+            Log.d(TAG, "MMM UserID " + var.user_ID + " || "+ sh.getString(getString(R.string.pref_key_user_user_id),""));
+            Log.d(TAG, "MMM IP " + var.serverIP + " || "+ sh.getString(getString(R.string.pref_key_connection_ip),""));
+            Log.d(TAG, "MMM Port " + var.serverPort + " || "+ sh.getString(getString(R.string.pref_key_connection_port),""));
+            Log.d(TAG, "MMM Editable " + var.editableMode + " || "+ sh.getBoolean(getString(R.string.pref_key_preferences_editable_mode),false));
+            Log.d(TAG, "MMM max " + var.maxRecordedActivity + " || "+ sh.getString(getString(R.string.pref_key_preferences_max_active_activities),""));
+            Log.d(TAG, "MMM lastLog " + dataManager.lastLog + " || "+ sh.getString(getString(R.string.lastLog),""));
+        }
 
     }
 
@@ -516,6 +528,10 @@ public class MainActivity extends Activity implements PreferenceListener {
         prefsEditor.putString(CALENDAR_MAP, json);
 
 
+        List<Stamp> logList = dataManager.logList;
+        json = gson.toJson(logList);
+        prefsEditor.putString(LOG_LIST,json);
+
         prefsEditor.putString(getString(R.string.pref_key_user_user_id), var.user_ID);
         prefsEditor.putString(getString(R.string.pref_key_connection_ip), var.serverIP);
         prefsEditor.putString(getString(R.string.pref_key_connection_port), var.serverPort);
@@ -591,6 +607,15 @@ public class MainActivity extends Activity implements PreferenceListener {
                 Log.d(TAG, "Jsonnnnnn " + dataManager.calenderMap.size());
         }
 
+        if (mPrefs.contains(LOG_LIST)) {
+            String json = mPrefs.getString(LOG_LIST, "");
+            Type type = new TypeToken<List<Stamp>>() {
+            }.getType();
+            List<Stamp> logList = gson.fromJson(json, type);
+            dataManager.logList = logList;
+        }
+
+
         if (dataManager.activeList != null) {
             Variables.getInstance().activeCount = dataManager.activeList.size();
         }
@@ -607,9 +632,9 @@ public class MainActivity extends Activity implements PreferenceListener {
         saveLogFile();
         deleteCurrentActivityState();
         deleteAllExternalFiles();
-
-//        initConfiguration();
-//        initCalendar();
+        initConfiguration();
+        loadConfigurationFromExternal();
+        initCalendar();
     }
 
 

@@ -88,7 +88,7 @@ public class FragmentCalender extends BaseFragemnt implements
         setMenuBackground(android.R.color.holo_blue_light);
         setMenuBtn(R.drawable.ic_back);
         setCalendarIconVisibility(true);
-        if (!var.editable) scrollListToCurrentTime();
+//        if (!var.editable) scrollListToCurrentTime();
 
         if(var.editableMode) {
             fab_calendar.setVisibility(View.VISIBLE);
@@ -120,7 +120,7 @@ public class FragmentCalender extends BaseFragemnt implements
         rv_calender.setAdapter(adapter);
         rv_calender.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_calender.setOnClickListener(this);
-        scrollListToCurrentTime();
+//        scrollListToCurrentTime();
     }
 
 
