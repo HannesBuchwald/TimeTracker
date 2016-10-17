@@ -41,6 +41,13 @@
             android:key="@string/pref_key_preferences_max_active_activities"
             android:summary="Amount of maximal active Activities"
             android:title="Max. active Activities: "
+            android:inputType="number"
+            />
+        <EditTextPreference
+            android:key="@string/pref_key_preferences_threshold"
+            android:summary="Minimum time which an activity must be recorded to be displayed in CalendarList"
+            android:title="Threshold Minutes: "
+            android:inputType="number"
             />
         <Preference
             android:key="@string/pref_key_preferences_reset_activities"

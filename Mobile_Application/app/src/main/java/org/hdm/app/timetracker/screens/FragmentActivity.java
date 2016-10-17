@@ -7,6 +7,7 @@ package org.hdm.app.timetracker.screens;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -32,6 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import static org.hdm.app.timetracker.util.Consts.*;
 
@@ -58,6 +60,9 @@ public class FragmentActivity extends BaseFragemnt implements
     private boolean externalWork;
     private int shortClickCounter = Variables.getInstance().shortClickCounter;
     private String currentShortClickTitle = "";
+    private Runnable updateRemainingTimeRunnable;
+    private Timer tmr;
+    private Handler handler = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,9 +81,6 @@ public class FragmentActivity extends BaseFragemnt implements
         updateActiveList();
         updateObjectList();
         editableMode();
-
-        if(DEBUGMODE) Log.d(TAG, "here Im");
-//        activeAdapter.update();
     }
 
     @Override
@@ -89,6 +91,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
         if(DEBUGMODE) Log.d(TAG, "on Pause");
         activeAdapter.stopCounting();
+        stopCounting();
     }
 
 
@@ -470,17 +473,18 @@ public class FragmentActivity extends BaseFragemnt implements
             setMenuTitle("Activity");
             setMenuBackground(android.R.color.holo_orange_light);
             setMenuBtn(R.drawable.ic_forward);
+            startCounting();
         }
     }
 
 
-    // load edited List and update ActivityObjectListAdapter
+    // load edited List and uupdate ActivityObjectListAdapter
     public void updateObjectList() {
         objectAdapter.list = new ArrayList<>(dataManager.getObjectMap().keySet());
         objectAdapter.notifyDataSetChanged();
     }
 
-    // load edited List and update activeActivityObjectListAdapter
+    // load edited List and uupdate activeActivityObjectListAdapter
     public void updateActiveList() {
         activeAdapter.stopCounting();
         activeAdapter.list = dataManager.activeList;
@@ -502,5 +506,37 @@ public class FragmentActivity extends BaseFragemnt implements
                 addActivityObjectToCalendarList(aObject.title, aObject.startTime);
             }
         }
+    }
+
+
+
+
+
+    public void startCounting() {
+
+        updateRemainingTimeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                String currentTime = Calendar.getInstance().getTime().toString().substring(11,20);
+                setMenuTitle(currentTime);
+                if(DEBUGMODE) Log.d(TAG, currentTime);
+            }
+        };
+        startUpdateTimer();
+    }
+
+
+    public void stopCounting() {
+        if (tmr != null) tmr.cancel();
+    }
+
+    private void startUpdateTimer() {
+        tmr = new Timer();
+        tmr.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(updateRemainingTimeRunnable);
+            }
+        }, 0, 1000);
     }
 }

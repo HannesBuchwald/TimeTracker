@@ -5,7 +5,7 @@ package org.hdm.app.timetracker.util;
  */
 public final class Consts {
 
-    public final static boolean DEBUGMODE       = true;
+    public final static boolean DEBUGMODE       = false;
     public final static int CALENDARITEMROW     = 1;
 
 
@@ -23,10 +23,7 @@ public final class Consts {
     public final static String PORTIONS         = "portions";
     public final static String FOOD             = "food";
 
-
-
-
-
+    
     public final static String ACTIVITY_STATE   = "ActivityState";
     public final static String ACTIVE_LIST      = "ActiveList";
     public final static String CALENDAR_MAP     = "CalendarMap";

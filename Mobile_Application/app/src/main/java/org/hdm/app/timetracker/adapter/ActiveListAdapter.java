@@ -49,9 +49,6 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         this.list = activityObject;
         this.activeList = new ArrayList<>();
         this.timerList = new ArrayList<>();
-
-
-//        update();
     }
 
 
@@ -68,17 +65,14 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     int count = 0;
 
 
-    public void update() {
-
+    public void startCounting() {
 
         updateRemainingTimeRunnable = new Runnable() {
             @Override
             public void run() {
-
               if(DEBUGMODE)  Log.d(TAG, "run "+ timerList.size() +" " + count++);
 
                 for (View_Holder holder : activeList) {
-
 
                     ActivityObject object = DataManager.getInstance().getActivityObject(holder.title.getText().toString());
                     Date startDate = object.startTime;
@@ -118,6 +112,17 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     }
 
 
+    public void stopCounting() {
+
+        if (timerList != null) {
+            for (Timer timer : timerList) {
+                timer.cancel();
+            }
+            timerList = new ArrayList<>();
+            activeList = new ArrayList<>();
+        }
+    }
+
     private void startUpdateTimer() {
         tmr = new Timer();
         timerList.add(tmr);
@@ -135,7 +140,7 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
 
         if(!activeList.equals(holder)) activeList.add(holder);
-        update();
+        startCounting();
 
 
 
@@ -212,14 +217,5 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     }
 
 
-    public void stopCounting() {
 
-        if (timerList != null) {
-            for (Timer timer : timerList) {
-                timer.cancel();
-            }
-           timerList = new ArrayList<>();
-            activeList = new ArrayList<>();
-        }
-    }
 }

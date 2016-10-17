@@ -32,6 +32,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     private Preference prefConnectionIP;
     private Preference prefConnectionPort;
     private Preference prefMaxActivities;
+    private Preference prefThreshold;
 
 
     @Override
@@ -44,11 +45,8 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initXML();
         initListener();
-
-
     }
 
 
@@ -76,11 +74,14 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
         prefEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_editable_mode));
         prefMaxActivities = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_max_active_activities));
+        prefThreshold = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_threshold));
         prefActivitiesReset = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_reset_activities));
 
         prefConnectionSend = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_send));
         prefConnectionIP = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_ip));
         prefConnectionPort = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_port));
+
+
 
     }
 
@@ -96,6 +97,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
         prefEditableMode.setOnPreferenceChangeListener(this);
         prefMaxActivities.setOnPreferenceChangeListener(this);
+        prefThreshold.setOnPreferenceChangeListener(this);
         prefActivitiesReset.setOnPreferenceClickListener(this);
     }
 
@@ -123,6 +125,10 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
         if (prefMaxActivities != null) {
             prefMaxActivities.setTitle("Max. active Activities: " + Variables.getInstance().maxRecordedActivity);
+        }
+
+        if (prefThreshold != null) {
+            prefThreshold.setTitle("Threshold Minutes: " + Variables.getInstance().minRecordingTime);
         }
     }
 
@@ -185,6 +191,20 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
                 } else {
                     Toast.makeText(getActivity(),
                             "Only a number between 1 - 100 is allowed",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        } else if(preference.equals(prefThreshold)) {
+
+            if (newValue instanceof String) {
+                int value = Integer.valueOf((String) newValue);
+                if (value >= 0 && value <= 30) {
+                    Variables.getInstance().minRecordingTime = value;
+                    prefThreshold.setTitle("Threshold Minutes: " + value);
+                } else {
+                    Toast.makeText(getActivity(),
+                            "Only a number between 0 - 30 is allowed",
                             Toast.LENGTH_SHORT)
                             .show();
                 }

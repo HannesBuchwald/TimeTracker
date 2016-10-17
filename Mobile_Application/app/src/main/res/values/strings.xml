@@ -50,6 +50,7 @@
     <string name="pref_key_preferences_about">pref_key_preferences_about</string>
     <string name="pref_key_preferences_max_active_activities">pref_key_preferences_max_active_activities</string>
     <string name="lastLog">LastLog</string>
+    <string name="pref_key_preferences_threshold">pref_key_preferences_trashhold</string>
 
 
 </resources>

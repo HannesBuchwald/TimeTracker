@@ -101,6 +101,8 @@ public class MainActivity extends Activity implements PreferenceListener {
             Log.d(TAG, "MMM Port " + var.serverPort + " || "+ sh.getString(getString(R.string.pref_key_connection_port),""));
             Log.d(TAG, "MMM Editable " + var.editableMode + " || "+ sh.getBoolean(getString(R.string.pref_key_preferences_editable_mode),false));
             Log.d(TAG, "MMM max " + var.maxRecordedActivity + " || "+ sh.getString(getString(R.string.pref_key_preferences_max_active_activities),""));
+            Log.d(TAG, "MMM max " + var.minRecordingTime + " || "+ sh.getString(getString(R.string.pref_key_preferences_threshold),""));
+
             Log.d(TAG, "MMM lastLog " + dataManager.lastLog + " || "+ sh.getString(getString(R.string.lastLog),""));
         }
 
@@ -193,6 +195,7 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         prefs.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
         prefs.putString(getString(R.string.pref_key_preferences_max_active_activities), String.valueOf(var.maxRecordedActivity));
+        prefs.putString(getString(R.string.pref_key_preferences_threshold), String.valueOf(var.minRecordingTime));
         prefs.commit();
 
     }
@@ -536,7 +539,10 @@ public class MainActivity extends Activity implements PreferenceListener {
         prefsEditor.putString(getString(R.string.pref_key_connection_ip), var.serverIP);
         prefsEditor.putString(getString(R.string.pref_key_connection_port), var.serverPort);
         prefsEditor.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
-        prefsEditor.putString(getString(R.string.pref_key_preferences_max_active_activities), String.valueOf(var.maxRecordedActivity));
+        prefsEditor.putString(getString(R.string.pref_key_preferences_max_active_activities),
+                String.valueOf(var.maxRecordedActivity));
+        prefsEditor.putString(getString(R.string.pref_key_preferences_threshold),
+                String.valueOf(var.minRecordingTime));
         prefsEditor.putString(getString(R.string.lastLog), dataManager.lastLog);
         prefsEditor.commit();
     }
@@ -570,6 +576,12 @@ public class MainActivity extends Activity implements PreferenceListener {
             String max = mPrefs.getString(getString(R.string.pref_key_preferences_max_active_activities), "");
             var.maxRecordedActivity = Integer.valueOf(max);
         }
+
+        if (mPrefs.contains(getString(R.string.pref_key_preferences_threshold))) {
+            String max = mPrefs.getString(getString(R.string.pref_key_preferences_threshold), "");
+            var.minRecordingTime = Integer.valueOf(max);
+        }
+
         if (mPrefs.contains(getString(R.string.lastLog))) {
             String lastLog = mPrefs.getString(getString(R.string.lastLog), "");
             dataManager.lastLog = lastLog;
