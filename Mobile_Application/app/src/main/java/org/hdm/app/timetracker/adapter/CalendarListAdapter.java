@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.CALENDARITEMROW;
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -74,7 +75,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         String title = list.get(position).toString();
         holder.id = title;
         holder.setListener(this);
-        Log.d(TAG, "title " + title);
+        if(DEBUGMODE) Log.d(TAG, "title " + title);
 
         int date = Integer.parseInt(title.substring(8, 10));
 
@@ -114,7 +115,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
             boolean colored = false;
             if (var.coloredDates != null) {
                 for (int i = 0; i < var.coloredDates.size(); i++) {
-                    Log.d(TAG, "colored " + var.coloredDates.get(i).getDate() + " " + date);
+                    if(DEBUGMODE) Log.d(TAG, "colored " + var.coloredDates.get(i).getDate() + " " + date);
                     if (var.coloredDates.get(i).getDate() == date) colored = true;
                 }
             }
@@ -174,14 +175,14 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
     @Override
     public void didClickOnView(View view, String s, View_Holder holder) {
-        Log.d(TAG, "holder " + holder.id);
+        if(DEBUGMODE) Log.d(TAG, "holder " + holder.id);
         if (listener != null) listener.didOnClickAddBtn(holder);
     }
 
 
     @Override
     public void didLongClickOnView(View view, String s, View_Holder view_holder) {
-        Log.d(TAG, "holder ");
+        if(DEBUGMODE) Log.d(TAG, "holder ");
 
     }
 
@@ -197,7 +198,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
     @Override
     public void didOnClick(String time, String s, View_Holder holder) {
-        Log.d(TAG, "holder " + holder.id);
+        if(DEBUGMODE) Log.d(TAG, "holder " + holder.id);
         if (listener != null) listener.didOnClick(time, s, holder);
     }
 

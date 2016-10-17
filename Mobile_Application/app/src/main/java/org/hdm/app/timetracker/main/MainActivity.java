@@ -91,11 +91,11 @@ public class MainActivity extends Activity implements PreferenceListener {
             var.dateArray.add(calEndTime.getTime());
             if(i%2 == 1) var.coloredDates.add((calEndTime.getTime()));
             calEndTime.add(Calendar.DAY_OF_MONTH, 1);
-        Log.d(TAG, "mod " + i%2);
+        if(DEBUGMODE) Log.d(TAG, "mod " + i%2);
 
         }
 
-        Log.d(TAG, "size " + var.coloredDates.size() + " // " + var.dateArray.size());
+        if(DEBUGMODE) Log.d(TAG, "size " + var.coloredDates.size() + " // " + var.dateArray.size());
         initCalenderMap(var.dateArray.get(0));
     }
 
@@ -300,17 +300,17 @@ public class MainActivity extends Activity implements PreferenceListener {
      */
     public void initCalenderMap(Date currentTime) {
 
-        Log.d(TAG, "calendar eingang " + currentTime);
+        if(DEBUGMODE) Log.d(TAG, "calendar eingang " + currentTime);
 
         Calendar cal = Calendar.getInstance();
-        Log.d(TAG, "calendar new Instance " + cal.getTime());
+        if(DEBUGMODE) Log.d(TAG, "calendar new Instance " + cal.getTime());
         cal.setTime(currentTime);
-        Log.d(TAG, "calendar set with eingang " + cal.getTime());
+        if(DEBUGMODE) Log.d(TAG, "calendar set with eingang " + cal.getTime());
 
 
         Calendar calEndTime = Calendar.getInstance();
         calEndTime.setTime(currentTime);
-        Log.d(TAG, "calendar end time " + calEndTime.getTime());
+        if(DEBUGMODE) Log.d(TAG, "calendar end time " + calEndTime.getTime());
 
 
         Date time = cal.getTime();
@@ -331,7 +331,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         calEndTime.add(Calendar.MINUTE, -var.timeFrame);
         endTime = calEndTime.getTime();
 
-        Log.d(TAG, "calendar end time " + endTime + "  " + time);
+        if(DEBUGMODE) Log.d(TAG, "calendar end time " + endTime + "  " + time);
 
 
         while (time.before(endTime)) {
@@ -339,7 +339,7 @@ public class MainActivity extends Activity implements PreferenceListener {
             DataManager.getInstance().setCalenderMapEntry(time.toString(), null);
             // add 30 minutes to setTime
             cal.add(Calendar.MINUTE, var.timeFrame);
-            Log.d(TAG, "calendar time new " + time.toString() + " " + DataManager.getInstance().calenderMap.size());
+            if(DEBUGMODE) Log.d(TAG, "calendar time new " + time.toString() + " " + DataManager.getInstance().calenderMap.size());
         }
 
 
@@ -384,15 +384,15 @@ public class MainActivity extends Activity implements PreferenceListener {
         calendar.add(Calendar.SECOND, 10);
 
         Date currentDate = calendar.getTime();
-        Log.d(TAG, "calendar5 " + currentDate);
+        if(DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
 
 
 //        Calendar currentCalendar = Calendar.getInstance();
 //        currentCalendar.add(Calendar.DAY_OF_MONTH, +1);
 //        initCalenderMap(currentCalendar.getTime()); // only for Testing
 
-        Log.d(TAG, "calendar4 " + calendar.getTime());
-        Log.d(TAG, "calendar5 " + currentDate);
+        if(DEBUGMODE) Log.d(TAG, "calendar4 " + calendar.getTime());
+        if(DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
 
 
         Timer timer = new Timer();
@@ -455,7 +455,7 @@ public class MainActivity extends Activity implements PreferenceListener {
                 DataManager.getInstance().activeList = var.activeActivities;
                 ArrayList<String> listt = DataManager.getInstance().activeList;
 
-                Log.d(TAG, "listt size " + listt.size());
+                if(DEBUGMODE) Log.d(TAG, "listt size " + listt.size());
 
                 // iterate through the complete list and save the active Activity to Activity Object
                 for (int i = 0; i < listt.size(); i++) {
@@ -472,7 +472,7 @@ public class MainActivity extends Activity implements PreferenceListener {
                     calendar.set(Calendar.MINUTE, 0);
                     calendar.set(Calendar.HOUR, 0);
                     activityObject.startTime = calendar.getTime();
-                    Log.d(TAG, "listt size " + activityObject.startTime);
+                    if(DEBUGMODE) Log.d(TAG, "listt size " + activityObject.startTime);
 
 
                     //Count how many activities are active
@@ -481,11 +481,11 @@ public class MainActivity extends Activity implements PreferenceListener {
                     DataManager.getInstance().setActivityObject(activityObject);
                     // ToDo check background of Activity in objectList and activeList like ActivityFragment
 
-                    Log.d(TAG, "listt size " + DataManager.getInstance().getActivityObject(activityObject.title).startTime);
+                    if(DEBUGMODE) Log.d(TAG, "listt size " + DataManager.getInstance().getActivityObject(activityObject.title).startTime);
                 }
 
 
-                Log.d(TAG, "restart");
+                if(DEBUGMODE) Log.d(TAG, "restart");
                 initResetRecordedData();
             }
         };
@@ -526,10 +526,10 @@ public class MainActivity extends Activity implements PreferenceListener {
         int size = currentDate.length();
         String year = currentDate.substring(size - 4, size);
         String date = currentDate.substring(4, 19);
-        Log.d(TAG, "User ID:" + var.user_ID);
+        if(DEBUGMODE) Log.d(TAG, "User ID:" + var.user_ID);
         String fileName = var.user_ID + "_" + year + "_" + date + "_activities.txt";
         fileName = fileName.replaceAll(" ", "_");
-        Log.d(TAG, "currentDate " + fileName);
+        if(DEBUGMODE) Log.d(TAG, "currentDate " + fileName);
         new FileLoader(this).saveLogsOnExternal(fileName);
     }
 
@@ -585,7 +585,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         if (mPrefs.contains(ACTIVITY_STATE)) {
 
             String json = mPrefs.getString(ACTIVITY_STATE, "");
-            Log.d(TAG, "Jsonnnnnn " + json);
+            if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
 
 
             Type typeOfHashMap = new TypeToken<LinkedHashMap<String, ActivityObject>>() {
@@ -605,13 +605,13 @@ public class MainActivity extends Activity implements PreferenceListener {
 
             if (mPrefs.contains(CALENDAR_MAP)) {
                 json = mPrefs.getString(CALENDAR_MAP, "");
-                Log.d(TAG, "Jsonnnnnn " + json);
+                if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
                 Type type = new TypeToken<LinkedHashMap<String, ArrayList<String>>>() {
                 }.getType();
                 LinkedHashMap<String, ArrayList<String>> calendarMap = gson.fromJson(json, type);
                 DataManager.getInstance().calenderMap = calendarMap;
-                Log.d(TAG, "Jsonnnnnnnnnn " + DataManager.getInstance().calenderMap);
-                Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap.size());
+                if(DEBUGMODE) Log.d(TAG, "Jsonnnnnnnnnn " + DataManager.getInstance().calenderMap);
+                if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap.size());
             }
 
         }
@@ -641,7 +641,7 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         saveLogFile();
 
-        Log.d(TAG, "Click on Send Files");
+        if(DEBUGMODE) Log.d(TAG, "Click on Send Files");
 
         Thread sendThread = new Thread(new Runnable() {
             @Override

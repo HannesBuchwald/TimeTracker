@@ -12,6 +12,7 @@ import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.listener.PreferenceListener;
 import org.hdm.app.timetracker.util.Variables;
 
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 
 /**
  * Created by Hannes on 14.09.2016.
@@ -147,7 +148,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
             if (newValue instanceof String) {
                 Variables.getInstance().user_ID = (String) newValue;
                 prefUserID.setTitle("User ID: " + Variables.getInstance().user_ID);
-                Log.d(TAG, "User ID: " + Variables.getInstance().user_ID);
+                if(DEBUGMODE) Log.d(TAG, "User ID: " + Variables.getInstance().user_ID);
             }
         }
 

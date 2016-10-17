@@ -26,6 +26,8 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+
 
 /**
  * Created by Hannes on 03.06.2016.
@@ -94,7 +96,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
     @Override
     public void didLongClickOnPortionListItem(String title, View_Holder view_holder) {
-        Log.d(TAG, "click on Dialog " + title);
+        if(DEBUGMODE) Log.d(TAG, "click on Dialog " + title);
 
         handleObjectClick(title, view_holder);
     }
@@ -123,8 +125,8 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         // set Background to green
         view_holder.setBackground(foodObject.activeState);
 
-        Log.d(TAG, "foodObject " + foodObject.title);
-        Log.d(TAG, "foodObject a" + activityObject.food);
+            if (DEBUGMODE) Log.d(TAG, "foodObject " + foodObject.title);
+        if (DEBUGMODE) Log.d(TAG, "foodObject a" + activityObject.food);
 
         if (activityObject.food.size() >= 1) {
             btnDialogFood.setVisibility(View.VISIBLE);
@@ -144,10 +146,10 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
     @Override
     public boolean onLongClick(View v) {
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").food.toString());
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").portion);
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").startTime.toString());
-        Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").endTime.toString());
+        if(DEBUGMODE) Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").food.toString());
+        if(DEBUGMODE) Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").portion);
+        if(DEBUGMODE) Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").startTime.toString());
+        if(DEBUGMODE) Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").endTime.toString());
 
 
         saveStateToLogList(activityObject);

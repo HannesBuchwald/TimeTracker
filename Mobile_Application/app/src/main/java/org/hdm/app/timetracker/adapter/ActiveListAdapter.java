@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import static org.hdm.app.timetracker.util.Consts.*;
+
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -34,7 +36,6 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     public List<String> list = null;
 
     public List<View_Holder> activeList;
-    public List<Integer> positionList;
 
     android.os.Handler handler = new android.os.Handler();
     private Runnable updateRemainingTimeRunnable;
@@ -47,7 +48,6 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
         this.list = activityObject;
         this.activeList = new ArrayList<>();
-        this.positionList = new ArrayList<>();
         this.timerList = new ArrayList<>();
 
 
@@ -61,7 +61,7 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         //Inflate the layout, initialize the View Holder
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout_active, parent, false);
         View_Holder holder = new View_Holder(v);
-        Log.d(TAG, "Count View Holder " + holder);
+        if(DEBUGMODE) Log.d(TAG, "Count View Holder " + holder);
         return holder;
     }
 
@@ -75,24 +75,29 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
             @Override
             public void run() {
 
-                Log.d(TAG, "run " + count++);
-
-//                synchronized (activeList) {
+              if(DEBUGMODE)  Log.d(TAG, "run "+ timerList.size() +" " + count++);
 
                 for (View_Holder holder : activeList) {
 
 
                     ActivityObject object = DataManager.getInstance().getActivityObject(holder.title.getText().toString());
                     Date startDate = object.startTime;
-                    long currentTime = Calendar.getInstance().getTime().getTime();
 
+                    Date currentDate =  Calendar.getInstance().getTime();
+                    long currentTime = currentDate.getTime();
 
                     if (object != null) {
 
+                        int dayDiff =  currentDate.getDate() - startDate.getDate();
                         long timeDiff = currentTime - startDate.getTime();
+
                         int seconds = (int) (timeDiff / 1000) % 60;
                         int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
                         int hours = (int) ((timeDiff / (1000 * 60 * 60)) % 24);
+
+                        for(int i=0;i<dayDiff;i++){
+                            hours+=24;
+                        }
 
                         String secondsStr = String.valueOf(seconds);
                         String minutesStr = String.valueOf(minutes);
@@ -101,55 +106,13 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
                         if (seconds < 10) secondsStr = "0" + secondsStr;
                         if (minutes < 10) minutesStr = "0" + minutesStr;
                         if (hours < 10) hoursStr = "0" + hoursStr;
+
 
                         String time = hoursStr + ":" + minutesStr + ":" + secondsStr;
                         holder.updateTimeRemaining(time);
                     }
                 }
             }
-        };
-        startUpdateTimer();
-    }
-
-
-
-
-    private void update(View_Holder holder) {
-
-
-        final View_Holder ho = holder;
-
-
-
-        updateRemainingTimeRunnable = new Runnable() {
-            @Override
-            public void run() {
-
-                    ActivityObject object = DataManager.getInstance().getActivityObject(ho.title.getText().toString());
-                    Date startDate = object.startTime;
-                    long currentTime = Calendar.getInstance().getTime().getTime();
-                    Log.d(TAG, "run " + count++);
-
-
-                    if (object != null) {
-
-                        long timeDiff = currentTime - startDate.getTime();
-                        int seconds = (int) (timeDiff / 1000) % 60;
-                        int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
-                        int hours = (int) ((timeDiff / (1000 * 60 * 60)) % 24);
-
-                        String secondsStr = String.valueOf(seconds);
-                        String minutesStr = String.valueOf(minutes);
-                        String hoursStr = String.valueOf(hours);
-
-                        if (seconds < 10) secondsStr = "0" + secondsStr;
-                        if (minutes < 10) minutesStr = "0" + minutesStr;
-                        if (hours < 10) hoursStr = "0" + hoursStr;
-
-                        String time = hoursStr + ":" + minutesStr + ":" + secondsStr;
-                        ho.updateTimeRemaining(time);
-                    }
-                }
         };
         startUpdateTimer();
     }
@@ -191,7 +154,7 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
             holder.setBackground(object.activeState);
         }
 
-        Log.d(TAG, "Count View Holder " + position + " " + holder.title.getText() + " " + timerList.size());
+        if(DEBUGMODE) Log.d(TAG, "Count View Holder " + position + " " + holder.title.getText() + " " + timerList.size());
 
     }
 

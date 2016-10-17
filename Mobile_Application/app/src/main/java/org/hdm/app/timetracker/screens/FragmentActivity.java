@@ -53,13 +53,8 @@ public class FragmentActivity extends BaseFragemnt implements
     private ObjectListAdapter objectAdapter;
     private ActiveListAdapter activeAdapter;
 
-    private Date startDate;
-    private long countt;
 
-    List<Timer> timerList = new ArrayList<>();
 
-    String currentTitle = "";
-    int settingsCounter = 4;
     private boolean externalWork;
     private int shortClickCounter = Variables.getInstance().shortClickCounter;
     private String currentShortClickTitle = "";
@@ -82,7 +77,7 @@ public class FragmentActivity extends BaseFragemnt implements
         updateObjectList();
         editableMode();
 
-        Log.d(TAG, "here Im");
+        if(DEBUGMODE) Log.d(TAG, "here Im");
 //        activeAdapter.update();
     }
 
@@ -92,7 +87,7 @@ public class FragmentActivity extends BaseFragemnt implements
         super.onPause();
         addActiveActivitiesToCalenderList();
 
-        Log.d(TAG, "on Pause");
+        if(DEBUGMODE) Log.d(TAG, "on Pause");
         activeAdapter.stopCounting();
     }
 
@@ -111,7 +106,7 @@ public class FragmentActivity extends BaseFragemnt implements
         recyclerView_activeData.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView_activeData.setLayoutManager(new StaggeredGridLayoutManager(
                 var.activeListRow, StaggeredGridLayoutManager.HORIZONTAL));
-        Log.d(TAG, "size init Activity List");
+        if(DEBUGMODE) Log.d(TAG, "size init Activity List");
     }
 
 
@@ -135,7 +130,7 @@ public class FragmentActivity extends BaseFragemnt implements
     // Listener from the ActiveActivityObjectList
     @Override
     public void didOnClickOnActiveListItem(String title, View_Holder holder) {
-        Log.d(TAG, "titlelll " + title);
+        if(DEBUGMODE) Log.d(TAG, "titlelll " + title);
         handleShortClick(title, null);
     }
 
@@ -151,7 +146,7 @@ public class FragmentActivity extends BaseFragemnt implements
      */
     @Override
     public void didClickOnActivityListItem(String title, View_Holder holder) {
-        Log.d(TAG, "did click on View");
+        if(DEBUGMODE) Log.d(TAG, "did click on View");
         handleShortClick(title, holder);
     }
 
@@ -163,12 +158,12 @@ public class FragmentActivity extends BaseFragemnt implements
 
     private void handleShortClick(String title, View_Holder holder) {
 
-        Log.d(TAG, "title1 " + title + " " + currentShortClickTitle + " " + shortClickCounter);
+        if(DEBUGMODE) Log.d(TAG, "title1 " + title + " " + currentShortClickTitle + " " + shortClickCounter);
 
 
         if (title.equals(currentShortClickTitle)) shortClickCounter--;
         currentShortClickTitle = title;
-        Log.d(TAG, "title3 " + title + " " + currentShortClickTitle + " " + shortClickCounter);
+        if(DEBUGMODE) Log.d(TAG, "title3 " + title + " " + currentShortClickTitle + " " + shortClickCounter);
 
 
         if (shortClickCounter <= 1) {
@@ -182,7 +177,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
             ActivityObject object = dataManager.getActivityObject((String) holder.title.getText());
 
-            Log.d(TAG, "title4 " + object.externalWork);
+            if(DEBUGMODE) Log.d(TAG, "title4 " + object.externalWork);
 
 
             if (object.externalWork != null) {
@@ -219,7 +214,7 @@ public class FragmentActivity extends BaseFragemnt implements
     private void handleLongClick(String title, View_Holder holder) {
 
 
-        Log.d(TAG, " titllte " + title + " " + holder);
+        if(DEBUGMODE) Log.d(TAG, " titllte " + title + " " + holder);
 
         // If edditable Mode true - than add activity to selectedTime in CalendearList
         if (var.editable) {
@@ -241,6 +236,16 @@ public class FragmentActivity extends BaseFragemnt implements
 
             // set temporary start time
             activityObject.startTime = Calendar.getInstance().getTime();
+            if (DEBUGMODE) Log.d(TAG, "activityObject " + activityObject.startTime);
+
+            // Only for testing porpuse
+//            Calendar cal = Calendar.getInstance();
+//            cal.add(Calendar.DAY_OF_MONTH, -1);
+//            cal.add(Calendar.HOUR, -23);
+//            cal.add(Calendar.MINUTE, -59);
+//            cal.add(Calendar.SECOND, -50);
+//            activityObject.startTime = cal.getTime();
+
             if (DEBUGMODE) Log.d(TAG, "activityObject " + activityObject.startTime);
 
 
@@ -270,7 +275,7 @@ public class FragmentActivity extends BaseFragemnt implements
             Date start = activityObject.startTime;
             Date end = activityObject.endTime;
 
-            Log.d(TAG, "startTimee " + activityObject.startTime);
+            if(DEBUGMODE) Log.d(TAG, "startTimee " + activityObject.startTime);
 
 
 //                if ((end.getTime() - start.getTime())/10000f > var.minRecordingTime) {
@@ -411,7 +416,7 @@ public class FragmentActivity extends BaseFragemnt implements
         Date currentDate = cal.getTime();
 
 
-        Log.d(TAG, "time1 " + startTime);
+        if(DEBUGMODE) Log.d(TAG, "time1 " + startTime);
 
 
         long diff = currentDate.getTime() - startTime.getTime();

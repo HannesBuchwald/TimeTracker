@@ -41,7 +41,6 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
         this.context = context;
         this.data = data;
         list = recActivityTitles;
-//        Log.d(TAG, "list" + list.toString());
     }
 
 

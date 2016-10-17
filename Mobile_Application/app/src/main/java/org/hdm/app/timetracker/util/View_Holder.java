@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -42,22 +44,17 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     public  TextView title;
     public  TextView time;
     public  ImageView imageView;
-    public Timer timer;
-    Handler handler = new Handler();
 
-    public int count = 0;
     private String titleText;
-    private long countt;
     public ImageView iv_background_bottom;
     public ImageView iv_background_top;
     public CardView btn_add;
 
-    Date startDate;
     public String id ="";
 
     public boolean activityList;
-    private TimerTask timerTask;
     private ImageView iv_cancel;
+    public int count = 0;
 
     /************** Constructors ******************/
 
@@ -128,9 +125,6 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.blue));
             }
             time.setVisibility(View.VISIBLE);
-            if(activityList) runCount();
-
-        Log.d(TAG, "here immm");
     }
 
 
@@ -151,9 +145,6 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 // lollipop and above
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.green));
             }
-//            time.setVisibility(View.VISIBLE);
-//            if(activityList) runCount();
-
 
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -163,65 +154,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 // lollipop and above
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.white));
             }
-//            time.setVisibility(View.GONE);
-//            stopCount();
+
         }
-    }
-
-
-
-//    public void handleTimeCounter(boolean state) {
-//
-//        if(state) {
-//            runCount();
-//        } else {
-//            stopCount();
-//        }
-//    }
-
-
-
-    public void runCount() {
-
-        ActivityObject object = DataManager.getInstance().getActivityObject(title.getText().toString());
-        startDate = object.startTime;
-
-        if(timer != null) {
-            stopCount();
-            Log.d(TAG, "StartCount " +title);
-        }
-
-        timer = new Timer();
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Date currentDate = Calendar.getInstance().getTime();
-                countt = (currentDate.getTime() - startDate.getTime())/1000;
-
-                Log.d(TAG, timer.toString()+  " "  + countt);
-
-                handler.post(new Runnable() {
-                    public void run() {
-                        int seconds = (int) countt % 60;
-                        int minutes = (int) countt / 60;
-                        int houres = minutes / 60;
-                        String stringTime = String.format("%02d:%02d:%02d", houres, minutes, seconds);
-                        time.setText(stringTime);
-                        //count++;
-                    }
-                });
-            }
-        };
-
-        timer.scheduleAtFixedRate(timerTask,0, 1000);
-    }
-
-
-    public void stopCount() {
-        if(timer != null)timer.cancel();
-        if(timerTask != null) timerTask.cancel();
-
-        Log.d(TAG, "stop counting");
     }
 
 
@@ -288,40 +222,11 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
-    public void updateTimeRemaining(long currentTime) {
-
-
-        ActivityObject object = DataManager.getInstance().getActivityObject(title.getText().toString());
-        startDate = object.startTime;
-
-//        long timeDiff = startDate.getTime() - currentTime;
-        if(object!= null){
-
-        long timeDiff = currentTime - startDate.getTime();
-        int seconds = (int) (timeDiff / 1000) % 60;
-        int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
-        int hours = (int) ((timeDiff / (1000 * 60 * 60)) % 24);
-
-        String secondsStr = String.valueOf(seconds);
-        String minutesStr = String.valueOf(minutes);
-        String hoursStr = String.valueOf(hours);
-
-        if(seconds<10) secondsStr = "0"+secondsStr;
-        if(minutes<10) minutesStr = "0"+minutesStr;
-        if(hours<10) hoursStr = "0"+hoursStr;
-
-        if(time!= null) {
-            time.setText(hoursStr + ":" + minutesStr + ":" + secondsStr);
-            Log.d(TAG, time.getText().toString()+  " "  + timeDiff);
-        }
-        }
-
-    }
 
     public void updateTimeRemaining(String startTime) {
         if(time!= null) {
             time.setText(startTime);
-            Log.d(TAG, time.getText().toString() + title.getText().toString());
+            if(DEBUGMODE) Log.d(TAG, time.getText().toString() + title.getText().toString());
         }
 
     }

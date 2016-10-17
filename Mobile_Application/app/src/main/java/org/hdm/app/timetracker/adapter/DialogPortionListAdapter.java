@@ -17,6 +17,8 @@ import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.List;
 
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+
 /**
  * Created by Hannes on 27.05.2016.
  */
@@ -60,7 +62,7 @@ public class DialogPortionListAdapter extends RecyclerView.Adapter<View_Holder> 
         holder.id = object._id;
         if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
         holder.setBackground(object.activeState);
-        Log.d(TAG, "position " + position + " " + object.title + " "+ object.activeState);
+        if(DEBUGMODE) Log.d(TAG, "position " + position + " " + object.title + " "+ object.activeState);
     }
 
 

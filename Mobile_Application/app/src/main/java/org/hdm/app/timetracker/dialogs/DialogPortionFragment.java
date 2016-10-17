@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+
 
 /**
  * Created by Hannes on 03.06.2016.
@@ -100,7 +102,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
     @Override
     public void didLongClickOnPortionListItem(String title, View_Holder view_holder) {
-        Log.d(TAG, "click on Dialog " + title);
+        if(DEBUGMODE) Log.d(TAG, "click on Dialog " + title);
 
         handleObjectClick(title, view_holder);
     }
@@ -109,7 +111,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
         // get clicked PortionObject
         ActivityObject portionObject = dataManager.getPortionObject(title);
-        Log.d(TAG, "activState " + portionObject.activeState + " portion " + activityObject.portion);
+        if(DEBUGMODE) Log.d(TAG, "activState " + portionObject.activeState + " portion " + activityObject.portion);
 
 
         if (portionObject.activeState) {
