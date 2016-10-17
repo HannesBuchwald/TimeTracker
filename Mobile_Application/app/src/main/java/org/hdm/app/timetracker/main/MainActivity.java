@@ -671,6 +671,7 @@ public class MainActivity extends Activity implements PreferenceListener {
                     writer.flush();
                     writer.close();
                     socket.close();
+                    if (DEBUGMODE) Log.d(TAG, "Click on Send Files");
 
 
                 } catch (IOException e) {
