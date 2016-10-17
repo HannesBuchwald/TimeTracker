@@ -83,7 +83,7 @@ public class FragmentActivity extends BaseFragemnt implements
         editableMode();
 
         Log.d(TAG, "here Im");
-
+//        activeAdapter.update();
     }
 
     @Override
@@ -91,6 +91,9 @@ public class FragmentActivity extends BaseFragemnt implements
 
         super.onPause();
         addActiveActivitiesToCalenderList();
+
+        Log.d(TAG, "on Pause");
+        activeAdapter.stopCounting();
     }
 
 
@@ -474,8 +477,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
     // load edited List and update activeActivityObjectListAdapter
     public void updateActiveList() {
+        activeAdapter.stopCounting();
         activeAdapter.list = dataManager.activeList;
-        Log.d(TAG, "size " + timerList.size());
         activeAdapter.notifyDataSetChanged();
     }
 

@@ -151,8 +151,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 // lollipop and above
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.green));
             }
-            time.setVisibility(View.VISIBLE);
-            if(activityList) runCount();
+//            time.setVisibility(View.VISIBLE);
+//            if(activityList) runCount();
 
 
         } else {
@@ -163,8 +163,8 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 // lollipop and above
                 cv.setBackgroundColor(cv.getResources().getColor(R.color.white));
             }
-            time.setVisibility(View.GONE);
-            stopCount();
+//            time.setVisibility(View.GONE);
+//            stopCount();
         }
     }
 
@@ -288,4 +288,41 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
+    public void updateTimeRemaining(long currentTime) {
+
+
+        ActivityObject object = DataManager.getInstance().getActivityObject(title.getText().toString());
+        startDate = object.startTime;
+
+//        long timeDiff = startDate.getTime() - currentTime;
+        if(object!= null){
+
+        long timeDiff = currentTime - startDate.getTime();
+        int seconds = (int) (timeDiff / 1000) % 60;
+        int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
+        int hours = (int) ((timeDiff / (1000 * 60 * 60)) % 24);
+
+        String secondsStr = String.valueOf(seconds);
+        String minutesStr = String.valueOf(minutes);
+        String hoursStr = String.valueOf(hours);
+
+        if(seconds<10) secondsStr = "0"+secondsStr;
+        if(minutes<10) minutesStr = "0"+minutesStr;
+        if(hours<10) hoursStr = "0"+hoursStr;
+
+        if(time!= null) {
+            time.setText(hoursStr + ":" + minutesStr + ":" + secondsStr);
+            Log.d(TAG, time.getText().toString()+  " "  + timeDiff);
+        }
+        }
+
+    }
+
+    public void updateTimeRemaining(String startTime) {
+        if(time!= null) {
+            time.setText(startTime);
+            Log.d(TAG, time.getText().toString() + title.getText().toString());
+        }
+
+    }
 }

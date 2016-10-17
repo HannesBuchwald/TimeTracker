@@ -47,6 +47,7 @@
     <string name="pref_key_connection_send">pref_key_send</string>
     <string name="pref_key_connection_ip">pref_key_ip</string>
     <string name="pref_key_connection_port">pref_key_connection_port</string>
+    <string name="pref_key_preferences_about">pref_key_preferences_about</string>
 
 
 </resources>

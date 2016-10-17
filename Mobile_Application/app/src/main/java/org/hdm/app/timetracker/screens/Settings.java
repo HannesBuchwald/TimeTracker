@@ -29,7 +29,6 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     private Preference prefConnectionSend;
     private Preference prefConnectionIP;
     private Preference prefConnectionPort;
-    private WifiManager wifiManager;
 
 
     @Override
@@ -148,6 +147,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
             if (newValue instanceof String) {
                 Variables.getInstance().user_ID = (String) newValue;
                 prefUserID.setTitle("User ID: " + Variables.getInstance().user_ID);
+                Log.d(TAG, "User ID: " + Variables.getInstance().user_ID);
             }
         }
 

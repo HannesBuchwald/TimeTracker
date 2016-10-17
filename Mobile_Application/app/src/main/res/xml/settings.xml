@@ -42,6 +42,14 @@
             android:summary="Enable Activity Editable Function in CalendarView"
             android:title="Editable Mode"
            />
+        <Preference
+            android:key="@string/pref_key_preferences_about"
+            android:summary="Current Version 1.0"
+            android:title="App Version"
+
+
+            />
+
     </PreferenceCategory>
 
 

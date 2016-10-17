@@ -61,7 +61,7 @@ public class FileLoader {
 
 
         initFolder();
-        initConfiguration();
+//        initConfiguration();
         initJson();
 
     }

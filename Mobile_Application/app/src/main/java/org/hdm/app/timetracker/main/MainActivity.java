@@ -50,8 +50,7 @@ import static org.hdm.app.timetracker.util.Consts.*;
 
 // Version 0.9 - 07.10.2016
 
-public class MainActivity extends Activity implements
-        PreferenceListener {
+public class MainActivity extends Activity implements PreferenceListener {
     private final String TAG = "MainActivity";
 
     // ToDo Add Logik for Dayshift
@@ -178,20 +177,21 @@ public class MainActivity extends Activity implements
         FileLoader fl = new FileLoader(this);
         fl.initFiles();
 
+        initVariables();
+        initDeviceModies();
+    }
 
+    private void initVariables() {
         // Datenabgleich zwischen SharedMemory und Variables
         SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
         prefs.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
-        prefs.putString(getString(R.string.pref_user_ID), var.user_ID);
+//        prefs.putString(getString(R.string.pref_user_ID), var.user_ID);
         prefs.putString(getString(R.string.pref_key_connection_ip), var.serverIP);
         prefs.putString(getString(R.string.pref_key_connection_port), var.serverPort);
         prefs.commit();
-
-
-        initDeviceModies();
-
-
     }
+
+
 
     private void initDeviceModies() {
 
@@ -526,6 +526,7 @@ public class MainActivity extends Activity implements
         int size = currentDate.length();
         String year = currentDate.substring(size - 4, size);
         String date = currentDate.substring(4, 19);
+        Log.d(TAG, "User ID:" + var.user_ID);
         String fileName = var.user_ID + "_" + year + "_" + date + "_activities.txt";
         fileName = fileName.replaceAll(" ", "_");
         Log.d(TAG, "currentDate " + fileName);

@@ -35,7 +35,7 @@ public class Variables {
     /**
      * Amount of maximal recorded activities at the same time
      */
-    public int maxRecordedActivity = 2;
+    public int maxRecordedActivity = 3;
 
 
     /**
@@ -152,7 +152,7 @@ public class Variables {
     /**
      * Flag for editable Mode is active
      */
-    public boolean editableMode = false;
+    public boolean editableMode = true;
 
     public int shortClickCounter = 3;
     public long shortClickCounterResetTime = 4000;

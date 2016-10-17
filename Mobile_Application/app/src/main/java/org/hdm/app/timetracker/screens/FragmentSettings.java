@@ -71,7 +71,7 @@ public class FragmentSettings extends BaseFragemnt {
     @Override
     public void onResume() {
         super.onResume();
-        setMenuTitle("Version 0.9");
+        setMenuTitle("Settings");
         setMenuBackground(android.R.color.holo_red_light);
         setMenuBtn(R.drawable.ic_forward);
         menuView.findViewById(R.id.menu_tv).setOnClickListener(null);
