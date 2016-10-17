@@ -32,10 +32,6 @@ public final class Consts {
     public final static String CALENDAR_MAP     = "CalendarMap";
 
 
-
-
-
-
     /**
      The caller references the constants using <tt>Consts.EMPTY_STRING</tt>,
      and so on. Thus, the caller should be prevented from constructing objects of

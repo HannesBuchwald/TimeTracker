@@ -89,10 +89,6 @@ public class FragmentSettings extends BaseFragemnt {
 
         if(wifiManager!= null) wifiManager.setWifiEnabled(false);
         if(DEBUGMODE) Log.d(TAG, "Wifi is on" + wifiManager.isWifiEnabled());
-
-
-
-
     }
 
 

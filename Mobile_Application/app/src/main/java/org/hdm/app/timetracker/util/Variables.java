@@ -23,7 +23,7 @@ public class Variables {
     /**
      * UserName from the person which is using the application
      */
-    public String user_ID = "01";
+    public String user_ID = "xxx";
 
 
     /**
@@ -100,7 +100,6 @@ public class Variables {
     /**
      * Backpress flags
      */
-    // ToDo change ack to false
     public boolean backPress = false;
     public boolean backPressDialog = false;
 
@@ -162,7 +161,6 @@ public class Variables {
      * Status if Smartphone is connected to server
      */
     public boolean serverConnection = true;
-
     public String serverPort = "4460";
     public String serverIP = "192.168.2.117";
 

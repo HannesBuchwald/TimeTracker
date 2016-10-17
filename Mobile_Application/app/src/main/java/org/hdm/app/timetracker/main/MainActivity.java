@@ -1,18 +1,14 @@
 package org.hdm.app.timetracker.main;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -30,11 +26,11 @@ import org.hdm.app.timetracker.listener.PreferenceListener;
 import org.hdm.app.timetracker.util.FileLoader;
 import org.hdm.app.timetracker.util.Variables;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.*;
 
@@ -61,6 +56,9 @@ public class MainActivity extends Activity implements PreferenceListener {
      */
     Handler handler = new Handler();
     private Variables var;
+    private Timer timer;
+    private int count = 0;
+    private DataManager dataManager;
 
 
     @Override
@@ -68,37 +66,33 @@ public class MainActivity extends Activity implements PreferenceListener {
         super.onCreate(savedInstanceState);
 
         initConfiguration();
-
-        initCalendar();
-        initDataLogger();
-//        initResetRecordedData();
+        loadConfigurationFromExternal();
         loadSavedObjectState();
+
+        initVariables();
+        initDeviceModies();
+        initCalendar();
+        initDeviceModies();
         initLayout();
 
     }
 
-    private void initCalendar() {
 
-        Calendar calEndTime = Calendar.getInstance();
-        var.fistDay = calEndTime.getTime();
-        var.dateArray = new ArrayList<>();
-        var.coloredDates = new ArrayList<>();
-
-        int size = var.amountOfDays;
-        if(var.amountOfDays < 1) size = 1;
-
-        for(int i=0;i<size ;i++) {
-            var.dateArray.add(calEndTime.getTime());
-            if(i%2 == 1) var.coloredDates.add((calEndTime.getTime()));
-            calEndTime.add(Calendar.DAY_OF_MONTH, 1);
-        if(DEBUGMODE) Log.d(TAG, "mod " + i%2);
-
-        }
-
-        if(DEBUGMODE) Log.d(TAG, "size " + var.coloredDates.size() + " // " + var.dateArray.size());
-        initCalenderMap(var.dateArray.get(0));
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveLogFile();
+        saveCurrentState();
+        if (timer != null) timer.cancel();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initSaveCurrentState();
+
+    }
 
     /**
      * There are to options for the Backpress Button
@@ -109,7 +103,7 @@ public class MainActivity extends Activity implements PreferenceListener {
     public void onBackPressed() {
 
         // ToDo write test cases
-        if (Variables.getInstance().backPress) {
+        if (var.backPress) {
 
             // if backPressDialog is true then show a AlertDialog before quit the app
             if (Variables.getInstance().backPressDialog) {
@@ -127,15 +121,6 @@ public class MainActivity extends Activity implements PreferenceListener {
                 MainActivity.super.onBackPressed();
             }
         }
-    }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (DEBUGMODE) Log.d(TAG, "onStop");
-        saveLogFile();
-        saveCurrentState();
     }
 
 
@@ -162,35 +147,43 @@ public class MainActivity extends Activity implements PreferenceListener {
     /**
      * Init DataManagement Singleton
      * Init Variables Singleton
-     * Load all used files like activity.json, images
      */
     private void initConfiguration() {
         // Init the Data Structure - there all the created where hosted
         DataManager.init();
         Variables.init();
+        dataManager = DataManager.getInstance();
         var = Variables.getInstance();
+    }
 
-        Calendar cal = Calendar.getInstance();
 
-        var.currentTime = cal.getTime();
-
+    /**
+     * Load all used files like activity.json, images
+     */
+    private void loadConfigurationFromExternal() {
         FileLoader fl = new FileLoader(this);
         fl.initFiles();
-
-        initVariables();
-        initDeviceModies();
     }
+
 
     private void initVariables() {
+
+        Calendar cal = Calendar.getInstance();
+        var.currentTime = cal.getTime();
+        var.backPress = var.editableMode;
+
         // Datenabgleich zwischen SharedMemory und Variables
         SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        prefs.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
-//        prefs.putString(getString(R.string.pref_user_ID), var.user_ID);
+        prefs.putString(getString(R.string.pref_key_user_user_id), var.user_ID);
+
         prefs.putString(getString(R.string.pref_key_connection_ip), var.serverIP);
         prefs.putString(getString(R.string.pref_key_connection_port), var.serverPort);
-        prefs.commit();
-    }
 
+        prefs.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
+        prefs.putString(getString(R.string.pref_key_preferences_max_active_activities), String.valueOf(var.maxRecordedActivity));
+        prefs.commit();
+
+    }
 
 
     private void initDeviceModies() {
@@ -201,18 +194,20 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         // Set Bluetooth state
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(var.bluetoothState) {
+        if (var.bluetoothState) {
             bluetoothAdapter.enable();
-        } else  {
+        } else {
             bluetoothAdapter.disable();
         }
 
-
-        float brightness = var.displayBrightness / (float)255;
+        // Set Display Brightness
+        float brightness = var.displayBrightness / (float) 255;
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.screenBrightness = brightness;
         getWindow().setAttributes(lp);
 
+
+        // set Display TimeOut
         setTimeout(var.screenOffTimeout);
 
     }
@@ -250,49 +245,6 @@ public class MainActivity extends Activity implements PreferenceListener {
     }
 
 
-
-
-
-//    /**
-//     * Init Content for CalendarList
-//     * Every hour is seperatetd in two half hour periods
-//     */
-//    public void initCalenderMap() {
-//
-//        Calendar cal = Calendar.getInstance();
-//        Date time = cal.getTime();
-//
-//        // Reset Time to 00:00:00
-//        time.setHours(var.startHour);
-//        time.setMinutes(var.startMin);
-//        time.setSeconds(var.startMin);
-//
-//        // Set Calendar with reseted time
-//        cal.setTime(time);
-//
-//
-//        Calendar calEndTime = Calendar.getInstance();
-//        Date endTime = calEndTime.getTime();
-//        endTime.setHours(var.endHour);
-//        endTime.setMinutes(var.startMin);
-//        endTime.setSeconds(var.startMin);
-//        calEndTime.setTime(endTime);
-//        calEndTime.add(Calendar.MINUTE, -var.timeFrame);
-//        endTime = calEndTime.getTime();
-//
-//        Log.d(TAG, "Timeweee " + endTime + "  "  + time);
-//
-//        DataManager.getInstance().calenderMap = new TreeMap<>();
-//
-//        while(time.before(endTime)) {
-//            time = cal.getTime();
-//            DataManager.getInstance().setCalenderMapEntry(time.toString(), null);
-//            // add 30 minutes to setTime
-//            cal.add(Calendar.MINUTE, var.timeFrame);
-//        }
-//    }
-
-
     /*
      * Init CalendarList with new Entries
      *
@@ -300,17 +252,17 @@ public class MainActivity extends Activity implements PreferenceListener {
      */
     public void initCalenderMap(Date currentTime) {
 
-        if(DEBUGMODE) Log.d(TAG, "calendar eingang " + currentTime);
+        if (DEBUGMODE) Log.d(TAG, "calendar eingang " + currentTime);
 
         Calendar cal = Calendar.getInstance();
-        if(DEBUGMODE) Log.d(TAG, "calendar new Instance " + cal.getTime());
+        if (DEBUGMODE) Log.d(TAG, "calendar new Instance " + cal.getTime());
         cal.setTime(currentTime);
-        if(DEBUGMODE) Log.d(TAG, "calendar set with eingang " + cal.getTime());
+        if (DEBUGMODE) Log.d(TAG, "calendar set with eingang " + cal.getTime());
 
 
         Calendar calEndTime = Calendar.getInstance();
         calEndTime.setTime(currentTime);
-        if(DEBUGMODE) Log.d(TAG, "calendar end time " + calEndTime.getTime());
+        if (DEBUGMODE) Log.d(TAG, "calendar end time " + calEndTime.getTime());
 
 
         Date time = cal.getTime();
@@ -323,7 +275,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         cal.setTime(time);
 
 
-        Date endTime = var.dateArray.get(var.dateArray.size()-1);
+        Date endTime = var.dateArray.get(var.dateArray.size() - 1);
         endTime.setHours(var.endHour);
         endTime.setMinutes(var.startMin);
         endTime.setSeconds(var.startMin);
@@ -331,19 +283,17 @@ public class MainActivity extends Activity implements PreferenceListener {
         calEndTime.add(Calendar.MINUTE, -var.timeFrame);
         endTime = calEndTime.getTime();
 
-        if(DEBUGMODE) Log.d(TAG, "calendar end time " + endTime + "  " + time);
+        if (DEBUGMODE) Log.d(TAG, "calendar end time " + endTime + "  " + time);
 
 
         while (time.before(endTime)) {
             time = cal.getTime();
-            DataManager.getInstance().setCalenderMapEntry(time.toString(), null);
+            dataManager.setCalenderMapEntry(time.toString(), null);
             // add 30 minutes to setTime
             cal.add(Calendar.MINUTE, var.timeFrame);
-            if(DEBUGMODE) Log.d(TAG, "calendar time new " + time.toString() + " " + DataManager.getInstance().calenderMap.size());
+            if (DEBUGMODE)
+                Log.d(TAG, "calendar time new " + time.toString() + " " + dataManager.calenderMap.size());
         }
-
-
-
 
 
     }
@@ -353,20 +303,23 @@ public class MainActivity extends Activity implements PreferenceListener {
      * Save current State every 15 min
      * Run in TimerTask Thread not on UI Thread
      */
-    private void initDataLogger() {
+    private void initSaveCurrentState() {
 
-        Timer timer = new Timer();
+        timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+
                 handler.post(new Runnable() {
                     public void run() {
                         saveLogFile();
+                        if (DEBUGMODE) Log.d(TAG, "saveLogFile " + count++);
                     }
                 });
+
             }
         };
-        timer.scheduleAtFixedRate(timerTask, 0, (var.logTimeInterval * 60 * 1000));
+        timer.scheduleAtFixedRate(timerTask, 0, var.logTimeInterval * 60000);
     }
 
 
@@ -384,15 +337,15 @@ public class MainActivity extends Activity implements PreferenceListener {
         calendar.add(Calendar.SECOND, 10);
 
         Date currentDate = calendar.getTime();
-        if(DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
+        if (DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
 
 
 //        Calendar currentCalendar = Calendar.getInstance();
 //        currentCalendar.add(Calendar.DAY_OF_MONTH, +1);
 //        initCalenderMap(currentCalendar.getTime()); // only for Testing
 
-        if(DEBUGMODE) Log.d(TAG, "calendar4 " + calendar.getTime());
-        if(DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
+        if (DEBUGMODE) Log.d(TAG, "calendar4 " + calendar.getTime());
+        if (DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
 
 
         Timer timer = new Timer();
@@ -408,14 +361,14 @@ public class MainActivity extends Activity implements PreferenceListener {
                 // Stop every active Activity and save the time
 
                 // Get ActiveList
-                ArrayList<String> list = DataManager.getInstance().activeList;
+                ArrayList<String> list = dataManager.activeList;
 
                 // iterate through the complete list and save the active Activity to Activity Object
                 for (int i = 0; i < list.size() - 1; i++) {
 
                     String title = list.get(i);
 
-                    ActivityObject activityObject = DataManager.getInstance().getActivityObject(title);
+                    ActivityObject activityObject = dataManager.getActivityObject(title);
 
                     // Deactivate Activity
                     activityObject.activeState = false;
@@ -430,17 +383,17 @@ public class MainActivity extends Activity implements PreferenceListener {
 
                     // Save Timestamp and SubCategory in ActivityObject
                     activityObject.saveTimeStamp("user");
-                    DataManager.getInstance().setActivityObject(activityObject);
+                    dataManager.setActivityObject(activityObject);
 
                     // ToDo check background of Activity in objectList and activeList like ActivityFragment
-                    // DataManager.getInstance().activeList.remove(activityObject.title);
+                    // dataManager.activeList.remove(activityObject.title);
                 }
 
                 // Save Log File
                 saveLogFile();
 
                 // Save active Files
-                var.activeActivities = DataManager.getInstance().activeList;
+                var.activeActivities = dataManager.activeList;
 
                 // Reset all Lists, CalendarList, ObjectActivityList, ActiveActivity
                 initConfiguration();
@@ -452,17 +405,17 @@ public class MainActivity extends Activity implements PreferenceListener {
 
 
                 //Get active Activities and set them back to active
-                DataManager.getInstance().activeList = var.activeActivities;
-                ArrayList<String> listt = DataManager.getInstance().activeList;
+                dataManager.activeList = var.activeActivities;
+                ArrayList<String> listt = dataManager.activeList;
 
-                if(DEBUGMODE) Log.d(TAG, "listt size " + listt.size());
+                if (DEBUGMODE) Log.d(TAG, "listt size " + listt.size());
 
                 // iterate through the complete list and save the active Activity to Activity Object
                 for (int i = 0; i < listt.size(); i++) {
 
                     String title = listt.get(i);
 
-                    ActivityObject activityObject = DataManager.getInstance().getActivityObject(title);
+                    ActivityObject activityObject = dataManager.getActivityObject(title);
 
                     // Deactivate Activity
                     activityObject.activeState = true;
@@ -472,20 +425,21 @@ public class MainActivity extends Activity implements PreferenceListener {
                     calendar.set(Calendar.MINUTE, 0);
                     calendar.set(Calendar.HOUR, 0);
                     activityObject.startTime = calendar.getTime();
-                    if(DEBUGMODE) Log.d(TAG, "listt size " + activityObject.startTime);
+                    if (DEBUGMODE) Log.d(TAG, "listt size " + activityObject.startTime);
 
 
                     //Count how many activities are active
                     var.activeCount++;
 
-                    DataManager.getInstance().setActivityObject(activityObject);
+                    dataManager.setActivityObject(activityObject);
                     // ToDo check background of Activity in objectList and activeList like ActivityFragment
 
-                    if(DEBUGMODE) Log.d(TAG, "listt size " + DataManager.getInstance().getActivityObject(activityObject.title).startTime);
+                    if (DEBUGMODE)
+                        Log.d(TAG, "listt size " + dataManager.getActivityObject(activityObject.title).startTime);
                 }
 
 
-                if(DEBUGMODE) Log.d(TAG, "restart");
+                if (DEBUGMODE) Log.d(TAG, "restart");
                 initResetRecordedData();
             }
         };
@@ -526,10 +480,10 @@ public class MainActivity extends Activity implements PreferenceListener {
         int size = currentDate.length();
         String year = currentDate.substring(size - 4, size);
         String date = currentDate.substring(4, 19);
-        if(DEBUGMODE) Log.d(TAG, "User ID:" + var.user_ID);
+        if (DEBUGMODE) Log.d(TAG, "User ID:" + var.user_ID);
         String fileName = var.user_ID + "_" + year + "_" + date + "_activities.txt";
         fileName = fileName.replaceAll(" ", "_");
-        if(DEBUGMODE) Log.d(TAG, "currentDate " + fileName);
+        if (DEBUGMODE) Log.d(TAG, "currentDate " + fileName);
         new FileLoader(this).saveLogsOnExternal(fileName);
     }
 
@@ -545,23 +499,30 @@ public class MainActivity extends Activity implements PreferenceListener {
 
 
         // Save ObjectActivity Map
-        Map<String, ActivityObject> map = DataManager.getInstance().getObjectMap();
+        Map<String, ActivityObject> map = dataManager.getObjectMap();
         String json = gson.toJson(map);
         prefsEditor.putString(ACTIVITY_STATE, json);
 
 
         // Save ActiveList
-        ArrayList<String> activeList = DataManager.getInstance().activeList;
+        ArrayList<String> activeList = dataManager.activeList;
         json = gson.toJson(activeList);
         prefsEditor.putString(ACTIVE_LIST, json);
 
 
         // Save CalendarMap
-        LinkedHashMap<String, ArrayList<String>> calendarMap = DataManager.getInstance().calenderMap;
+        LinkedHashMap<String, ArrayList<String>> calendarMap = dataManager.calenderMap;
         json = gson.toJson(calendarMap);
         prefsEditor.putString(CALENDAR_MAP, json);
-        prefsEditor.commit();
 
+
+        prefsEditor.putString(getString(R.string.pref_key_user_user_id), var.user_ID);
+        prefsEditor.putString(getString(R.string.pref_key_connection_ip), var.serverIP);
+        prefsEditor.putString(getString(R.string.pref_key_connection_port), var.serverPort);
+        prefsEditor.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
+        prefsEditor.putString(getString(R.string.pref_key_preferences_max_active_activities), String.valueOf(var.maxRecordedActivity));
+        prefsEditor.putString(getString(R.string.lastLog), dataManager.lastLog);
+        prefsEditor.commit();
     }
 
 
@@ -572,51 +533,66 @@ public class MainActivity extends Activity implements PreferenceListener {
         Gson gson = new Gson();
 
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = mPrefs.edit();
-//        editor.remove(ACTIVITY_STATE);
-//        editor.remove(ACTIVE_LIST);
-//        editor.remove(CALENDAR_MAP);
-//        editor.commit();
 
-        // Datenabgleich zwischen SharedMemory und Variables
-        editor.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
-        editor.apply();
+        if (mPrefs.contains(getString(R.string.pref_key_user_user_id))) {
+            String userID = mPrefs.getString(getString(R.string.pref_key_user_user_id), "");
+            var.user_ID = userID;
+        }
+        if (mPrefs.contains(getString(R.string.pref_key_connection_ip))) {
+            String ip = mPrefs.getString(getString(R.string.pref_key_connection_ip), "");
+            var.serverIP = ip;
+        }
+        if (mPrefs.contains(getString(R.string.pref_key_connection_port))) {
+            String port = mPrefs.getString(getString(R.string.pref_key_connection_port), "");
+            var.serverPort = port;
+        }
+        if (mPrefs.contains(getString(R.string.pref_key_preferences_editable_mode))) {
+            boolean editableMode = mPrefs.getBoolean(getString(R.string.pref_key_preferences_editable_mode), false);
+            var.editableMode = editableMode;
+        }
+        if (mPrefs.contains(getString(R.string.pref_key_preferences_max_active_activities))) {
+            String max = mPrefs.getString(getString(R.string.pref_key_preferences_max_active_activities), "");
+            var.maxRecordedActivity = Integer.valueOf(max);
+        }
+        if (mPrefs.contains(getString(R.string.lastLog))) {
+            String lastLog = mPrefs.getString(getString(R.string.lastLog), "");
+            dataManager.lastLog = lastLog;
+        }
 
         if (mPrefs.contains(ACTIVITY_STATE)) {
 
             String json = mPrefs.getString(ACTIVITY_STATE, "");
-            if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
-
+            if (DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
 
             Type typeOfHashMap = new TypeToken<LinkedHashMap<String, ActivityObject>>() {
             }.getType();
             LinkedHashMap<String, ActivityObject> newMap = gson.fromJson(json, typeOfHashMap); // This type must match TypeToken
-            DataManager.getInstance().activityMap = newMap;
-
-
-            if (mPrefs.contains(ACTIVE_LIST)) {
-                json = mPrefs.getString(ACTIVE_LIST, "");
-                Type type = new TypeToken<List<String>>() {
-                }.getType();
-                ArrayList<String> activeList = gson.fromJson(json, type);
-                DataManager.getInstance().activeList = activeList;
-
-            }
-
-            if (mPrefs.contains(CALENDAR_MAP)) {
-                json = mPrefs.getString(CALENDAR_MAP, "");
-                if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
-                Type type = new TypeToken<LinkedHashMap<String, ArrayList<String>>>() {
-                }.getType();
-                LinkedHashMap<String, ArrayList<String>> calendarMap = gson.fromJson(json, type);
-                DataManager.getInstance().calenderMap = calendarMap;
-                if(DEBUGMODE) Log.d(TAG, "Jsonnnnnnnnnn " + DataManager.getInstance().calenderMap);
-                if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + DataManager.getInstance().calenderMap.size());
-            }
-
+            dataManager.activityMap = newMap;
         }
-        if (DataManager.getInstance().activeList != null) {
-            Variables.getInstance().activeCount = DataManager.getInstance().activeList.size();
+
+
+        if (mPrefs.contains(ACTIVE_LIST)) {
+            String json = mPrefs.getString(ACTIVE_LIST, "");
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            ArrayList<String> activeList = gson.fromJson(json, type);
+            dataManager.activeList = activeList;
+        }
+
+        if (mPrefs.contains(CALENDAR_MAP)) {
+            String json = mPrefs.getString(CALENDAR_MAP, "");
+            if (DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
+            Type type = new TypeToken<LinkedHashMap<String, ArrayList<String>>>() {
+            }.getType();
+            LinkedHashMap<String, ArrayList<String>> calendarMap = gson.fromJson(json, type);
+            dataManager.calenderMap = calendarMap;
+            if (DEBUGMODE) Log.d(TAG, "Jsonnnnnnnnnn " + dataManager.calenderMap);
+            if (DEBUGMODE)
+                Log.d(TAG, "Jsonnnnnn " + dataManager.calenderMap.size());
+        }
+
+        if (dataManager.activeList != null) {
+            Variables.getInstance().activeCount = dataManager.activeList.size();
         }
     }
 
@@ -628,11 +604,12 @@ public class MainActivity extends Activity implements PreferenceListener {
     @Override
     public void resetActivities() {
         // Activity reset process;
-
         saveLogFile();
-        resetAll();
-        initConfiguration();
-        initCalendar();
+        deleteCurrentActivityState();
+        deleteAllExternalFiles();
+
+//        initConfiguration();
+//        initCalendar();
     }
 
 
@@ -641,7 +618,7 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         saveLogFile();
 
-        if(DEBUGMODE) Log.d(TAG, "Click on Send Files");
+        if (DEBUGMODE) Log.d(TAG, "Click on Send Files");
 
         Thread sendThread = new Thread(new Runnable() {
             @Override
@@ -653,13 +630,13 @@ public class MainActivity extends Activity implements PreferenceListener {
                     socket = new Socket(var.serverIP, Integer.parseInt(var.serverPort));
 
                     PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-                    writer.write(DataManager.getInstance().lastLog);
+                    writer.write(dataManager.lastLog);
                     writer.flush();
                     writer.close();
                     socket.close();
 
 
-                }  catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -668,24 +645,43 @@ public class MainActivity extends Activity implements PreferenceListener {
     }
 
 
-
-
-
-
-    private void resetAll() {
-
-
+    private void deleteCurrentActivityState() {
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = mPrefs.edit();
-        editor.remove(ACTIVITY_STATE);
-        editor.remove(ACTIVE_LIST);
-        editor.remove(CALENDAR_MAP);
+        editor.clear();
         editor.commit();
+    }
 
+    private void deleteAllExternalFiles() {
+        File imageFolder = new File(Environment.getExternalStorageDirectory(), IMAGE_FOLDER);
+        File configFolder = new File(Environment.getExternalStorageDirectory(), CONFIG_FOLDER);
 
         FileLoader fl = new FileLoader(this);
-        fl.deleteExternalFolder(IMAGE_FOLDER);
-        fl.deleteExternalFolder(CONFIG_FOLDER);
-        fl.deleteExternalFolder(LOGS_FOLDER);
+        fl.delete(imageFolder);
+        fl.delete(configFolder);
+    }
+
+
+    private void initCalendar() {
+
+        Calendar calEndTime = Calendar.getInstance();
+        var.fistDay = calEndTime.getTime();
+        var.dateArray = new ArrayList<>();
+        var.coloredDates = new ArrayList<>();
+
+        int size = var.amountOfDays;
+        if (var.amountOfDays < 1) size = 1;
+
+        for (int i = 0; i < size; i++) {
+            var.dateArray.add(calEndTime.getTime());
+            if (i % 2 == 1) var.coloredDates.add((calEndTime.getTime()));
+            calEndTime.add(Calendar.DAY_OF_MONTH, 1);
+            if (DEBUGMODE) Log.d(TAG, "mod " + i % 2);
+
+        }
+
+        if (DEBUGMODE)
+            Log.d(TAG, "size " + var.coloredDates.size() + " // " + var.dateArray.size());
+        initCalenderMap(var.dateArray.get(0));
     }
 }

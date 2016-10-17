@@ -292,19 +292,40 @@ public class FileLoader {
         return null;
     }
 
-    public String deleteExternalFolder(String folderName) {
+//    public boolean deleteExternalFolder(String folderName) {
+//
+//
+//
+//
+//
+//
+//            if (f.isDirectory()) {
+//                File[] files = f.listFiles();
+//                if (files != null)
+//                    for (File f : files) delete(f);
+//            }
+//            return file.delete();
+//        }
+//
+//        return false;
+//
+//    }
+
+
+    public boolean delete(File file) {
 
         if (!isExternalStorageWritable()) {
             Toast.makeText(context, " External Storage is not writeble -" +
                     "folder could not be created", Toast.LENGTH_SHORT).show();
-            return null;
+            return false;
         }
 
-        File f = new File(enviroment, folderName);
-
-            f.mkdirs();
-            return f.toString();
-
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null)
+                for (File f : files) delete(f);
+        }
+        return file.delete();
     }
 
 
