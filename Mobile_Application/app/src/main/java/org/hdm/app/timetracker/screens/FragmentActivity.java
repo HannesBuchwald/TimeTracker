@@ -7,7 +7,6 @@ package org.hdm.app.timetracker.screens;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
-import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.dialogs.DialogPortionFragment;
 import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
@@ -243,10 +241,11 @@ public class FragmentActivity extends BaseFragemnt implements
 
             // Only for testing porpuse
 //            Calendar cal = Calendar.getInstance();
-//            cal.add(Calendar.DAY_OF_MONTH, -1);
-//            cal.add(Calendar.HOUR, -23);
+//            cal.add(Calendar.DAY_OF_MONTH, -3);
+//            cal.add(Calendar.HOUR, -2);
+//            cal.add(Calendar.MONTH, -9);
 //            cal.add(Calendar.MINUTE, -59);
-//            cal.add(Calendar.SECOND, -50);
+//            cal.add(Calendar.SECOND, -55);
 //            activityObject.startTime = cal.getTime();
 
             if (DEBUGMODE) Log.d(TAG, "activityObject " + activityObject.startTime);
@@ -271,6 +270,7 @@ public class FragmentActivity extends BaseFragemnt implements
             // set temporary end time
             activityObject.endTime = Calendar.getInstance().getTime();
 
+            activityObject.author = "user";
 
             //Count how many activities are active
             var.activeCount--;
@@ -295,9 +295,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
             } else {
                 // Save Timestamp and SubCategory in ActivityObject
-
                 saveStateToLogList(activityObject);
-                activityObject.saveTimeStamp("user");
+                activityObject.saveTimeStamp("uuser");
             }
 
             dataManager.activeList.remove(activityObject.title);
@@ -335,16 +334,25 @@ public class FragmentActivity extends BaseFragemnt implements
     private void saveStateToLogList(ActivityObject activityObject) {
 
         Stamp stamp = new Stamp();
-        stamp.user = var.user_ID;
-        stamp.activity = activityObject.title;
-        stamp.date = Calendar.getInstance().getTime().toString();
-        stamp.startTime = activityObject.startTime.toString();
-        stamp.endTime = activityObject.endTime.toString();
-        stamp.time = String.valueOf(activityObject.endTime.getTime() - activityObject.startTime.getTime());
-        stamp.contractWork = activityObject.service;
-        stamp.author = "user";
-        stamp.delete = "no";
-        stamp.portion = "";
+        stamp.a03_userID = Variables.getInstance().user_ID;
+        stamp.a01_activity = activityObject.title;
+
+        stamp.c01_contract_work = activityObject.service;
+        stamp.a06_author = activityObject.author;
+        stamp.a07_delete = "No";
+
+        int year = 1900 + activityObject.startTime.getYear();
+        int month = activityObject.startTime.getMonth()+1;
+        int day = activityObject.startTime.getDate();
+        stamp.b01_time_date = year + "." + month + "." + day;
+        stamp.b02_time_start = activityObject.startTime.toString().substring(11,19);
+        stamp.b03_time_end = activityObject.endTime.toString().substring(11,19);
+
+        long ms = activityObject.endTime.getTime() - activityObject.startTime.getTime();
+        stamp.b04_time_sum = String.valueOf((ms/1000)/60);
+
+        if(stamp.a07_delete.equals("Yes")) stamp.b04_time_sum = "-" + stamp.b04_time_sum;
+
 
         dataManager.logList.add(stamp);
     }
@@ -389,7 +397,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
         if (add) {
             // Add the TimeStamp to the ArrayList in the Activity Object
-            // ToDo change "yes" to real parameter
+            activityObject.author = "admin";
+            saveStateToLogList(activityObject);
             activityObject.saveTimeStamp("admin", startDate, endDate);
             dataManager.setActivityObject(activityObject);
         }
@@ -517,7 +526,7 @@ public class FragmentActivity extends BaseFragemnt implements
         updateRemainingTimeRunnable = new Runnable() {
             @Override
             public void run() {
-                String currentTime = Calendar.getInstance().getTime().toString().substring(11,20);
+                String currentTime = Calendar.getInstance().getTime().toString().substring(11,16);
                 setMenuTitle(currentTime);
                 if(DEBUGMODE) Log.d(TAG, currentTime);
             }

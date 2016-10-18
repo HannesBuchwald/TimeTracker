@@ -1,8 +1,6 @@
 package org.hdm.app.timetracker.screens;
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -25,7 +23,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     private PreferenceListener listener;
     private Activity mainActivity;
 
-    private Preference prefActivitiesReset;
+    private Preference prefRestore;
     private Preference prefEditableMode;
     private Preference prefUserID;
     private Preference prefConnectionSend;
@@ -33,6 +31,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     private Preference prefConnectionPort;
     private Preference prefMaxActivities;
     private Preference prefThreshold;
+    private Preference prefReload;
 
 
     @Override
@@ -72,17 +71,15 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
         prefUserID = getPreferenceManager().findPreference(getString(R.string.pref_key_user_user_id));
 
-        prefEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_editable_mode));
-        prefMaxActivities = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_max_active_activities));
-        prefThreshold = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_threshold));
-        prefActivitiesReset = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_reset_activities));
-
         prefConnectionSend = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_send));
         prefConnectionIP = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_ip));
         prefConnectionPort = getPreferenceManager().findPreference(getString(R.string.pref_key_connection_port));
 
-
-
+        prefEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_editable_mode));
+        prefMaxActivities = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_max_active_activities));
+        prefThreshold = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_threshold));
+        prefRestore = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_restore));
+        prefReload = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_reload));
     }
 
     private void initListener() {
@@ -98,7 +95,9 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         prefEditableMode.setOnPreferenceChangeListener(this);
         prefMaxActivities.setOnPreferenceChangeListener(this);
         prefThreshold.setOnPreferenceChangeListener(this);
-        prefActivitiesReset.setOnPreferenceClickListener(this);
+        prefRestore.setOnPreferenceClickListener(this);
+        prefReload.setOnPreferenceClickListener(this);
+
     }
 
 
@@ -138,13 +137,18 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     public boolean onPreferenceClick(Preference preference) {
 
 
-        if (preference.equals(prefActivitiesReset)){
-            if (listener != null) listener.resetActivities();
-        }
 
         if (preference.equals(prefConnectionSend)) {
             if (listener != null) listener.sendLogFile();
         }
+        if (preference.equals(prefRestore)){
+            if (listener != null) listener.restore();
+        }
+        if (preference.equals(prefReload)){
+            if (listener != null) listener.reload();
+        }
+
+
         return true;
     }
 

@@ -34,6 +34,8 @@ public class ActivityObject extends Object {
     public boolean activeState = false;
     public int count = 0;
 
+    public String author = null;
+
     public Date startTime = null;
     public Date endTime = null;
     public String service = "";
@@ -68,6 +70,7 @@ public class ActivityObject extends Object {
         this.startTime = null;
         this.endTime = null;
         this.service = null;
+        this.author = null;
         this.portion = null;
         this.food = new ArrayList<>();
 

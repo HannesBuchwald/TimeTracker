@@ -87,11 +87,13 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
                         int seconds = (int) (timeDiff / 1000) % 60;
                         int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
-                        int hours = (int) ((timeDiff / (1000 * 60 * 60)) % 24);
+                        int hours = (int) (timeDiff/1000) / 3600;
 
-                        for(int i=0;i<dayDiff;i++){
-                            hours+=24;
-                        }
+                        int month = startDate.getMonth();
+
+                        if(DEBUGMODE) Log.d(TAG, "activityObject time difference "
+                                + (timeDiff) + " "
+                                + (timeDiff/1000)/60 +" "+ month);
 
                         String secondsStr = String.valueOf(seconds);
                         String minutesStr = String.valueOf(minutes);

@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Properties;
 
 import static org.hdm.app.timetracker.util.Consts.*;
@@ -131,6 +132,14 @@ public class FileLoader {
 
         String path = enviroment + "/" + CONFIG_FOLDER;
 
+        DataManager.getInstance().activeList = new ArrayList<>();
+        DataManager.getInstance().logList = new ArrayList<>();
+        DataManager.getInstance().lastLog = "[]";
+
+        DataManager.getInstance().activityMap = new LinkedHashMap<>();
+        DataManager.getInstance().portionMap = new LinkedHashMap<>();
+        DataManager.getInstance().foodMap = new LinkedHashMap<>();
+
         // Copy all Json files from Intern to External Folder if they not exist
         String fileName = "activity.json";
         if (!isExternalFileExists(path + fileName)) {
@@ -140,9 +149,6 @@ public class FileLoader {
         loadActivityObjects(PORTIONS, path, fileName);
         loadActivityObjects(FOOD, path, fileName);
 
-        DataManager.getInstance().logList = new ArrayList<>();
-        DataManager.getInstance().lastLog = "";
-        DataManager.getInstance().activeList = new ArrayList<>();
 
     }
 

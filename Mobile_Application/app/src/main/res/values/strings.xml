@@ -41,7 +41,7 @@
 
     <string name="pref_user_ID">USER ID</string>
 
-    <string name="pref_key_preferences_reset_activities">pref_key_reset_activities</string>
+    <string name="pref_key_preferences_restore">pref_key_reset_activities</string>
     <string name="pref_key_preferences_editable_mode">pref_key_editable_mode</string>
     <string name="pref_key_user_user_id">pref_key_user_id</string>
     <string name="pref_key_connection_send">pref_key_send</string>
@@ -51,6 +51,7 @@
     <string name="pref_key_preferences_max_active_activities">pref_key_preferences_max_active_activities</string>
     <string name="lastLog">LastLog</string>
     <string name="pref_key_preferences_threshold">pref_key_preferences_trashhold</string>
+    <string name="pref_key_preferences_reload">pref_key_preferences_load_new_config</string>
 
 
 </resources>

@@ -30,7 +30,6 @@ public final class Consts {
     public final static String LOG_LIST        = "LogList";
 
 
-
     /**
      The caller references the constants using <tt>Consts.EMPTY_STRING</tt>,
      and so on. Thus, the caller should be prevented from constructing objects of

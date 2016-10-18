@@ -16,13 +16,11 @@ import org.hdm.app.timetracker.adapter.DialogFoodListAdapter;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
-import org.hdm.app.timetracker.datastorage.TimeFrame;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
 import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +152,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
         saveStateToLogList(activityObject);
         // Save Timestamp and SubCategory in ActivityObject
-        activityObject.saveTimeStamp("user");
+        activityObject.saveTimeStamp("uuser");
         dataManager.setActivityObject(activityObject);
         resetFoodItemState();
         this.dismiss();
@@ -165,72 +163,89 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
     public void saveStateToLogList(ActivityObject activityObject) {
 
         Stamp stamp = new Stamp();
-        stamp.user = Variables.getInstance().user_ID;
-        stamp.activity = activityObject.title;
-        stamp.date = Calendar.getInstance().getTime().toString();
-        stamp.startTime = activityObject.startTime.toString();
-        stamp.endTime = activityObject.endTime.toString();
-        stamp.time = String.valueOf(activityObject.endTime.getTime() - activityObject.startTime.getTime());
-        stamp.contractWork = activityObject.service;
-        stamp.author = "user";
-        stamp.delete = "no";
-        stamp.portion = activityObject.portion;
+        stamp.a03_userID = Variables.getInstance().user_ID;
+        stamp.a01_activity = activityObject.title;
 
+        int year = 1900 + activityObject.startTime.getYear();
+        int month = activityObject.startTime.getMonth()+1;
+        int day = activityObject.startTime.getDate();
+        stamp.b01_time_date = year + "." + month + "." + day;
+        stamp.b02_time_start = activityObject.startTime.toString().substring(11,19);
+        stamp.b03_time_end = activityObject.endTime.toString().substring(11,19);
+
+        long ms = activityObject.endTime.getTime() - activityObject.startTime.getTime();
+        stamp.b04_time_sum = String.valueOf((ms/1000)/60);
+
+        stamp.c01_contract_work = activityObject.service;
+        stamp.a06_author = "uuser";
+        stamp.a07_delete = "no";
+
+
+        stamp.f01_portion = activityObject.portion;
+        if (DEBUGMODE) Log.d(TAG, "Portion " + stamp.f01_portion);
+
+
+        int foodSum = 0;
 
         LinkedHashMap<String, ActivityObject> foodMap = dataManager.getFoodMap();
         for (Map.Entry<String, ActivityObject> entry : foodMap.entrySet()) {
 
-            boolean activeState = entry.getValue().activeState;
+//            boolean activeState = entry.getValue().activeState;
+            int value = 0;
+            if(entry.getValue().activeState) {
+                value = 1;
+                foodSum++;
+            }
 
             String title = entry.getValue().title;
             switch (title) {
 
                 case "Cereals":
-                    stamp.cereals = String.valueOf(activeState);
+                    stamp.f02_cereals = String.valueOf(value);
                     break;
 
                 case "Roots/tubers":
-                    stamp.roots_tubers = String.valueOf(activeState);
+                    stamp.f03_roots_tubers = String.valueOf(value);
                     break;
 
                 case "Vegetables":
-                    stamp.vegetables = String.valueOf(activeState);
+                    stamp.f04_vegetables = String.valueOf(value);
                     break;
 
                 case "Fruits":
-                    stamp.fruits = String.valueOf(activeState);
+                    stamp.f05_fruits = String.valueOf(value);
                     break;
 
                 case "Meats":
-                    stamp.meats = String.valueOf(activeState);
+                    stamp.f06_meats = String.valueOf(value);
                     break;
 
                 case "Eggs":
-                    stamp.eggs = String.valueOf(activeState);
+                    stamp.f07_eggs = String.valueOf(value);
                     break;
 
                 case "Fish/seafood":
-                    stamp.fish_seafood = String.valueOf(activeState);
+                    stamp.v08_fish_seafood = String.valueOf(value);
                     break;
 
                 case "Pulses/legumes/nuts":
-                    stamp.pulses_legumes_nuts = String.valueOf(activeState);
+                    stamp.f09_pulses_legumes_nuts = String.valueOf(value);
                     break;
 
                 case "Milk products":
-                    stamp.milk_products = String.valueOf(activeState);
+                    stamp.f10_milk_products = String.valueOf(value);
                     break;
 
                 case "Oils/fats":
-                    stamp.oils_fats = String.valueOf(activeState);
+                    stamp.f11_oils_fats = String.valueOf(value);
                     break;
 
                 case "Sugar/honey":
-                    stamp.sugar_honey = String.valueOf(activeState);
+                    stamp.f12_sugar_honey = String.valueOf(value);
                     break;
 
                 case "Tea/coffee":
-                    stamp.tea_coffee = String.valueOf(activeState);
+                    stamp.f13_tea_coffee = String.valueOf(value);
                     break;
 
                 default:
@@ -241,6 +256,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         }
 
 
+        stamp.f13_food_sum = String.valueOf(foodSum);
         dataManager.logList.add(stamp);
     }
 

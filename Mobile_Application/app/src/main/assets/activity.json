@@ -2,7 +2,7 @@
   "portions": [
     {
       "_id": "301",
-      "title": "1/4",
+      "title": "=25/100",
       "imageName": "ic_portion_01.png",
       "externalWork": null,
       "group_activity": "Food Quantity",
@@ -10,7 +10,7 @@
     },
     {
       "_id": "302",
-      "title": "2/4",
+      "title": "=50/100",
       "imageName": "ic_portion_02.png",
       "externalWork": null,
       "group_activity": "Food Quantity",
@@ -18,7 +18,7 @@
     },
     {
       "_id": "303",
-      "title": "Plate 3/4",
+      "title": "=75/100",
       "imageName": "ic_portion_03.png",
       "externalWork": null,
       "group_activity": "Food Quantity",
@@ -26,7 +26,7 @@
     },
     {
       "_id": "304",
-      "title": "Plate 4/4",
+      "title": "=100/100",
       "imageName": "ic_portion_04.png",
       "externalWork": null,
       "group_activity": "Food Quantity",

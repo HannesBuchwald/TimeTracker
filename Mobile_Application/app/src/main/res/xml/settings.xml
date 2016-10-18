@@ -50,9 +50,13 @@
             android:inputType="number"
             />
         <Preference
-            android:key="@string/pref_key_preferences_reset_activities"
-            android:summary="Reset all - Images, LogFiles, Configuration"
-            android:title="Reset all" />
+            android:key="@string/pref_key_preferences_reload"
+            android:summary="Reload new Images and Configurations and reset current Activity Logs"
+            android:title="Reload" />
+        <Preference
+            android:key="@string/pref_key_preferences_restore"
+            android:summary="Restore all Images, Configurations and reset current Activity Logs"
+            android:title="Restore" />
 
         <Preference
             android:key="@string/pref_key_preferences_about"

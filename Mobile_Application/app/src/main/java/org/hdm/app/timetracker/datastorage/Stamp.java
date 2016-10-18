@@ -9,30 +9,35 @@ import java.util.List;
  */
 public class Stamp {
 
-    public String user;
-    public String activity;
-    public String date;
-    public String startTime;
-    public String endTime;
-    public String time;
-    public String contractWork;
+    public String a01_activity;
+    public String a02_phase;
+    public String a03_userID;
+    public String a04_group;
+    public String a05_sex;
+    public String a06_author;
+    public String a07_delete;
+    public String a08_error;
 
-    public String author;
-    public String delete;
+    public String b01_time_date;
+    public String b02_time_start;
+    public String b03_time_end;
+    public String b04_time_sum;
 
-    public String portion;
-    public String cereals;
-    public String roots_tubers;
-    public String vegetables;
-    public String fruits;
-    public String meats;
-    public String eggs;
-    public String fish_seafood;
-    public String pulses_legumes_nuts;
-    public String milk_products;
-    public String oils_fats;
-    public String sugar_honey;
-    public String tea_coffee;
+    public String c01_contract_work;
 
+    public String f01_portion;
+    public String f02_cereals;
+    public String f03_roots_tubers;
+    public String f04_vegetables;
+    public String f05_fruits;
+    public String f06_meats;
+    public String f07_eggs;
+    public String v08_fish_seafood;
+    public String f09_pulses_legumes_nuts;
+    public String f10_milk_products;
+    public String f11_oils_fats;
+    public String f12_sugar_honey;
+    public String f13_tea_coffee;
+    public String f13_food_sum;
 
 }

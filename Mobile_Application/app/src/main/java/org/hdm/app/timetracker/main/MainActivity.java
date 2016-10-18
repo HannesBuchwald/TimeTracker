@@ -397,7 +397,7 @@ public class MainActivity extends Activity implements PreferenceListener {
                     var.activeCount--;
 
                     // Save Timestamp and SubCategory in ActivityObject
-                    activityObject.saveTimeStamp("user");
+                    activityObject.saveTimeStamp("uuser");
                     dataManager.setActivityObject(activityObject);
 
                     // ToDo check background of Activity in objectList and activeList like ActivityFragment
@@ -635,16 +635,24 @@ public class MainActivity extends Activity implements PreferenceListener {
 
 
     /**
-     * Listener from SettingsView
+     * Listener from Settings Screen
      */
 
     @Override
-    public void resetActivities() {
-        // Activity reset process;
+    public void restore() {
+        deleteAllExternalFiles();
+        reload();
+//        saveLogFile();
+//        deleteCurrentActivityState();
+////        initConfiguration();
+//        loadConfigurationFromExternal();
+//        initCalendar();
+    }
+
+    @Override
+    public void reload() {
         saveLogFile();
         deleteCurrentActivityState();
-        deleteAllExternalFiles();
-        initConfiguration();
         loadConfigurationFromExternal();
         initCalendar();
     }
@@ -655,23 +663,28 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         saveLogFile();
 
-        if (DEBUGMODE) Log.d(TAG, "Click on Send Files");
+        if (DEBUGMODE) Log.d(TAG, "Send Files Click");
 
         Thread sendThread = new Thread(new Runnable() {
             @Override
             public void run() {
 
-                Socket socket = null;
 
                 try {
-                    socket = new Socket(var.serverIP, Integer.parseInt(var.serverPort));
+                    Socket socket = new Socket(var.serverIP, Integer.parseInt(var.serverPort));
+
+                    if (DEBUGMODE) Log.d(TAG, "Send Files create socket " + var.serverIP +" "+ var.serverPort);
 
                     PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+                    if (DEBUGMODE) Log.d(TAG, "Send Files new Print Writer");
+
                     writer.write(dataManager.lastLog);
+                    if (DEBUGMODE) Log.d(TAG, "Send Files write");
+
                     writer.flush();
                     writer.close();
                     socket.close();
-                    if (DEBUGMODE) Log.d(TAG, "Click on Send Files");
+                    if (DEBUGMODE) Log.d(TAG, "Send File has been send");
 
 
                 } catch (IOException e) {
@@ -684,10 +697,22 @@ public class MainActivity extends Activity implements PreferenceListener {
 
 
     private void deleteCurrentActivityState() {
+
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = mPrefs.edit();
-        editor.clear();
+        editor.remove(ACTIVITY_STATE);
+        editor.remove(ACTIVE_LIST);
+        editor.remove(CALENDAR_MAP);
+        editor.remove(LOG_LIST);
+        editor.remove(getString(R.string.pref_key_user_user_id));
+        editor.remove(getString(R.string.pref_key_connection_ip));
+        editor.remove(getString(R.string.pref_key_connection_port));
+        editor.remove(getString(R.string.pref_key_preferences_editable_mode));
+        editor.remove(getString(R.string.pref_key_preferences_max_active_activities));
+        editor.remove(getString(R.string.pref_key_preferences_threshold));
+        editor.remove(getString(R.string.lastLog));
         editor.commit();
+
     }
 
     private void deleteAllExternalFiles() {
