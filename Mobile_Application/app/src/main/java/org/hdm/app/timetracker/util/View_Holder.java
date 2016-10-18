@@ -119,10 +119,10 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     public void setBackground(String blue) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lollipop
-                cv.setCardBackgroundColor(Color.YELLOW);
+                cv.setCardBackgroundColor(Color.BLUE);
             } else {
                 // lollipop and above
-                cv.setBackgroundColor(cv.getResources().getColor(R.color.yellow));
+                cv.setBackgroundColor(cv.getResources().getColor(R.color.blue));
             }
             time.setVisibility(View.VISIBLE);
     }
@@ -192,7 +192,35 @@ public class View_Holder extends RecyclerView.ViewHolder implements
 
 
 
+    // Called from the CalendarView
+    public void setCalendarItemBackground(boolean editable, String a) {
 
+        if(editable) {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                // below lollipop
+                cv.setCardBackgroundColor(Color.GRAY);
+                iv_cancel.setVisibility(View.VISIBLE);
+
+            } else {
+                // lollipop and above
+                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.gray));
+                iv_cancel.setVisibility(View.VISIBLE);
+            }
+        } else {
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                // below lillipop
+                cv.setCardBackgroundColor(Color.GRAY);
+                iv_cancel.setVisibility(View.GONE);
+
+            } else {
+                // lollipop and above
+                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.gray));
+                iv_cancel.setVisibility(View.GONE);
+            }
+        }
+    }
 
     
     

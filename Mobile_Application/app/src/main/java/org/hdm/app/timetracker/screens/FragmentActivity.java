@@ -287,7 +287,7 @@ public class FragmentActivity extends BaseFragemnt implements
 //                    // add ActivityObject to CalendarContentList
 //                }
 
-            addActivityObjectToCalendarList(activityObject.title, activityObject.startTime);
+            addActivityObjectToCalendarList(activityObject, activityObject.startTime);
 
             if (activityObject.title.equals("Eating + Drinking")) {
 
@@ -396,8 +396,17 @@ public class FragmentActivity extends BaseFragemnt implements
         Date endDate = endT.getTime();
 
 
+
+        String titlee = activityObject.title;
+
+        if (externalWork) {
+            titlee = "Y___"+titlee;
+        } else {
+            titlee = "N___"+titlee;
+        }
+
         // add ActivityObject to CalenderList
-        boolean add = dataManager.setActivityToCalendarList(var.selectedTime, activityObject.title);
+        boolean add = dataManager.setActivityToCalendarList(var.selectedTime, titlee);
 
         if (add) {
             // Add the TimeStamp to the ArrayList in the Activity Object
@@ -420,7 +429,16 @@ public class FragmentActivity extends BaseFragemnt implements
         listener.flip();
     }
 
-    private void addActivityObjectToCalendarList(String title, Date startTime) {
+    private void addActivityObjectToCalendarList(ActivityObject object, Date startTime) {
+
+        String title;
+
+
+        if(object.service.contains("Yes")) {
+            title = "Y___"+object.title;
+        }else {
+            title = "N___"+object.title;
+        }
 
         // find current TimeSlot
         int startMin = startTime.getMinutes();
@@ -525,7 +543,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
             for (int i = 0; i < activeList.size(); i++) {
                 ActivityObject aObject = dataManager.getActivityObject(activeList.get(i));
-                addActivityObjectToCalendarList(aObject.title, aObject.startTime);
+                addActivityObjectToCalendarList(aObject, aObject.startTime);
             }
         }
     }

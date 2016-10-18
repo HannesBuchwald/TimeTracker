@@ -2,6 +2,7 @@ package org.hdm.app.timetracker.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,12 +63,25 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
         holder.setListener(this);
         if(holder.imageView != null) {
-            
-            ActivityObject dataa =(ActivityObject) data.get(list.get(position));
+
+            String title = (String) list.get(position);
+            String externalWork = title.substring(0, 4);
+
+            Log.d(TAG, "XXXX " + title + " " + externalWork);
+            ActivityObject dataa =(ActivityObject) data.get(title.substring(4));
+
+//            ActivityObject dataa =(ActivityObject) data.get(list.get(position));
             if(DataManager.getInstance().imageMap.get(dataa.imageName) != null )
                 holder.imageView.setImageBitmap(DataManager.getInstance().imageMap.get(dataa.imageName));
-            holder.title.setText(dataa.title);
-            holder.setCalendarItemBackground(var.editable);
+            holder.title.setText(title);
+
+
+            if(externalWork.contains("Y")) {
+                holder.setCalendarItemBackground(var.editable,"");
+            } else {
+                holder.setCalendarItemBackground(var.editable);
+            }
+//            if(var.editable) holder.setCalendarItemBackground(var.editable);
         }
     }
 
@@ -102,7 +116,9 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
 
     // Remove a RecyclerView item containing a specified Daata object
     public void remove(String activityObject) {
+        Log.d(TAG, "01" + activityObject);
         int position = list.indexOf(activityObject);
+        Log.d(TAG, "02" + position);
         list.remove(position);
         notifyItemRemoved(position);
     }
