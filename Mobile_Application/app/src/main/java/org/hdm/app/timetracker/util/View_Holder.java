@@ -119,10 +119,10 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     public void setBackground(String blue) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lollipop
-                cv.setCardBackgroundColor(Color.BLUE);
+                cv.setCardBackgroundColor(Color.YELLOW);
             } else {
                 // lollipop and above
-                cv.setBackgroundColor(cv.getResources().getColor(R.color.blue));
+                cv.setBackgroundColor(cv.getResources().getColor(R.color.yellow));
             }
             time.setVisibility(View.VISIBLE);
     }

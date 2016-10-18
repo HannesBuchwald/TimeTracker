@@ -62,7 +62,7 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
         holder.setListener(this);
         if(holder.imageView != null) {
-
+            
             ActivityObject dataa =(ActivityObject) data.get(list.get(position));
             if(DataManager.getInstance().imageMap.get(dataa.imageName) != null )
                 holder.imageView.setImageBitmap(DataManager.getInstance().imageMap.get(dataa.imageName));

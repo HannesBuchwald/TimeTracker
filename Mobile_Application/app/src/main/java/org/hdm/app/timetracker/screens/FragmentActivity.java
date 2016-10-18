@@ -171,6 +171,8 @@ public class FragmentActivity extends BaseFragemnt implements
             shortClickCounter = var.shortClickCounter;
             currentShortClickTitle = "";
 
+
+            // is clicked from ActiveListItem
             if (holder == null) {
                 handleLongClick(title, holder);
                 return;
@@ -215,7 +217,7 @@ public class FragmentActivity extends BaseFragemnt implements
     private void handleLongClick(String title, View_Holder holder) {
 
 
-        if(DEBUGMODE) Log.d(TAG, " titllte " + title + " " + holder);
+        if(DEBUGMODE) Log.d(TAG, " titllte " + title + " " + holder + var.editable);
 
         // If edditable Mode true - than add activity to selectedTime in CalendearList
         if (var.editable) {
@@ -241,7 +243,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
             // Only for testing porpuse
 //            Calendar cal = Calendar.getInstance();
-//            cal.add(Calendar.DAY_OF_MONTH, -3);
+//            cal.add(Calendar.DAY_OF_MONTH, -10);
 //            cal.add(Calendar.HOUR, -2);
 //            cal.add(Calendar.MONTH, -9);
 //            cal.add(Calendar.MINUTE, -59);
@@ -270,7 +272,7 @@ public class FragmentActivity extends BaseFragemnt implements
             // set temporary end time
             activityObject.endTime = Calendar.getInstance().getTime();
 
-            activityObject.author = "user";
+            activityObject.author = "User";
 
             //Count how many activities are active
             var.activeCount--;
@@ -327,7 +329,6 @@ public class FragmentActivity extends BaseFragemnt implements
         if (holder == null) {
             objectAdapter.notifyItemChanged(objectAdapter.list.indexOf(activityObject.title));
         }
-
     }
 
 
@@ -371,15 +372,18 @@ public class FragmentActivity extends BaseFragemnt implements
         // Get the DataObject which was clicked
         // there are all information stored about the activity object
         // state, names image ect.
-        ActivityObject activityObject = dataManager.getActivityObject(title);
+        ActivityObject activityObject = new ActivityObject();
+        activityObject = dataManager.getActivityObject(title);
 
 
         String startTime = var.selectedTime;
+        int startDay = Integer.parseInt(startTime.substring(8, 10));
         int startHour = Integer.parseInt(startTime.substring(11, 13));
         int startMin = Integer.parseInt(startTime.substring(14, 16));
 
         // StartTime
         Date startDate = Calendar.getInstance().getTime();
+        startDate.setDate(startDay);
         startDate.setHours(startHour);
         startDate.setMinutes(startMin);
         startDate.setSeconds(00);
@@ -397,12 +401,21 @@ public class FragmentActivity extends BaseFragemnt implements
 
         if (add) {
             // Add the TimeStamp to the ArrayList in the Activity Object
-            activityObject.author = "admin";
+            if (externalWork) {
+                activityObject.service = "Yes";
+            } else {
+                activityObject.service = "No";
+            }
+
+            activityObject.startTime = startDate;
+            activityObject.endTime = endDate;
+            activityObject.author = "Admin";
             saveStateToLogList(activityObject);
-            activityObject.saveTimeStamp("admin", startDate, endDate);
-            dataManager.setActivityObject(activityObject);
+//            activityObject.saveTimeStamp("admin", startDate, endDate);
+//            dataManager.setActivityObject(activityObject);
         }
 
+        externalWork = false;
         // Flip back the view to CalendarView
         listener.flip();
     }

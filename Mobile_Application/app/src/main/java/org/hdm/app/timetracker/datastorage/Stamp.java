@@ -32,12 +32,12 @@ public class Stamp {
     public String f05_fruits;
     public String f06_meats;
     public String f07_eggs;
-    public String v08_fish_seafood;
+    public String f08_fish_seafood;
     public String f09_pulses_legumes_nuts;
     public String f10_milk_products;
     public String f11_oils_fats;
     public String f12_sugar_honey;
     public String f13_tea_coffee;
-    public String f13_food_sum;
+    public String f14_food_sum;
 
 }

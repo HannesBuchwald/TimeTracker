@@ -177,8 +177,8 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         stamp.b04_time_sum = String.valueOf((ms/1000)/60);
 
         stamp.c01_contract_work = activityObject.service;
-        stamp.a06_author = "uuser";
-        stamp.a07_delete = "no";
+        stamp.a06_author = activityObject.author;
+        stamp.a07_delete = "No";
 
 
         stamp.f01_portion = activityObject.portion;
@@ -225,7 +225,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
                     break;
 
                 case "Fish/seafood":
-                    stamp.v08_fish_seafood = String.valueOf(value);
+                    stamp.f08_fish_seafood = String.valueOf(value);
                     break;
 
                 case "Pulses/legumes/nuts":
@@ -256,7 +256,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         }
 
 
-        stamp.f13_food_sum = String.valueOf(foodSum);
+        stamp.f14_food_sum = String.valueOf(foodSum);
         dataManager.logList.add(stamp);
     }
 
