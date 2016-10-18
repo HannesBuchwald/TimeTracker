@@ -642,11 +642,6 @@ public class MainActivity extends Activity implements PreferenceListener {
     public void restore() {
         deleteAllExternalFiles();
         reload();
-//        saveLogFile();
-//        deleteCurrentActivityState();
-////        initConfiguration();
-//        loadConfigurationFromExternal();
-//        initCalendar();
     }
 
     @Override
@@ -694,6 +689,9 @@ public class MainActivity extends Activity implements PreferenceListener {
         });
         sendThread.start();
     }
+
+
+
 
 
     private void deleteCurrentActivityState() {
