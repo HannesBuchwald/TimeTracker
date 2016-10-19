@@ -439,14 +439,25 @@ public class FragmentActivity extends BaseFragemnt implements
             activityObject.startTime = startDate;
             activityObject.endTime = endDate;
             activityObject.author = "Admin";
-            saveStateToLogList(activityObject);
+
+            if (activityObject.title.equals("Eating + Drinking")) {
+
+                DialogPortionFragment dFragment = new DialogPortionFragment(this, activityObject);
+                FragmentManager fm = getFragmentManager();
+                dFragment.show(fm, "Dialog Fragment");
+
+            } else {
+                // Save Timestamp and SubCategory in ActivityObject
+                saveStateToLogList(activityObject);
+                // Flip back the view to CalendarView
+                listener.flip();
+            }
 //            activityObject.saveTimeStamp("admin", startDate, endDate);
 //            dataManager.setActivityObject(activityObject);
         }
 
         externalWork = false;
-        // Flip back the view to CalendarView
-        listener.flip();
+
     }
 
     private void addActivityObjectToCalendarList(ActivityObject object, Date startTime) {
@@ -598,5 +609,9 @@ public class FragmentActivity extends BaseFragemnt implements
                 handler.post(updateRemainingTimeRunnable);
             }
         }, 0, 1000);
+    }
+
+    public void flip() {
+         listener.flip();
     }
 }
