@@ -1,9 +1,13 @@
 package org.hdm.app.timetracker.screens;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,6 +36,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
     private Preference prefMaxActivities;
     private Preference prefThreshold;
     private Preference prefReload;
+    private Preference prefInterval;
 
 
     @Override
@@ -78,6 +83,9 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         prefEditableMode = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_editable_mode));
         prefMaxActivities = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_max_active_activities));
         prefThreshold = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_threshold));
+        prefInterval = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_log_interval));
+
+
         prefRestore = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_restore));
         prefReload = getPreferenceManager().findPreference(getString(R.string.pref_key_preferences_reload));
     }
@@ -95,6 +103,7 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         prefEditableMode.setOnPreferenceChangeListener(this);
         prefMaxActivities.setOnPreferenceChangeListener(this);
         prefThreshold.setOnPreferenceChangeListener(this);
+        prefInterval.setOnPreferenceChangeListener(this);
         prefRestore.setOnPreferenceClickListener(this);
         prefReload.setOnPreferenceClickListener(this);
 
@@ -115,11 +124,15 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
         }
 
         if (prefConnectionIP != null) {
-            prefConnectionIP.setTitle("Port: " + Variables.getInstance().serverIP);
+            prefConnectionIP.setTitle("IP: " + Variables.getInstance().serverIP);
         }
 
         if (prefConnectionPort != null) {
             prefConnectionPort.setTitle("Port: " + Variables.getInstance().serverPort);
+        }
+
+        if (prefEditableMode != null) {
+
         }
 
         if (prefMaxActivities != null) {
@@ -128,6 +141,9 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
 
         if (prefThreshold != null) {
             prefThreshold.setTitle("Threshold Minutes: " + Variables.getInstance().minRecordingTime);
+        }
+        if (prefInterval != null) {
+            prefInterval.setTitle("Log Time Interval: " + Variables.getInstance().logTimeInterval);
         }
     }
 
@@ -142,10 +158,31 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
             if (listener != null) listener.sendLogFile();
         }
         if (preference.equals(prefRestore)){
-            if (listener != null) listener.restore();
+
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Restore")
+                    .setMessage("Are you realy want to restore?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if (listener != null) listener.restore();
+                        }
+                    }).create().show();
         }
         if (preference.equals(prefReload)){
-            if (listener != null) listener.reload();
+
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Reload")
+                    .setMessage("Are you realy want to reload?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                             if (listener != null) listener.reload();
+                        }
+                    }).create().show();
+
         }
 
 
@@ -213,8 +250,21 @@ public class Settings extends PreferenceFragment implements Preference.OnPrefere
                             .show();
                 }
             }
-        }
+        } else if(preference.equals(prefInterval)) {
 
+            if (newValue instanceof String) {
+                int value = Integer.valueOf((String) newValue);
+                if (value >= 1 && value <= 60) {
+                    Variables.getInstance().logTimeInterval = value;
+                    prefInterval.setTitle("Log Time Interval: " + value);
+                } else {
+                    Toast.makeText(getActivity(),
+                            "Only a number between 0 - 60 is allowed",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        }
         return true;
     }
 }

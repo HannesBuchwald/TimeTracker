@@ -39,7 +39,7 @@
             />
         <EditTextPreference
             android:key="@string/pref_key_preferences_max_active_activities"
-            android:summary="Amount of maximal active Activities"
+            android:summary="Amount of maximal parallel recording Activities"
             android:title="Max. active Activities: "
             android:inputType="number"
             />
@@ -49,18 +49,24 @@
             android:title="Threshold Minutes: "
             android:inputType="number"
             />
+        <EditTextPreference
+            android:key="@string/pref_key_preferences_log_interval"
+            android:summary="This is the interval time which the application will save a logfile from recorded activities"
+            android:title="Log Time Interval: "
+            android:inputType="number"
+            />
         <Preference
             android:key="@string/pref_key_preferences_reload"
-            android:summary="Reload new Images and Configurations and reset current Activity Logs"
+            android:summary="Reload Images and Configurations from external Folder - resets the current Activity Logs"
             android:title="Reload" />
         <Preference
             android:key="@string/pref_key_preferences_restore"
-            android:summary="Restore all Images, Configurations and reset current Activity Logs"
+            android:summary="Restore all Images and Configurations from internal App - resets the current Activity Logs"
             android:title="Restore" />
 
         <Preference
             android:key="@string/pref_key_preferences_about"
-            android:summary="Current Version 1.0"
+            android:summary="Current Version 1.1"
             android:title="App Version"
             />
 

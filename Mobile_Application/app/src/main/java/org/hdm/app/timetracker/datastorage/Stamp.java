@@ -22,6 +22,7 @@ public class Stamp {
     public String b02_time_start;
     public String b03_time_end;
     public String b04_time_sum;
+    public String b05_time_sum_sec;
 
     public String c01_contract_work;
 

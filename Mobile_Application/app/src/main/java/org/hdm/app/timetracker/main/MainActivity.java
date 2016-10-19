@@ -50,7 +50,6 @@ public class MainActivity extends Activity implements PreferenceListener {
     private final String TAG = "MainActivity";
 
     // ToDo Add Logik for Dayshift
-    // ToDo Add Logik to display Activitys on Dayview only after 1 Minute recording
 
     /**
      * Constants
@@ -79,6 +78,8 @@ public class MainActivity extends Activity implements PreferenceListener {
     @Override
     public void onStop() {
         super.onStop();
+        var.editableMode = false;
+        var.backPress = false;
         saveLogFile();
         saveCurrentState();
         if (timer != null) timer.cancel();
@@ -91,7 +92,6 @@ public class MainActivity extends Activity implements PreferenceListener {
         initSaveCurrentState();
 
         if(DEBUGMODE) {
-
             SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);
             Log.d(TAG, "MMM UserID " + var.user_ID + " || "+ sh.getString(getString(R.string.pref_key_user_user_id),""));
             Log.d(TAG, "MMM IP " + var.serverIP + " || "+ sh.getString(getString(R.string.pref_key_connection_ip),""));
@@ -178,6 +178,8 @@ public class MainActivity extends Activity implements PreferenceListener {
 
     private void initVariables() {
 
+        if(DEBUGMODE) Log.d(TAG, "initVariables") ;
+
         Calendar cal = Calendar.getInstance();
         var.currentTime = cal.getTime();
         var.backPress = var.editableMode;
@@ -192,6 +194,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         prefs.putBoolean(getString(R.string.pref_key_preferences_editable_mode), var.editableMode);
         prefs.putString(getString(R.string.pref_key_preferences_max_active_activities), String.valueOf(var.maxRecordedActivity));
         prefs.putString(getString(R.string.pref_key_preferences_threshold), String.valueOf(var.minRecordingTime));
+        prefs.putString(getString(R.string.pref_key_preferences_log_interval), String.valueOf(var.logTimeInterval));
         prefs.commit();
 
     }
@@ -333,131 +336,6 @@ public class MainActivity extends Activity implements PreferenceListener {
     }
 
 
-    private void initResetRecordedData() {
-
-
-        // ToDo Check hole function --- last edit
-
-        // Set the alarm to start at approximately 2:00 p.m.
-        final Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(System.currentTimeMillis());
-//        calendar.set(Calendar.HOUR_OF_DAY, 23);
-//        calendar.set(Calendar.MINUTE, 59);
-//        calendar.set(Calendar.SECOND, 56);
-        calendar.add(Calendar.SECOND, 10);
-
-        Date currentDate = calendar.getTime();
-        if (DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
-
-
-//        Calendar currentCalendar = Calendar.getInstance();
-//        currentCalendar.add(Calendar.DAY_OF_MONTH, +1);
-//        initCalenderMap(currentCalendar.getTime()); // only for Testing
-
-        if (DEBUGMODE) Log.d(TAG, "calendar4 " + calendar.getTime());
-        if (DEBUGMODE) Log.d(TAG, "calendar5 " + currentDate);
-
-
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-
-                //add 24 hours to the calendar Time for the next
-//                calendar.add(Calendar.DAY_OF_MONTH, +1);
-                calendar.add(Calendar.SECOND, 10);
-
-
-                // Stop every active Activity and save the time
-
-                // Get ActiveList
-                ArrayList<String> list = dataManager.activeList;
-
-                // iterate through the complete list and save the active Activity to Activity Object
-                for (int i = 0; i < list.size() - 1; i++) {
-
-                    String title = list.get(i);
-
-                    ActivityObject activityObject = dataManager.getActivityObject(title);
-
-                    // Deactivate Activity
-                    activityObject.activeState = false;
-                    activityObject.count = 0;
-
-                    // set temporary end time
-                    activityObject.endTime = Calendar.getInstance().getTime();
-
-
-                    //Count how many activities are active
-                    var.activeCount--;
-
-                    // Save Timestamp and SubCategory in ActivityObject
-                    activityObject.saveTimeStamp("uuser");
-                    dataManager.setActivityObject(activityObject);
-
-                    // ToDo check background of Activity in objectList and activeList like ActivityFragment
-                    // dataManager.activeList.remove(activityObject.title);
-                }
-
-                // Save Log File
-                saveLogFile();
-
-                // Save active Files
-                var.activeActivities = dataManager.activeList;
-
-                // Reset all Lists, CalendarList, ObjectActivityList, ActiveActivity
-                initConfiguration();
-
-
-                // Add new CalendarItems
-                calendar.add(Calendar.DAY_OF_MONTH, +1);
-                initCalenderMap(calendar.getTime());
-
-
-                //Get active Activities and set them back to active
-                dataManager.activeList = var.activeActivities;
-                ArrayList<String> listt = dataManager.activeList;
-
-                if (DEBUGMODE) Log.d(TAG, "listt size " + listt.size());
-
-                // iterate through the complete list and save the active Activity to Activity Object
-                for (int i = 0; i < listt.size(); i++) {
-
-                    String title = listt.get(i);
-
-                    ActivityObject activityObject = dataManager.getActivityObject(title);
-
-                    // Deactivate Activity
-                    activityObject.activeState = true;
-                    activityObject.count = 1;
-
-                    calendar.set(Calendar.SECOND, 0);
-                    calendar.set(Calendar.MINUTE, 0);
-                    calendar.set(Calendar.HOUR, 0);
-                    activityObject.startTime = calendar.getTime();
-                    if (DEBUGMODE) Log.d(TAG, "listt size " + activityObject.startTime);
-
-
-                    //Count how many activities are active
-                    var.activeCount++;
-
-                    dataManager.setActivityObject(activityObject);
-                    // ToDo check background of Activity in objectList and activeList like ActivityFragment
-
-                    if (DEBUGMODE)
-                        Log.d(TAG, "listt size " + dataManager.getActivityObject(activityObject.title).startTime);
-                }
-
-
-                if (DEBUGMODE) Log.d(TAG, "restart");
-                initResetRecordedData();
-            }
-        };
-        timer.schedule(timerTask, calendar.getTime());
-
-    }
-
-
     /**
      * Init the Layout
      * activate FullScreen Mode
@@ -538,6 +416,9 @@ public class MainActivity extends Activity implements PreferenceListener {
                 String.valueOf(var.maxRecordedActivity));
         prefsEditor.putString(getString(R.string.pref_key_preferences_threshold),
                 String.valueOf(var.minRecordingTime));
+        prefsEditor.putString(getString(R.string.pref_key_preferences_log_interval),
+                String.valueOf(var.logTimeInterval));
+
         prefsEditor.putString(getString(R.string.lastLog), dataManager.lastLog);
         prefsEditor.putString(getString(R.string.firstDay), var.fistDay);
         prefsEditor.commit();
@@ -576,6 +457,11 @@ public class MainActivity extends Activity implements PreferenceListener {
         if (mPrefs.contains(getString(R.string.pref_key_preferences_threshold))) {
             String max = mPrefs.getString(getString(R.string.pref_key_preferences_threshold), "");
             var.minRecordingTime = Integer.valueOf(max);
+        }
+
+        if (mPrefs.contains(getString(R.string.pref_key_preferences_log_interval))) {
+            String max = mPrefs.getString(getString(R.string.pref_key_preferences_log_interval), "");
+            var.logTimeInterval = Integer.valueOf(max);
         }
 
         if (mPrefs.contains(getString(R.string.lastLog))) {
@@ -708,6 +594,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         editor.remove(getString(R.string.pref_key_preferences_editable_mode));
         editor.remove(getString(R.string.pref_key_preferences_max_active_activities));
         editor.remove(getString(R.string.pref_key_preferences_threshold));
+        editor.remove(getString(R.string.pref_key_preferences_log_interval));
         editor.remove(getString(R.string.lastLog));
         editor.remove(getString(R.string.firstDay));
         editor.commit();

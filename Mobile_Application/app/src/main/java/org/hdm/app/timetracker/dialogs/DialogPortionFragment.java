@@ -17,6 +17,7 @@ import org.hdm.app.timetracker.adapter.DialogPortionListAdapter;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
+import org.hdm.app.timetracker.screens.FragmentActivity;
 import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
@@ -38,7 +39,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     private ActivityObject activityObject;
     private DialogPortionListAdapter portionAdapter;
     private RecyclerView recyclerView;
-
+    private boolean clickFlag;
 
     public Variables var = Variables.getInstance();
     public DataManager dataManager = DataManager.getInstance();
@@ -47,15 +48,14 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     View view;
     private Button btnDialogFood;
     private String lastSelectedItem = "";
+    private FragmentActivity fragmentActivity;
 
-
-    public DialogPortionFragment() {
-    }
-
-
-    public DialogPortionFragment(ActivityObject activityObject) {
+    public DialogPortionFragment(FragmentActivity fragmentActivity, ActivityObject activityObject) {
         this.activityObject = activityObject;
+        this.fragmentActivity = fragmentActivity;
     }
+
+
 
 
     @Override
@@ -73,7 +73,12 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     public void onPause() {
         super.onPause();
         resetPortionItemState();
+        if(!clickFlag) {
+            fragmentActivity.saveStateToLogList(activityObject);
+            Log.d(TAG, "onPause DialogFragment" );
+        }
         if (this != null) this.dismiss();
+        clickFlag = false;
     }
 
 
@@ -152,6 +157,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     public boolean onLongClick(View v) {
 
         // pass onto next Dialog
+        clickFlag = true;
         DialogFoodFragment dFoodFragment = new DialogFoodFragment(activityObject);
         FragmentManager fm = getFragmentManager();
         dFoodFragment.show(fm, "Food Fragment");

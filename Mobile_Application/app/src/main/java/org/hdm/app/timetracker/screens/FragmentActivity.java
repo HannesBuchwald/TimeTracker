@@ -291,7 +291,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
             if (activityObject.title.equals("Eating + Drinking")) {
 
-                DialogPortionFragment dFragment = new DialogPortionFragment(activityObject);
+                DialogPortionFragment dFragment = new DialogPortionFragment(this, activityObject);
                 FragmentManager fm = getFragmentManager();
                 dFragment.show(fm, "Dialog Fragment");
 
@@ -332,7 +332,7 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
 
-    private void saveStateToLogList(ActivityObject activityObject) {
+    public void saveStateToLogList(ActivityObject activityObject) {
 
         Stamp stamp = new Stamp();
         stamp.a03_userID = Variables.getInstance().user_ID;
@@ -350,8 +350,27 @@ public class FragmentActivity extends BaseFragemnt implements
         stamp.b02_time_start = date.substring(11,19);
         stamp.b03_time_end = activityObject.endTime.toString().substring(11,19);
 
+
         long ms = activityObject.endTime.getTime() - activityObject.startTime.getTime();
-        stamp.b04_time_sum = String.valueOf((ms/1000)/60);
+        stamp.b05_time_sum_sec = String.valueOf((ms/1000));
+
+        long timeDiff = activityObject.endTime.getTime() - activityObject.startTime.getTime();
+
+        int seconds = (int) (timeDiff / 1000) % 60;
+        int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
+        int hours = (int) (timeDiff/1000) / 3600;
+
+        String secondsStr = String.valueOf(seconds);
+        String minutesStr = String.valueOf(minutes);
+        String hoursStr = String.valueOf(hours);
+
+        if (seconds < 10) secondsStr = "0" + secondsStr;
+        if (minutes < 10) minutesStr = "0" + minutesStr;
+        if (hours < 10) hoursStr = "0" + hoursStr;
+
+        String time = hoursStr + ":" + minutesStr + ":" + secondsStr;
+
+        stamp.b04_time_sum = time;
 
         if(stamp.a07_delete.equals("Yes")) stamp.b04_time_sum = "-" + stamp.b04_time_sum;
 

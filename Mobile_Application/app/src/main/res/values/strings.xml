@@ -55,5 +55,6 @@
 
     <string name="lastLog">LastLog</string>
     <string name="firstDay">FistDay</string>
+    <string name="pref_key_preferences_log_interval">pref_key_preferences_log_interval</string>
 
 </resources>

@@ -176,7 +176,29 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         stamp.b03_time_end = activityObject.endTime.toString().substring(11,19);
 
         long ms = activityObject.endTime.getTime() - activityObject.startTime.getTime();
-        stamp.b04_time_sum = String.valueOf((ms/1000)/60);
+        stamp.b05_time_sum_sec = String.valueOf((ms/1000));
+
+        long timeDiff = activityObject.endTime.getTime() - activityObject.startTime.getTime();
+
+        int seconds = (int) (timeDiff / 1000) % 60;
+        int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
+        int hours = (int) (timeDiff/1000) / 3600;
+
+        String secondsStr = String.valueOf(seconds);
+        String minutesStr = String.valueOf(minutes);
+        String hoursStr = String.valueOf(hours);
+
+        if (seconds < 10) secondsStr = "0" + secondsStr;
+        if (minutes < 10) minutesStr = "0" + minutesStr;
+        if (hours < 10) hoursStr = "0" + hoursStr;
+
+        String time = hoursStr + ":" + minutesStr + ":" + secondsStr;
+
+        stamp.b04_time_sum = time;
+
+
+
+//        stamp.b04_time_sum = String.valueOf((ms/1000)/60);
 
         stamp.c01_contract_work = activityObject.service;
         stamp.a06_author = activityObject.author;

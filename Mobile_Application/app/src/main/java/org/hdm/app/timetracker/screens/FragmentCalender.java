@@ -192,8 +192,9 @@ public class FragmentCalender extends BaseFragemnt implements
         cal.add(Calendar.MINUTE, 30);
         Date endTime = cal.getTime();
         stamp.b03_time_end = endTime.toString().substring(11,19);
-        stamp.b04_time_sum = "-30";
-        // ToDo continue here
+
+        stamp.b05_time_sum_sec = "-1800";
+        stamp.b04_time_sum = "00:30:00";
         dataManager.logList.add(stamp);
     }
 
