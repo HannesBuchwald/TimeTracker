@@ -17,6 +17,7 @@ import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
+import org.hdm.app.timetracker.screens.FragmentActivity;
 import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
@@ -45,13 +46,15 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
     View view;
     private Button btnDialogFood;
+    private FragmentActivity fragmentActivity;
 
     public DialogFoodFragment() {
     }
 
 
-    public DialogFoodFragment(ActivityObject activityObject) {
+    public DialogFoodFragment(FragmentActivity fragmentActivity, ActivityObject activityObject) {
         this.activityObject = activityObject;
+        this.fragmentActivity = fragmentActivity;
     }
 
 
@@ -63,8 +66,6 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
 
         initLayout();
-
-
         return view;
     }
 
@@ -156,6 +157,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         dataManager.setActivityObject(activityObject);
         resetFoodItemState();
         this.dismiss();
+        if (var.editable) fragmentActivity.flip();
         return true;
     }
 
@@ -244,7 +246,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
                     stamp.f06_meats = String.valueOf(value);
                     break;
 
-                case "Eggs":
+                case "EgEgs":
                     stamp.f07_eggs = String.valueOf(value);
                     break;
 

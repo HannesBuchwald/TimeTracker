@@ -76,6 +76,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
         if(!clickFlag) {
             fragmentActivity.saveStateToLogList(activityObject);
             Log.d(TAG, "onPause DialogFragment" );
+            if (var.editable) fragmentActivity.flip();
         }
         if (this != null) this.dismiss();
         clickFlag = false;
@@ -158,7 +159,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
         // pass onto next Dialog
         clickFlag = true;
-        DialogFoodFragment dFoodFragment = new DialogFoodFragment(activityObject);
+        DialogFoodFragment dFoodFragment = new DialogFoodFragment(fragmentActivity, activityObject);
         FragmentManager fm = getFragmentManager();
         dFoodFragment.show(fm, "Food Fragment");
         resetPortionItemState();
@@ -172,32 +173,6 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
             entry.getValue().activeState = false;
         }
     }
-
-
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        return new AlertDialog.Builder(getActivity())
-//                // Set Dialog Icon
-////                .setIcon(R.drawable.shovel)
-//                // Set Dialog Title
-////                .setTitle("Alert DialogFragment")
-//                // Set Dialog Message
-////                .setMessage("Alert DialogFragment Tutorial")
-//
-//                // Positive button
-//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // Do something else
-//                    }
-//                })
-//
-//                // Negative Button
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog,	int which) {
-//                        // Do something else
-//                    }
-//                }).create();
-//    }
 
 
 }
