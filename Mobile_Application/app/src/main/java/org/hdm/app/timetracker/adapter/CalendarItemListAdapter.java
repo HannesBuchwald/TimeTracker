@@ -17,6 +17,7 @@ import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -42,6 +43,8 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
         this.context = context;
         this.data = data;
         list = recActivityTitles;
+        int size = list.size();
+        if(DEBUGMODE) Log.d(TAG, "List " + size);
     }
 
 

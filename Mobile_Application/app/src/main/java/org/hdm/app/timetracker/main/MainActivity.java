@@ -68,14 +68,11 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         initConfiguration();
         loadConfigurationFromExternal();
+        initCalendar();
         loadSavedObjectState();
-
         initVariables();
         initDeviceModies();
-        initCalendar();
-        initDeviceModies();
         initLayout();
-
     }
 
 
@@ -102,7 +99,6 @@ public class MainActivity extends Activity implements PreferenceListener {
             Log.d(TAG, "MMM Editable " + var.editableMode + " || "+ sh.getBoolean(getString(R.string.pref_key_preferences_editable_mode),false));
             Log.d(TAG, "MMM max " + var.maxRecordedActivity + " || "+ sh.getString(getString(R.string.pref_key_preferences_max_active_activities),""));
             Log.d(TAG, "MMM max " + var.minRecordingTime + " || "+ sh.getString(getString(R.string.pref_key_preferences_threshold),""));
-
             Log.d(TAG, "MMM lastLog " + dataManager.lastLog + " || "+ sh.getString(getString(R.string.lastLog),""));
         }
 
@@ -224,7 +220,6 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         // set Display TimeOut
         setTimeout(var.screenOffTimeout);
-
     }
 
 
@@ -544,6 +539,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         prefsEditor.putString(getString(R.string.pref_key_preferences_threshold),
                 String.valueOf(var.minRecordingTime));
         prefsEditor.putString(getString(R.string.lastLog), dataManager.lastLog);
+        prefsEditor.putString(getString(R.string.firstDay), var.fistDay);
         prefsEditor.commit();
     }
 
@@ -587,6 +583,10 @@ public class MainActivity extends Activity implements PreferenceListener {
             dataManager.lastLog = lastLog;
         }
 
+        if (mPrefs.contains(getString(R.string.firstDay))) {
+            String lastLog = mPrefs.getString(getString(R.string.firstDay), "");
+            var.fistDay = lastLog;
+        }
         if (mPrefs.contains(ACTIVITY_STATE)) {
 
             String json = mPrefs.getString(ACTIVITY_STATE, "");
@@ -709,6 +709,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         editor.remove(getString(R.string.pref_key_preferences_max_active_activities));
         editor.remove(getString(R.string.pref_key_preferences_threshold));
         editor.remove(getString(R.string.lastLog));
+        editor.remove(getString(R.string.firstDay));
         editor.commit();
 
     }
@@ -726,9 +727,12 @@ public class MainActivity extends Activity implements PreferenceListener {
     private void initCalendar() {
 
         Calendar calEndTime = Calendar.getInstance();
-        var.fistDay = calEndTime.getTime();
+//        calEndTime.add(Calendar.DAY_OF_MONTH, -1);
+        var.fistDay = String.valueOf(calEndTime.getTime().getDate());
+        Log.d(TAG, "FirstDay " + var.fistDay);
         var.dateArray = new ArrayList<>();
         var.coloredDates = new ArrayList<>();
+        dataManager.calenderMap = new LinkedHashMap<>();
 
         int size = var.amountOfDays;
         if (var.amountOfDays < 1) size = 1;

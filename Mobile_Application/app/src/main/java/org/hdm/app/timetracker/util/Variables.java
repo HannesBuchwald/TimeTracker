@@ -86,7 +86,7 @@ public class Variables {
      *
      * the value represent minutes
      */
-    public long minRecordingTime = 0;
+    public long minRecordingTime = 5;
 
 
 
@@ -167,7 +167,7 @@ public class Variables {
     /**
      *  Variable for Date in CalendarView
      */
-    public Date fistDay;
+    public String fistDay;
     public List<Date> dateArray;
     public List<Date> coloredDates;
 

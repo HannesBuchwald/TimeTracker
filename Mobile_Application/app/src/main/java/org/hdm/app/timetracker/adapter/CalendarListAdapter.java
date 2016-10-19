@@ -131,6 +131,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
         String calendarTitleDay = list.get(position).toString().substring(0, 3);
         String calendarTitleDate = list.get(position).toString().substring(8, 10);
+        if(DEBUGMODE) Log.d(TAG, "calendarTitle " + list.get(position));
         if (listener != null) listener.setCalendarTitle(calendarTitleDate + ". " + calendarTitleDay);
     }
 

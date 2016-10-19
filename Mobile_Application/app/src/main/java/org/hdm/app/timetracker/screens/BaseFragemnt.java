@@ -106,11 +106,11 @@ public class BaseFragemnt extends Fragment implements
     public void scrollListToCurrentTime() {
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, 0    );
+        cal.add(Calendar.DAY_OF_MONTH, 0);
 
 
         Date currentTime = cal.getTime();
-        int difference = currentTime.getDate()-var.fistDay.getDate();
+        int difference = currentTime.getDate()- Integer.parseInt(var.fistDay);
         int offSet = difference*48;
         int hour = currentTime.getHours();
         if(DEBUGMODE) Log.d(TAG, "offSet " + offSet + " // hour " + hour);

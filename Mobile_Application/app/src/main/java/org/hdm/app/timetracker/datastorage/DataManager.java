@@ -40,15 +40,8 @@ public class DataManager {
 
     public LinkedHashMap<String, ActivityObject> portionMap = new LinkedHashMap<>();
     public LinkedHashMap<String, ActivityObject> foodMap = new LinkedHashMap<>();
-
-
-
-
     public ArrayList<String> activeList = new ArrayList<>();
-
-
-
-    public List<Stamp> logList = new ArrayList<Stamp>();
+    public List<Stamp> logList = new ArrayList<>();
     public String lastLog = "";
 
 

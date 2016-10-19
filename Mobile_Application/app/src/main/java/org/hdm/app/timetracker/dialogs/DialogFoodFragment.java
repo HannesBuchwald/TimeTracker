@@ -166,11 +166,13 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         stamp.a03_userID = Variables.getInstance().user_ID;
         stamp.a01_activity = activityObject.title;
 
-        int year = 1900 + activityObject.startTime.getYear();
-        int month = activityObject.startTime.getMonth()+1;
-        int day = activityObject.startTime.getDate();
-        stamp.b01_time_date = year + "." + month + "." + day;
-        stamp.b02_time_start = activityObject.startTime.toString().substring(11,19);
+//        int year = 1900 + activityObject.startTime.getYear();
+//        int month = activityObject.startTime.getMonth()+1;
+//        int day = activityObject.startTime.getDate();
+
+        String date =  activityObject.startTime.toString();
+        stamp.b01_time_date = date.substring(0,10) + " " + date.substring(date.length()-4);;
+        stamp.b02_time_start = date.substring(11,19);
         stamp.b03_time_end = activityObject.endTime.toString().substring(11,19);
 
         long ms = activityObject.endTime.getTime() - activityObject.startTime.getTime();

@@ -120,7 +120,6 @@ public class FragmentCalender extends BaseFragemnt implements
         rv_calender.setAdapter(adapter);
         rv_calender.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_calender.setOnClickListener(this);
-//        scrollListToCurrentTime();
     }
 
 
@@ -158,7 +157,6 @@ public class FragmentCalender extends BaseFragemnt implements
             stamp.c01_contract_work = "Yes";
         } else {
             stamp.c01_contract_work = "No";
-
         }
 
         stamp.a06_author = "Admin";
@@ -173,22 +171,21 @@ public class FragmentCalender extends BaseFragemnt implements
         String dates = time.substring(8, 10);
         String houres = time.substring(11, 13);
         String minutes = time.substring(14, 16);
+        String month = convertMonthToNumber(time.substring(4,7));
 
-        Log.d(TAG, years + " "+ dates + " " + houres +" " + minutes);
-        // ToDo Continue here
+
+
+        Log.d(TAG, years +" " + month + " "+ dates + " " + houres +" " + minutes);
         date.setMinutes(Integer.parseInt(minutes));
         date.setHours(Integer.parseInt(houres));
         date.setDate(Integer.parseInt(dates));
-        date.setMonth(11);
+        date.setMonth(Integer.parseInt(month));
         date.setYear((Integer.parseInt(years))-1900);
 
 
-        int year = 1900 + date.getYear();
-        int month = date.getMonth()+1;
-        int day = date.getDate();
+        stamp.b01_time_date = time.substring(0,10) + " " + time.substring(time.length()-4);;
+        stamp.b02_time_start = time.substring(11,19);
 
-        stamp.b01_time_date = year + "." + month + "." + day;
-        stamp.b02_time_start = date.toString().substring(11,19);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -200,6 +197,9 @@ public class FragmentCalender extends BaseFragemnt implements
         dataManager.logList.add(stamp);
     }
 
+
+
+
     @Override
     public void didOnClickAddBtn(View_Holder holder) {
         if (DEBUGMODE) Log.d(TAG, "holder " + holder.id);
@@ -207,9 +207,11 @@ public class FragmentCalender extends BaseFragemnt implements
         listener.flip();
     }
 
+
     @Override
     public void setCalendarTitle(String s) {
         setMenuTitle(s);
+        if(DEBUGMODE) Log.d(TAG, "MenueTitle " + s);
     }
 
 
@@ -237,5 +239,40 @@ public class FragmentCalender extends BaseFragemnt implements
         return true;
     }
 
+
+
+    private String convertMonthToNumber(String substring) {
+
+        switch (substring) {
+
+            case "Jan":
+                return "0";
+            case "Feb":
+                return "1";
+            case "Mar":
+                return "2";
+            case "Apr":
+                return "3";
+            case "May":
+                return "4";
+            case "Jun":
+                return "5";
+            case "Jul":
+                return "6";
+            case "Aug":
+                return "7";
+            case "Sep":
+                return "8";
+            case "Oct":
+                return "9";
+            case "Nov":
+                return "10";
+            case "Dec":
+                return "11";
+
+            default:
+                return "0";
+        }
+    }
 
 }
