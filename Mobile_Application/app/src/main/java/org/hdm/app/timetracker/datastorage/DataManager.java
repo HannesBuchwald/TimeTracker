@@ -3,15 +3,10 @@ package org.hdm.app.timetracker.datastorage;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import org.hdm.app.timetracker.util.Variables;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 
@@ -44,6 +39,38 @@ public class DataManager {
     public List<Stamp> logList = new ArrayList<>();
     public String lastLog = "";
 
+
+
+
+
+
+    public LinkedHashMap<String, AAObject> getAaObjectMap() {
+        return aaObjectMap;
+    }
+
+    public void setAaObjectMap(LinkedHashMap<String, AAObject> aaObjectMap) {
+        this.aaObjectMap = aaObjectMap;
+    }
+
+
+    public int addObjectToActivityConfigurationMap(AAObject activityObject) {
+
+        String id = activityObject.get_id();
+        if (id != null && aaObjectMap != null) {
+
+            if(!aaObjectMap.containsKey(id)) {
+                aaObjectMap.put(id, activityObject);
+                return 01;
+            }
+            return 02;
+        }
+        return 03;
+    }
+
+
+
+
+    private LinkedHashMap<String, AAObject> aaObjectMap = new LinkedHashMap<>();
 
 
 
@@ -306,4 +333,16 @@ public class DataManager {
     }
 
 
+    public int addImageToImageMap(String imageName, Bitmap bitmap) {
+        
+        if(imageName!= null){
+
+            if(!imageMap.containsKey(imageName)) {
+                imageMap.put(imageName, bitmap);
+                return 01;
+            }
+            return 02;
+        }
+        return 03;
+    }
 }

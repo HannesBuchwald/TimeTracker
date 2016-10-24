@@ -11,7 +11,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.hdm.app.timetracker.datastorage.AAObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.main.MainActivity;
@@ -25,7 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 
@@ -38,6 +42,7 @@ import static org.hdm.app.timetracker.util.Consts.*;
 public class FileLoader {
 
     private static final String TAG = "FileLoader";
+    private static final String ACTIVITYTEST = "TestActivity";
 
 
     String state = Environment.getExternalStorageState();
@@ -149,8 +154,15 @@ public class FileLoader {
         loadActivityObjects(PORTIONS, path, fileName);
         loadActivityObjects(FOOD, path, fileName);
 
+        fileName = "TestActivity.json";
+        copyFileFromAssetToExternal(fileName, path);
+        loadActivityObjectss(ACTIVITYTEST, path, fileName);
+
+
 
     }
+
+
 
 
     /**************************
@@ -378,6 +390,44 @@ public class FileLoader {
         return properties;
     }
 
+    private void loadActivityObjectss(String activitytest, String folderPath, String fileName) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
+        options.inSampleSize = 2; //reduce quality
+
+        String jsonString = readStringFromExternalFolder(folderPath, fileName);
+        Gson gson = new Gson();
+        String json = gson.toJson(jsonString);
+        Log.d(TAG, json.toString());
+        Type collectionType = new TypeToken<Collection<AAObject>>(){}.getType();
+        Collection<AAObject> list = gson.fromJson(jsonString, collectionType);
+
+        String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
+
+        if(list != null) {
+            // Iterate through the hole list
+            for(AAObject object : list) {
+
+                String objectImgPath = imgPath + object.getImageName();
+
+                // check if Image is in externalFolder available
+                // if not than save it from asset to external load again
+                if (!isExternalFileExists(objectImgPath)) {
+                    // Save Image from Asset to External
+                    copyFileFromAssetToExternal(object.getImageName(), imgPath);
+                }
+
+                DataManager.getInstance().addImageToImageMap(
+                        object.getImageName(),
+                        BitmapFactory.decodeFile(objectImgPath, options));
+
+                DataManager.getInstance().addObjectToActivityConfigurationMap(object);
+            }
+
+        }
+        Log.d(TAG, "Size " + DataManager.getInstance().getAaObjectMap().size());
+    }
+
 
     // Load Content
     public void loadActivityObjects(String object, String folderPath, String fileName) {
@@ -438,7 +488,6 @@ public class FileLoader {
                     case ACTIVITIES:
                         DataManager.getInstance().setActivityObject(activityObject);
                         break;
-
                     case PORTIONS:
                         DataManager.getInstance().setPortionObject(activityObject);
                         break;
