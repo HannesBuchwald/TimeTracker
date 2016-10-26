@@ -164,6 +164,9 @@ public class MainActivity extends Activity implements PreferenceListener {
         Variables.init();
         dataManager = DataManager.getInstance();
         var = Variables.getInstance();
+
+
+        dataManager.initMaps();
     }
 
 

@@ -77,7 +77,7 @@ public class FragmentActivity extends BaseFragemnt implements
     public void onResume() {
         super.onResume();
         updateActiveList();
-        updateObjectList();
+      //  updateObjectList();
         editableMode();
     }
 
@@ -113,7 +113,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
     private void initObjectList() {
 
-        objectAdapter = new ObjectListAdapter((List) new ArrayList<>(dataManager.getObjectMap().keySet()));
+        objectAdapter = new ObjectListAdapter((List) new ArrayList<>(dataManager.getAaObjectMap().keySet()));
         objectAdapter.setListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
         recyclerView.setAdapter(objectAdapter);
@@ -152,8 +152,16 @@ public class FragmentActivity extends BaseFragemnt implements
     }
 
     @Override
-    public void didLongClickOnActivityListItem(String title, View_Holder view_holder) {
-        handleLongClick(title, view_holder);
+    public void didLongClickOnActivityListItem(String title, View_Holder holder) {
+        handleLongClick(title, holder);
+        handleClick(title, holder);
+    }
+
+    private void handleClick(String title, View_Holder holder) {
+
+        // if(active List is empty) {
+        Stamp stamp = new Stamp;
+
     }
 
 

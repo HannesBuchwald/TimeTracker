@@ -48,9 +48,11 @@ public class DataManager {
         return aaObjectMap;
     }
 
+
     public void setAaObjectMap(LinkedHashMap<String, AAObject> aaObjectMap) {
         this.aaObjectMap = aaObjectMap;
     }
+
 
 
     public int addObjectToActivityConfigurationMap(AAObject activityObject) {
@@ -333,8 +335,13 @@ public class DataManager {
     }
 
 
+    public AAObject getAaObject(String key) {
+        return aaObjectMap.get(key);
+    }
+
+
     public int addImageToImageMap(String imageName, Bitmap bitmap) {
-        
+
         if(imageName!= null){
 
             if(!imageMap.containsKey(imageName)) {
@@ -345,4 +352,13 @@ public class DataManager {
         }
         return 03;
     }
+
+    public void initMaps() {
+
+        aaObjectMap = new LinkedHashMap<String, AAObject>();
+        imageMap = new LinkedHashMap<String, Bitmap>();
+    }
+
+
+
 }

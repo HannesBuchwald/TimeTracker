@@ -2,7 +2,6 @@ package org.hdm.app.timetracker.util;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,16 +12,15 @@ import android.widget.TextView;
 import org.hdm.app.timetracker.adapter.CalendarListAdapter;
 import org.hdm.app.timetracker.adapter.CalendarItemListAdapter;
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.DataManager;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
+import static org.hdm.app.timetracker.util.Consts.BLUE;
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+import static org.hdm.app.timetracker.util.Consts.GRAY;
+import static org.hdm.app.timetracker.util.Consts.GREEN;
+import static org.hdm.app.timetracker.util.Consts.RED;
+import static org.hdm.app.timetracker.util.Consts.TRANSPARENT;
+import static org.hdm.app.timetracker.util.Consts.WHITE;
 
 
 /**
@@ -55,6 +53,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     public boolean activityList;
     private ImageView iv_cancel;
     public int count = 0;
+    public String setID;
 
     /************** Constructors ******************/
 
@@ -116,15 +115,70 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     /************** Init  End ******************/
 
 
-    public void setBackground(String blue) {
+    public void setBackground(String color) {
+
+        switch (color) {
+
+            case WHITE:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    cv.setCardBackgroundColor(Color.WHITE);
+                } else {
+                    cv.setBackgroundColor(cv.getResources().getColor(R.color.white));
+                }
+                break;
+
+
+            case BLUE:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    cv.setCardBackgroundColor(Color.BLUE);
+                } else {
+                    cv.setBackgroundColor(cv.getResources().getColor(R.color.blue));
+                }
+                break;
+
+
+            case GREEN:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    cv.setCardBackgroundColor(Color.GREEN);
+                } else {
+                    cv.setBackgroundColor(cv.getResources().getColor(R.color.green));
+                }
+
+            case RED:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    cv.setCardBackgroundColor(Color.RED);
+                    iv_cancel.setVisibility(View.VISIBLE);
+
+                } else {
+                    cv.setCardBackgroundColor(cv.getResources().getColor(R.color.red));
+                    iv_cancel.setVisibility(View.VISIBLE);
+                }
+                break;
+
+            case GRAY:
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                // below lollipop
-                cv.setCardBackgroundColor(Color.BLUE);
+                cv.setCardBackgroundColor(Color.GRAY);
+                iv_cancel.setVisibility(View.VISIBLE);
+
             } else {
-                // lollipop and above
-                cv.setBackgroundColor(cv.getResources().getColor(R.color.blue));
+                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.gray));
+                iv_cancel.setVisibility(View.VISIBLE);
             }
-            time.setVisibility(View.VISIBLE);
+
+            case TRANSPARENT:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    cv.setCardBackgroundColor(Color.TRANSPARENT);
+                    iv_cancel.setVisibility(View.GONE);
+                } else {
+                    cv.setCardBackgroundColor(cv.getResources().getColor(R.color.transparent));
+                    iv_cancel.setVisibility(View.GONE);
+                }
+                break;
+
+            default:
+                break;
+        }
+
     }
 
 
@@ -243,7 +297,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     @Override
     public boolean onLongClick(View v) {
             if(listener != null) {
-                if(listener!= null) listener.didLongClickOnView(v, title.getText().toString(), this);
+                if(listener!= null) listener.didLongClickOnView(v, id, this);
                 return true;
             }
         return false;
@@ -251,11 +305,13 @@ public class View_Holder extends RecyclerView.ViewHolder implements
 
 
 
-    public void updateTimeRemaining(String startTime) {
-        if(time!= null) {
-            time.setText(startTime);
-            if(DEBUGMODE) Log.d(TAG, time.getText().toString() + title.getText().toString());
-        }
 
+    public void updateTimeRemaining(String startTime) {
+        if(time!= null) time.setText(startTime);
+    }
+
+
+    public void setID(String ID) {
+        this.id = ID;
     }
 }

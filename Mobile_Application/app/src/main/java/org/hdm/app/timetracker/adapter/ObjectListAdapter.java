@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
+import org.hdm.app.timetracker.datastorage.AAObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
@@ -16,7 +17,10 @@ import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.List;
 
+import static org.hdm.app.timetracker.util.Consts.BLUE;
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+import static org.hdm.app.timetracker.util.Consts.GREEN;
+import static org.hdm.app.timetracker.util.Consts.WHITE;
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -55,26 +59,54 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
-        //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        ActivityObject object = dataManager.getActivityObject(list.get(position));
+
+        // Init Listener in View_Holder
         holder.setListener(this);
-        holder.title.setText(object.title);
-        holder.activityList = false;
-        if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
-        if(!var.editable) {
 
 
-            if(object.service != null) {
-
-                if(object.service.contains("Yes") && object.activeState) {
-                    holder.setBackground("blue");
-                } else {
-                    holder.setBackground(object.activeState);
-                }
-            } else {
-                holder.setBackground(object.activeState);
-            }
+        // set CardView Image
+        AAObject object = dataManager.getAaObject(list.get(position));
+        if(dataManager.imageMap.get(object.getImageName()) != null ) {
+            holder.imageView.setImageBitmap((dataManager.imageMap.get(object.getImageName())));
         }
+
+        // set ID
+        holder.setID(object.get_id());
+
+
+        // set Background
+        // get Item from Active List
+        if(false && var.editableMode) {
+
+            // if external Work true
+            if(false) {
+                holder.setBackground(BLUE);
+            } else {
+                holder.setBackground(GREEN);
+            }
+
+        } else {
+            holder.setBackground(WHITE);
+        }
+
+//        ActivityObject object = dataManager.getActivityObject(list.get(position));
+//        holder.title.setText(object.title);
+//        holder.activityList = false;
+//        if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
+//        if(!var.editable) {
+//
+//
+//            if(object.service != null) {
+//
+//                if(object.service.contains("Yes") && object.activeState) {
+//                    holder.setBackground("blue");
+//                } else {
+//                    holder.setBackground(object.activeState);
+//                }
+//            } else {
+//                holder.setBackground(object.activeState);
+//            }
+//        }
     }
 
 
@@ -124,9 +156,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void didClickOnView(View view, String title, View_Holder holder) {
-
         if(listener != null) listener.didClickOnActivityListItem(title, holder);
-
     }
 
 
