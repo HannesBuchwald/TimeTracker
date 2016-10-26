@@ -44,7 +44,7 @@ import java.util.TimerTask;
 import static org.hdm.app.timetracker.util.Consts.*;
 
 
-// Version 0.9 - 07.10.2016
+// Version 1.2 - 26.10.2016
 
 public class MainActivity extends Activity implements PreferenceListener {
     private final String TAG = "MainActivity";

@@ -66,7 +66,7 @@
 
         <Preference
             android:key="@string/pref_key_preferences_about"
-            android:summary="Current Version 1.1"
+            android:summary="Current Version 1.2"
             android:title="App Version"
             />
 

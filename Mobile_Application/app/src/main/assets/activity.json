@@ -675,7 +675,7 @@
       "_id": 68,
       "title": "Catching water",
       "imageName": "ic_68.png",
-      "externalWork": "",
+      "externalWork": "Yes",
       "group_activity": "Household",
       "item": ""
     },
@@ -683,7 +683,7 @@
       "_id": 69,
       "title": "Collecting firewood",
       "imageName": "ic_69.png",
-      "externalWork": "",
+      "externalWork": "Yes",
       "group_activity": "Household",
       "item": ""
     },
