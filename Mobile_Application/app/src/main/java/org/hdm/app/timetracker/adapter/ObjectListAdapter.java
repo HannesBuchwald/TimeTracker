@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.AAObject;
+import org.hdm.app.timetracker.datastorage.ActiveObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
@@ -76,7 +77,10 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
         // set Background
         // get Item from Active List
-        if(false && var.editableMode) {
+        // ToDo Implement External Work Flag
+        ActiveObject activeObject = dataManager.getActiveObject(object.get_id());
+
+        if(activeObject!= null) {
 
             // if external Work true
             if(false) {
@@ -88,25 +92,6 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         } else {
             holder.setBackground(WHITE);
         }
-
-//        ActivityObject object = dataManager.getActivityObject(list.get(position));
-//        holder.title.setText(object.title);
-//        holder.activityList = false;
-//        if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
-//        if(!var.editable) {
-//
-//
-//            if(object.service != null) {
-//
-//                if(object.service.contains("Yes") && object.activeState) {
-//                    holder.setBackground("blue");
-//                } else {
-//                    holder.setBackground(object.activeState);
-//                }
-//            } else {
-//                holder.setBackground(object.activeState);
-//            }
-//        }
     }
 
 

@@ -7,11 +7,12 @@ import java.util.Date;
  */
 public class ActiveObject {
 
-    private String id;
+    public String id;
+    public String title;
 
 
-    private Date startTime;
-    private Date endTime;
+    public Date startTime;
+    public Date endTime;
 
     public String b03_time_end;
     public String b04_time_sum;

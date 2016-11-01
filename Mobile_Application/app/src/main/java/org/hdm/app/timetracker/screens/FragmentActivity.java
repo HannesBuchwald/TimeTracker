@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
+import org.hdm.app.timetracker.datastorage.AAObject;
+import org.hdm.app.timetracker.datastorage.ActiveObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.dialogs.DialogPortionFragment;
@@ -29,6 +31,8 @@ import org.hdm.app.timetracker.util.View_Holder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -100,7 +104,7 @@ public class FragmentActivity extends BaseFragemnt implements
 
     private void initActiveList() {
 
-        activeAdapter = new ActiveListAdapter(dataManager.activeList);
+        activeAdapter = new ActiveListAdapter((List) new ArrayList<>(dataManager.getActiveObjectList().keySet()));
         activeAdapter.setListener(this);
         recyclerView_activeData = (RecyclerView) view.findViewById(R.id.rv_active);
         recyclerView_activeData.setAdapter(activeAdapter);
@@ -153,16 +157,35 @@ public class FragmentActivity extends BaseFragemnt implements
 
     @Override
     public void didLongClickOnActivityListItem(String title, View_Holder holder) {
-        handleLongClick(title, holder);
-        handleClick(title, holder);
+//        handleLongClick(title, holder);
+        addActivityToActiveList(title);
     }
 
-    private void handleClick(String title, View_Holder holder) {
 
-        // if(active List is empty) {
-        Stamp stamp = new Stamp;
+    private void addActivityToActiveList(String id) {
 
+        LinkedHashMap<String, ActiveObject> activeList =  dataManager.getActiveObjectList();
+
+        // Activity is already active
+        if(dataManager.getActiveObjectList().containsKey(id)) {
+
+            dataManager.addActivityToLogList(activeList.get(id)); // add Activity to LogList
+            activeList.remove(id); // delete Activity from active List
+
+        } else if(activeList.size() < var.maxRecordedActivity){
+            activeList.put(id, dataManager.createActiveObject(id));
+        }
+
+        dataManager.setActiveObjectList(activeList);
+
+        updateActiveList();
+        updateObjectList();
     }
+
+
+
+
+
 
 
     private void handleShortClick(String title, View_Holder holder) {
@@ -559,14 +582,16 @@ public class FragmentActivity extends BaseFragemnt implements
 
     // load edited List and uupdate ActivityObjectListAdapter
     public void updateObjectList() {
-        objectAdapter.list = new ArrayList<>(dataManager.getObjectMap().keySet());
+        objectAdapter.list = new ArrayList<>(dataManager.getAaObjectMap().keySet());
         objectAdapter.notifyDataSetChanged();
     }
+
+
 
     // load edited List and uupdate activeActivityObjectListAdapter
     public void updateActiveList() {
         activeAdapter.stopCounting();
-        activeAdapter.list = dataManager.activeList;
+        activeAdapter.list = (List) new ArrayList<>(dataManager.getActiveObjectList().keySet());
         activeAdapter.notifyDataSetChanged();
     }
 

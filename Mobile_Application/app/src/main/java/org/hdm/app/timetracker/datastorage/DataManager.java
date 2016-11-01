@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,7 +43,24 @@ public class DataManager {
 
 
 
+    private LinkedHashMap<String, ActiveObject> activeObjectList = new LinkedHashMap<>();
 
+
+    public LinkedHashMap<String, ActiveObject> getActiveObjectList() {
+        return activeObjectList;
+    }
+
+    public ActiveObject getActiveObject(String id) {
+        return activeObjectList.get(id);
+    }
+
+    public void setActiveObjectList(LinkedHashMap<String, ActiveObject> activeObjectList) {
+        this.activeObjectList = activeObjectList;
+    }
+
+
+
+    private LinkedHashMap<String, AAObject> aaObjectMap = new LinkedHashMap<>();
 
     public LinkedHashMap<String, AAObject> getAaObjectMap() {
         return aaObjectMap;
@@ -68,14 +86,6 @@ public class DataManager {
         }
         return 03;
     }
-
-
-
-
-    private LinkedHashMap<String, AAObject> aaObjectMap = new LinkedHashMap<>();
-
-
-
 
 
     public boolean createActivityObject(String name, ActivityObject activityObject) {
@@ -353,12 +363,34 @@ public class DataManager {
         return 03;
     }
 
+
+
     public void initMaps() {
 
         aaObjectMap = new LinkedHashMap<String, AAObject>();
         imageMap = new LinkedHashMap<String, Bitmap>();
+        activeObjectList = new LinkedHashMap<>();
+
     }
 
 
 
+    public ActiveObject createActiveObject(String id) {
+        ActiveObject activeObject = new ActiveObject();
+
+        AAObject aaObject = getAaObject(id);
+
+        activeObject.id = id;
+        activeObject.title = aaObject.getTitle();
+        activeObject.startTime = Calendar.getInstance().getTime();
+
+        // ToDo add Information about externalWork
+
+        return activeObject;
+    }
+
+
+
+    public void addActivityToLogList(ActiveObject activeObject) {
+    }
 }

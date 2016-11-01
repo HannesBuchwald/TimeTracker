@@ -37,26 +37,27 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     private ViewHolderListener listener;
 
     public RecyclerView rv_content;
-    public  CardView cv;
+    public CardView cv;
     private ImageView iv_play;
-    public  TextView title;
-    public  TextView time;
-    public  ImageView imageView;
+    public TextView title;
+    public TextView time;
+    public ImageView imageView;
 
     private String titleText;
     public ImageView iv_background_bottom;
     public ImageView iv_background_top;
     public CardView btn_add;
 
-    public String id ="";
+    public String id = "";
 
     public boolean activityList;
     private ImageView iv_cancel;
     public int count = 0;
     public String setID;
 
-    /************** Constructors ******************/
-
+    /**************
+     * Constructors
+     ******************/
 
 
     // Called from the Adapter for the ActivityObjectList in Activity Screen
@@ -78,23 +79,22 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
-    /************** Constructors  End ******************/
-
-
+    /**************
+     * Constructors  End
+     ******************/
 
 
     private void initActivityItemLayout() {
         cv = (CardView) itemView.findViewById(R.id.cardView);
         title = (TextView) itemView.findViewById(R.id.title);
         imageView = (ImageView) itemView.findViewById(R.id.imageView);
-        time = (TextView)itemView.findViewById(R.id.tv_time);
+        time = (TextView) itemView.findViewById(R.id.tv_time);
         titleText = title.getText().toString();
         iv_cancel = (ImageView) itemView.findViewById(R.id.iv_cancel);
 
         cv.setOnClickListener(this);
         cv.setOnLongClickListener(this);
     }
-
 
 
     private void initCalendarLayout() {
@@ -112,7 +112,9 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
-    /************** Init  End ******************/
+    /**************
+     * Init  End
+     ******************/
 
 
     public void setBackground(String color) {
@@ -143,6 +145,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 } else {
                     cv.setBackgroundColor(cv.getResources().getColor(R.color.green));
                 }
+                break;
 
             case RED:
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -156,14 +159,15 @@ public class View_Holder extends RecyclerView.ViewHolder implements
                 break;
 
             case GRAY:
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                cv.setCardBackgroundColor(Color.GRAY);
-                iv_cancel.setVisibility(View.VISIBLE);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    cv.setCardBackgroundColor(Color.GRAY);
+                    iv_cancel.setVisibility(View.VISIBLE);
 
-            } else {
-                cv.setCardBackgroundColor(cv.getResources().getColor(R.color.gray));
-                iv_cancel.setVisibility(View.VISIBLE);
-            }
+                } else {
+                    cv.setCardBackgroundColor(cv.getResources().getColor(R.color.gray));
+                    iv_cancel.setVisibility(View.VISIBLE);
+                }
+                break;
 
             case TRANSPARENT:
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -182,8 +186,6 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
-
-
     // called from the Activity Screen Interaction
 
     // Change CardView Style of Activitys
@@ -191,7 +193,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     // Activity != active - white background
     public void setBackground(boolean state) {
 
-        if(state) {
+        if (state) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lollipop
                 cv.setCardBackgroundColor(Color.GREEN);
@@ -213,16 +215,15 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
-
     // Called from the CalendarView
     public void setCalendarItemBackground(boolean editable) {
 
-        if(editable) {
+        if (editable) {
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lollipop
                 cv.setCardBackgroundColor(Color.RED);
-               iv_cancel.setVisibility(View.VISIBLE);
+                iv_cancel.setVisibility(View.VISIBLE);
 
             } else {
                 // lollipop and above
@@ -245,11 +246,10 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     }
 
 
-
     // Called from the CalendarView
     public void setCalendarItemBackground(boolean editable, String a) {
 
-        if(editable) {
+        if (editable) {
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 // below lollipop
@@ -276,38 +276,35 @@ public class View_Holder extends RecyclerView.ViewHolder implements
         }
     }
 
-    
-    
 
-    /******************* Listener **************************/
+    /*******************
+     * Listener
+     **************************/
     // reference parent listener
     public void setListener(ViewHolderListener listener) {
         this.listener = listener;
     }
 
 
-
     // Listener Interface with parent class
     @Override
     public void onClick(View v) {
-        if(listener!= null) listener.didClickOnView(v, title.getText().toString(), this);
+        if (listener != null) listener.didClickOnView(v, title.getText().toString(), this);
     }
 
 
     @Override
     public boolean onLongClick(View v) {
-            if(listener != null) {
-                if(listener!= null) listener.didLongClickOnView(v, id, this);
-                return true;
-            }
+        if (listener != null) {
+            if (listener != null) listener.didLongClickOnView(v, id, this);
+            return true;
+        }
         return false;
     }
 
 
-
-
     public void updateTimeRemaining(String startTime) {
-        if(time!= null) time.setText(startTime);
+        if (time != null) time.setText(startTime);
     }
 
 

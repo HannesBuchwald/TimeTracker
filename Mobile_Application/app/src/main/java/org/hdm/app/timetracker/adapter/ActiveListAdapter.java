@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
+import org.hdm.app.timetracker.datastorage.AAObject;
+import org.hdm.app.timetracker.datastorage.ActiveObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
@@ -43,8 +45,12 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     public List<Timer> timerList;
 
+    int count = 0;
 
-    public ActiveListAdapter(ArrayList<String> activityObject) {
+
+
+
+    public ActiveListAdapter(List<String> activityObject) {
 
         this.list = activityObject;
         this.activeList = new ArrayList<>();
@@ -52,9 +58,9 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     }
 
 
+
     @Override
     public View_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         //Inflate the layout, initialize the View Holder
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout_active, parent, false);
         View_Holder holder = new View_Holder(v);
@@ -62,106 +68,34 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         return holder;
     }
 
-    int count = 0;
-
-
-    public void startCounting() {
-
-        updateRemainingTimeRunnable = new Runnable() {
-            @Override
-            public void run() {
-              if(DEBUGMODE)  Log.d(TAG, "run "+ timerList.size() +" " + count++);
-
-                for (View_Holder holder : activeList) {
-
-                    ActivityObject object = DataManager.getInstance().getActivityObject(holder.title.getText().toString());
-                    Date startDate = object.startTime;
-
-                    Date currentDate =  Calendar.getInstance().getTime();
-                    long currentTime = currentDate.getTime();
-
-                    if (object != null) {
-
-                        int dayDiff =  currentDate.getDate() - startDate.getDate();
-                        long timeDiff = currentTime - startDate.getTime();
-
-                        int seconds = (int) (timeDiff / 1000) % 60;
-                        int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
-                        int hours = (int) (timeDiff/1000) / 3600;
-
-                        int month = startDate.getMonth();
-
-                        if(DEBUGMODE) Log.d(TAG, "activityObject time difference "
-                                + (timeDiff) + " "
-                                + (timeDiff/1000)/60 +" "+ month);
-
-                        String secondsStr = String.valueOf(seconds);
-                        String minutesStr = String.valueOf(minutes);
-                        String hoursStr = String.valueOf(hours);
-
-                        if (seconds < 10) secondsStr = "0" + secondsStr;
-                        if (minutes < 10) minutesStr = "0" + minutesStr;
-                        if (hours < 10) hoursStr = "0" + hoursStr;
-
-
-                        String time = hoursStr + ":" + minutesStr + ":" + secondsStr;
-                        holder.updateTimeRemaining(time);
-                    }
-                }
-            }
-        };
-        startUpdateTimer();
-    }
-
-
-    public void stopCounting() {
-
-        if (timerList != null) {
-            for (Timer timer : timerList) {
-                timer.cancel();
-            }
-            timerList = new ArrayList<>();
-            activeList = new ArrayList<>();
-        }
-    }
-
-    private void startUpdateTimer() {
-        tmr = new Timer();
-        timerList.add(tmr);
-        tmr.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(updateRemainingTimeRunnable);
-            }
-        }, 0, 1000);
-    }
 
 
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
 
+        holder.setListener(this);
+
+
 
         if(!activeList.equals(holder)) activeList.add(holder);
+
+        AAObject object = dataManager.getAaObject(list.get(position));
+        if(dataManager.imageMap.get(object.getImageName()) != null ) {
+            holder.imageView.setImageBitmap((dataManager.imageMap.get(object.getImageName())));
+        }
+
+        // set ID
+        holder.setID(object.get_id());
+
+        // if external Work true
+        // ToDo Implement External Work Flag
+
+//        if(false) {
+//            holder.setBackground(BLUE);
+//        } else {
+//            holder.setBackground(GREEN);
+//        }
         startCounting();
-
-
-
-        //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        ActivityObject object = dataManager.getActivityObject(list.get(position));
-        holder.setListener(this);
-        holder.title.setText(object.title);
-        holder.activityList = true;
-        if (dataManager.imageMap.get(object.imageName) != null) {
-            holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
-        }
-
-        if (object.service.equals("Yes")) {
-            holder.setBackground("blue");
-        } else {
-            holder.setBackground(object.activeState);
-        }
-
-        if(DEBUGMODE) Log.d(TAG, "Count View Holder " + position + " " + holder.title.getText() + " " + timerList.size());
 
     }
 
@@ -216,6 +150,86 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
     public void didLongClickOnView(View view, String s, View_Holder holder) {
         if (listener != null) listener.didOnLongClickOnActiveListItem(s, holder);
 
+    }
+
+
+
+
+
+
+
+    public void startCounting() {
+
+        updateRemainingTimeRunnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if(DEBUGMODE)  Log.d(TAG, "run "+ timerList.size() +" " + count++);
+
+                for (View_Holder holder : activeList) {
+
+                    ActiveObject object = DataManager.getInstance().getActiveObject(holder.id);
+                    Date startDate = object.startTime;
+
+                    Date currentDate =  Calendar.getInstance().getTime();
+                    long currentTime = currentDate.getTime();
+
+                    if (object != null) {
+
+                        int dayDiff =  currentDate.getDate() - startDate.getDate();
+                        long timeDiff = currentTime - startDate.getTime();
+
+                        int seconds = (int) (timeDiff / 1000) % 60;
+                        int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
+                        int hours = (int) (timeDiff/1000) / 3600;
+
+                        int month = startDate.getMonth();
+
+                        if(DEBUGMODE) Log.d(TAG, "activityObject time difference "
+                                + (timeDiff) + " "
+                                + (timeDiff/1000)/60 +" "+ month);
+
+                        String secondsStr = String.valueOf(seconds);
+                        String minutesStr = String.valueOf(minutes);
+                        String hoursStr = String.valueOf(hours);
+
+                        if (seconds < 10) secondsStr = "0" + secondsStr;
+                        if (minutes < 10) minutesStr = "0" + minutesStr;
+                        if (hours < 10) hoursStr = "0" + hoursStr;
+
+
+                        String time = hoursStr + ":" + minutesStr + ":" + secondsStr;
+                        holder.updateTimeRemaining(time);
+                    }
+                }
+            }
+        };
+        startUpdateTimer();
+    }
+
+
+
+    public void stopCounting() {
+
+        if (timerList != null) {
+            for (Timer timer : timerList) {
+                timer.cancel();
+            }
+            timerList = new ArrayList<>();
+            activeList = new ArrayList<>();
+        }
+    }
+
+
+    private void startUpdateTimer() {
+        tmr = new Timer();
+        timerList.add(tmr);
+        tmr.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(updateRemainingTimeRunnable);
+            }
+        }, 0, 1000);
     }
 
 
