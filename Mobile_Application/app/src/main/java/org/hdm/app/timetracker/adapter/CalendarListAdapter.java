@@ -11,17 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.listener.CalendarItemOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
 import static org.hdm.app.timetracker.util.Consts.CALENDARITEMROW;
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
@@ -155,15 +152,15 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
 
     // Insert a new item to the RecyclerView on a predefined position
-    public void insert(int position, ActivityObject activityObject) {
-        list.add(position, activityObject);
+    public void insert(int position, AAAActivityObject AAAActivityObject) {
+        list.add(position, AAAActivityObject);
         notifyItemInserted(position);
     }
 
 
     // Remove a RecyclerView item containing a specified Daata object
-    public void remove(ActivityObject activityObject) {
-        int position = list.indexOf(activityObject);
+    public void remove(AAAActivityObject AAAActivityObject) {
+        int position = list.indexOf(AAAActivityObject);
         list.remove(position);
         notifyItemRemoved(position);
     }

@@ -13,7 +13,7 @@ import android.widget.Button;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.adapter.DialogFoodListAdapter;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
@@ -35,7 +35,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
 
     private static final String TAG = "DialogFoodFragment";
-    private ActivityObject activityObject;
+    private AAAActivityObject AAAActivityObject;
     private DialogFoodListAdapter portionAdapter;
     private RecyclerView recyclerView;
 
@@ -52,8 +52,8 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
     }
 
 
-    public DialogFoodFragment(FragmentActivity fragmentActivity, ActivityObject activityObject) {
-        this.activityObject = activityObject;
+    public DialogFoodFragment(FragmentActivity fragmentActivity, AAAActivityObject AAAActivityObject) {
+        this.AAAActivityObject = AAAActivityObject;
         this.fragmentActivity = fragmentActivity;
     }
 
@@ -104,20 +104,20 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
 
         // get clicked PortionObject
-        ActivityObject foodObject = dataManager.getFoodObject(title);
+        AAAActivityObject foodObject = dataManager.getFoodObject(title);
 
         if (foodObject.activeState) {
             foodObject.activeState = false;
 
-            if (activityObject.food.contains(foodObject.title)) {
-                activityObject.food.remove(foodObject.title);
+            if (AAAActivityObject.food.contains(foodObject.title)) {
+                AAAActivityObject.food.remove(foodObject.title);
             }
 
         } else {
             foodObject.activeState = true;
 
-            if (!activityObject.food.contains(foodObject.title)) {
-                activityObject.food.add(foodObject.title);
+            if (!AAAActivityObject.food.contains(foodObject.title)) {
+                AAAActivityObject.food.add(foodObject.title);
             }
         }
 
@@ -125,9 +125,9 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         view_holder.setBackground(foodObject.activeState);
 
             if (DEBUGMODE) Log.d(TAG, "foodObject " + foodObject.title);
-        if (DEBUGMODE) Log.d(TAG, "foodObject a" + activityObject.food);
+        if (DEBUGMODE) Log.d(TAG, "foodObject a" + AAAActivityObject.food);
 
-        if (activityObject.food.size() >= 1) {
+        if (AAAActivityObject.food.size() >= 1) {
             btnDialogFood.setVisibility(View.VISIBLE);
         } else {
             btnDialogFood.setVisibility(View.GONE);
@@ -136,8 +136,8 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
 
     private void resetFoodItemState() {
-        LinkedHashMap<String, ActivityObject> foodMap = dataManager.getFoodMap();
-        for (Map.Entry<String, ActivityObject> entry : foodMap.entrySet()) {
+        LinkedHashMap<String, AAAActivityObject> foodMap = dataManager.getFoodMap();
+        for (Map.Entry<String, AAAActivityObject> entry : foodMap.entrySet()) {
             entry.getValue().activeState = false;
         }
     }
@@ -151,10 +151,10 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         if(DEBUGMODE) Log.d(TAG, "Here I´m " + dataManager.getActivityObject("Eating + Drinking").endTime.toString());
 
 
-        saveStateToLogList(activityObject);
-        // Save Timestamp and SubCategory in ActivityObject
-        activityObject.saveTimeStamp("uuser");
-        dataManager.setActivityObject(activityObject);
+        saveStateToLogList(AAAActivityObject);
+        // Save Timestamp and SubCategory in AAAActivityObject
+        AAAActivityObject.saveTimeStamp("uuser");
+        dataManager.setActivityObject(AAAActivityObject);
         resetFoodItemState();
         this.dismiss();
         if (var.editable) fragmentActivity.flip();
@@ -162,25 +162,25 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
     }
 
 
-    public void saveStateToLogList(ActivityObject activityObject) {
+    public void saveStateToLogList(AAAActivityObject AAAActivityObject) {
 
         Stamp stamp = new Stamp();
         stamp.a03_userID = Variables.getInstance().user_ID;
-        stamp.a01_activity = activityObject.title;
+        stamp.a01_activity = AAAActivityObject.title;
 
-//        int year = 1900 + activityObject.startTime.getYear();
-//        int month = activityObject.startTime.getMonth()+1;
-//        int day = activityObject.startTime.getDate();
+//        int year = 1900 + AAAActivityObject.startTime.getYear();
+//        int month = AAAActivityObject.startTime.getMonth()+1;
+//        int day = AAAActivityObject.startTime.getDate();
 
-        String date =  activityObject.startTime.toString();
+        String date =  AAAActivityObject.startTime.toString();
         stamp.b01_time_date = date.substring(0,10) + " " + date.substring(date.length()-4);;
         stamp.b02_time_start = date.substring(11,19);
-        stamp.b03_time_end = activityObject.endTime.toString().substring(11,19);
+        stamp.b03_time_end = AAAActivityObject.endTime.toString().substring(11,19);
 
-        long ms = activityObject.endTime.getTime() - activityObject.startTime.getTime();
+        long ms = AAAActivityObject.endTime.getTime() - AAAActivityObject.startTime.getTime();
         stamp.b05_time_sum_sec = String.valueOf((ms/1000));
 
-        long timeDiff = activityObject.endTime.getTime() - activityObject.startTime.getTime();
+        long timeDiff = AAAActivityObject.endTime.getTime() - AAAActivityObject.startTime.getTime();
 
         int seconds = (int) (timeDiff / 1000) % 60;
         int minutes = (int) ((timeDiff / (1000 * 60)) % 60);
@@ -202,19 +202,19 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
 //        stamp.b04_time_sum = String.valueOf((ms/1000)/60);
 
-        stamp.c01_contract_work = activityObject.service;
-        stamp.a06_author = activityObject.author;
+        stamp.c01_contract_work = AAAActivityObject.service;
+        stamp.a06_author = AAAActivityObject.author;
         stamp.a07_delete = "No";
 
 
-        stamp.f01_portion = activityObject.portion;
+        stamp.f01_portion = AAAActivityObject.portion;
         if (DEBUGMODE) Log.d(TAG, "Portion " + stamp.f01_portion);
 
 
         int foodSum = 0;
 
-        LinkedHashMap<String, ActivityObject> foodMap = dataManager.getFoodMap();
-        for (Map.Entry<String, ActivityObject> entry : foodMap.entrySet()) {
+        LinkedHashMap<String, AAAActivityObject> foodMap = dataManager.getFoodMap();
+        for (Map.Entry<String, AAAActivityObject> entry : foodMap.entrySet()) {
 
 //            boolean activeState = entry.getValue().activeState;
             int value = 0;

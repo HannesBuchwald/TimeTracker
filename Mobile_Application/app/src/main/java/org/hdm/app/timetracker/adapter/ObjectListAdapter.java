@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.AAObject;
-import org.hdm.app.timetracker.datastorage.ActiveObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.ActiveObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
@@ -66,7 +66,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
 
         // set CardView Image
-        AAObject object = dataManager.getAaObject(list.get(position));
+        ActivityObject object = dataManager.getObject(list.get(position));
         if(dataManager.imageMap.get(object.getImageName()) != null ) {
             holder.imageView.setImageBitmap((dataManager.imageMap.get(object.getImageName())));
         }
@@ -81,14 +81,11 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         ActiveObject activeObject = dataManager.getActiveObject(object.get_id());
 
         if(activeObject!= null) {
-
-            // if external Work true
-            if(false) {
+            if(activeObject.contractWork) {
                 holder.setBackground(BLUE);
             } else {
                 holder.setBackground(GREEN);
             }
-
         } else {
             holder.setBackground(WHITE);
         }
@@ -126,8 +123,8 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
 
     // Remove a RecyclerView item containing a specified Daata object
-    public void remove(ActivityObject activityObject) {
-        int position = list.indexOf(activityObject);
+    public void remove(AAAActivityObject AAAActivityObject) {
+        int position = list.indexOf(AAAActivityObject);
         list.remove(position);
         notifyItemRemoved(position);
     }
@@ -141,12 +138,12 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void didClickOnView(View view, String title, View_Holder holder) {
-        if(listener != null) listener.didClickOnActivityListItem(title, holder);
+        if(listener != null) listener.shortClickOnObjectItem(title, holder);
     }
 
 
     @Override
     public void didLongClickOnView(View view, String title, View_Holder holder) {
-        if(listener != null) listener.didLongClickOnActivityListItem(title, holder);
+        if(listener != null) listener.longClickOnObjectItem(title);
     }
 }

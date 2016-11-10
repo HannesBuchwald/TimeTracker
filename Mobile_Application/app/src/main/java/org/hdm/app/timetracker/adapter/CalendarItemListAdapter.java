@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.CalendarItemOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
@@ -71,9 +71,9 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
             String externalWork = title.substring(0, 4);
 
             Log.d(TAG, "XXXX " + title + " " + externalWork);
-            ActivityObject dataa =(ActivityObject) data.get(title.substring(4));
+            AAAActivityObject dataa =(AAAActivityObject) data.get(title.substring(4));
 
-//            ActivityObject dataa =(ActivityObject) data.get(list.get(position));
+//            AAAActivityObject dataa =(AAAActivityObject) data.get(list.get(position));
             if(DataManager.getInstance().imageMap.get(dataa.imageName) != null )
                 holder.imageView.setImageBitmap(DataManager.getInstance().imageMap.get(dataa.imageName));
             holder.title.setText(title);
@@ -110,8 +110,8 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
 
 
     // Insert a new item to the RecyclerView on a predefined position
-    public void insert(int position, ActivityObject activityObject) {
-        list.add(position, activityObject);
+    public void insert(int position, AAAActivityObject AAAActivityObject) {
+        list.add(position, AAAActivityObject);
         notifyItemInserted(position);
     }
 

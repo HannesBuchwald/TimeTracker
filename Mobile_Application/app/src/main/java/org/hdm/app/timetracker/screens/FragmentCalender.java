@@ -16,10 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
-import org.hdm.app.timetracker.datastorage.TimeFrame;
 import org.hdm.app.timetracker.listener.CalendarItemOnClickListener;
 import org.hdm.app.timetracker.adapter.CalendarListAdapter;
 import org.hdm.app.timetracker.util.Variables;
@@ -28,11 +26,9 @@ import org.hdm.app.timetracker.util.View_Holder;
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
 
 /**
@@ -137,7 +133,7 @@ public class FragmentCalender extends BaseFragemnt implements
             // Delete Entry in CalendarMap
             dataManager.deleteCalenderMapEntry(time, s);
 
-            // Delete Entry in ActivityObject TimeFrame
+            // Delete Entry in AAAActivityObject TimeFrame
 //            ArrayList<TimeFrame> list = dataManager.getActivityObject(s.substring(4)).timeFrameList;
 //            if (DEBUGMODE) Log.d(TAG, "activity " + list.size());
             saveStateToLogList(time, s);

@@ -4,34 +4,15 @@ package org.hdm.app.timetracker.screens;
  * Created by Hannes on 13.05.2016.
  */
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceFragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.adapter.ActiveListAdapter;
-import org.hdm.app.timetracker.adapter.ObjectListAdapter;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
-import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
-import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
-import org.hdm.app.timetracker.util.View_Holder;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
 
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 

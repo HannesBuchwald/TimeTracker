@@ -5,7 +5,7 @@ package org.hdm.app.timetracker.util;
  */
 public final class Consts {
 
-    public final static boolean DEBUGMODE = false;
+    public final static boolean DEBUGMODE = true;
     public final static int CALENDARITEMROW = 1;
 
 

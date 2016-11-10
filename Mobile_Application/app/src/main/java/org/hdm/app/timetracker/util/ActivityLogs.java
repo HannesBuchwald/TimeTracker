@@ -3,7 +3,7 @@ package org.hdm.app.timetracker.util;
 
 import android.util.Log;
 
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.TimeFrame;
 
@@ -39,11 +39,11 @@ public class ActivityLogs {
 
         this.user_id = Variables.getInstance().user_ID;
 
-        Map<String, ActivityObject> map = DataManager.getInstance().getObjectMap();
+        Map<String, AAAActivityObject> map = DataManager.getInstance().getObjectMappp();
 
 
-        for (Map.Entry<String, ActivityObject> entry : map.entrySet()) {
-            ActivityObject object = entry.getValue();
+        for (Map.Entry<String, AAAActivityObject> entry : map.entrySet()) {
+            AAAActivityObject object = entry.getValue();
 
             // Create new Log Object
             Logs logs = new Logs();

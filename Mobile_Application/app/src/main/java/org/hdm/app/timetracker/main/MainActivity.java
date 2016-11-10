@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.listener.PreferenceListener;
@@ -390,7 +390,7 @@ public class MainActivity extends Activity implements PreferenceListener {
 
 
         // Save ObjectActivity Map
-        Map<String, ActivityObject> map = dataManager.getObjectMap();
+        Map<String, AAAActivityObject> map = dataManager.getObjectMappp();
         String json = gson.toJson(map);
         prefsEditor.putString(ACTIVITY_STATE, json);
 
@@ -481,9 +481,9 @@ public class MainActivity extends Activity implements PreferenceListener {
             String json = mPrefs.getString(ACTIVITY_STATE, "");
             if (DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
 
-            Type typeOfHashMap = new TypeToken<LinkedHashMap<String, ActivityObject>>() {
+            Type typeOfHashMap = new TypeToken<LinkedHashMap<String, AAAActivityObject>>() {
             }.getType();
-            LinkedHashMap<String, ActivityObject> newMap = gson.fromJson(json, typeOfHashMap); // This type must match TypeToken
+            LinkedHashMap<String, AAAActivityObject> newMap = gson.fromJson(json, typeOfHashMap); // This type must match TypeToken
             dataManager.activityMap = newMap;
         }
 

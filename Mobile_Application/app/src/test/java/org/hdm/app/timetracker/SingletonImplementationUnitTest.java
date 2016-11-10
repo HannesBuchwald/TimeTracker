@@ -1,6 +1,6 @@
 package org.hdm.app.timetracker;
 
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.junit.Test;
 
@@ -22,12 +22,12 @@ public class SingletonImplementationUnitTest {
 
 
         for(int i = 0; i<10; i++) {
-            ActivityObject activityObject = new ActivityObject();
-            activityObject.title = "Hello";
-            DataManager.getInstance().setActivityObject(activityObject);
+            AAAActivityObject AAAActivityObject = new AAAActivityObject();
+            AAAActivityObject.title = "Hello";
+            DataManager.getInstance().setActivityObject(AAAActivityObject);
         }
 
-        int actualSize = DataManager.getInstance().getObjectMap().size();
+        int actualSize = DataManager.getInstance().getObjectMappp().size();
         int expectedSize = 1;
 
         assertEquals(actualSize, expectedSize);

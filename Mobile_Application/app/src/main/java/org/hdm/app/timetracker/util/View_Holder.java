@@ -289,7 +289,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements
     // Listener Interface with parent class
     @Override
     public void onClick(View v) {
-        if (listener != null) listener.didClickOnView(v, title.getText().toString(), this);
+        if (listener != null) listener.didClickOnView(v, id, this);
     }
 
 

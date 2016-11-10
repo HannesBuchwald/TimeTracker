@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
@@ -55,7 +55,7 @@ public class DialogFoodListAdapter extends RecyclerView.Adapter<View_Holder> imp
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        ActivityObject object = dataManager.getFoodObject((list.get(position)));
+        AAAActivityObject object = dataManager.getFoodObject((list.get(position)));
         holder.setListener(this);
         holder.title.setText(object.title);
         holder.id = object._id;
@@ -96,8 +96,8 @@ public class DialogFoodListAdapter extends RecyclerView.Adapter<View_Holder> imp
 
 
     // Remove a RecyclerView item containing a specified Daata object
-    public void remove(ActivityObject activityObject) {
-        int position = list.indexOf(activityObject);
+    public void remove(AAAActivityObject AAAActivityObject) {
+        int position = list.indexOf(AAAActivityObject);
         list.remove(position);
         notifyItemRemoved(position);
     }

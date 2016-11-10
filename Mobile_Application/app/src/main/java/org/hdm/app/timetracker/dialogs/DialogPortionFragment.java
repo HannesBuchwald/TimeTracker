@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.adapter.DialogPortionListAdapter;
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
 import org.hdm.app.timetracker.screens.FragmentActivity;
@@ -22,7 +22,6 @@ import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
 
     private static final String TAG = "DialogPortionFragment";
-    private ActivityObject activityObject;
+    private AAAActivityObject AAAActivityObject;
     private DialogPortionListAdapter portionAdapter;
     private RecyclerView recyclerView;
     private boolean clickFlag;
@@ -50,8 +49,8 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     private String lastSelectedItem = "";
     private FragmentActivity fragmentActivity;
 
-    public DialogPortionFragment(FragmentActivity fragmentActivity, ActivityObject activityObject) {
-        this.activityObject = activityObject;
+    public DialogPortionFragment(FragmentActivity fragmentActivity, AAAActivityObject AAAActivityObject) {
+        this.AAAActivityObject = AAAActivityObject;
         this.fragmentActivity = fragmentActivity;
     }
 
@@ -74,7 +73,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
         super.onPause();
         resetPortionItemState();
         if(!clickFlag) {
-            fragmentActivity.saveStateToLogList(activityObject);
+            fragmentActivity.saveStateToLogList(AAAActivityObject);
             Log.d(TAG, "onPause DialogFragment" );
             if (var.editable) fragmentActivity.flip();
         }
@@ -116,8 +115,8 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     private void handleObjectClick(String title, View_Holder view_holder) {
 
         // get clicked PortionObject
-        ActivityObject portionObject = dataManager.getPortionObject(title);
-        if(DEBUGMODE) Log.d(TAG, "activState " + portionObject.activeState + " portion " + activityObject.portion);
+        AAAActivityObject portionObject = dataManager.getPortionObject(title);
+        if(DEBUGMODE) Log.d(TAG, "activState " + portionObject.activeState + " portion " + AAAActivityObject.portion);
 
 
         if (portionObject.activeState) {
@@ -125,12 +124,12 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
         } else {
             portionObject.activeState = true;
 
-            // save portion to activityObject
-            activityObject.portion = portionObject.title;
+            // save portion to AAAActivityObject
+            AAAActivityObject.portion = portionObject.title;
 
             if (!portionObject.title.equals(lastSelectedItem)) {
 
-                ActivityObject lastObject = dataManager.getPortionObject(lastSelectedItem);
+                AAAActivityObject lastObject = dataManager.getPortionObject(lastSelectedItem);
 
                 if (lastObject != null) {
 
@@ -159,7 +158,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
         // pass onto next Dialog
         clickFlag = true;
-        DialogFoodFragment dFoodFragment = new DialogFoodFragment(fragmentActivity, activityObject);
+        DialogFoodFragment dFoodFragment = new DialogFoodFragment(fragmentActivity, AAAActivityObject);
         FragmentManager fm = getFragmentManager();
         dFoodFragment.show(fm, "Food Fragment");
         resetPortionItemState();
@@ -168,8 +167,8 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     }
 
     private void resetPortionItemState() {
-        LinkedHashMap<String, ActivityObject> portionMap = dataManager.getPortionMap();
-        for (Map.Entry<String, ActivityObject> entry : portionMap.entrySet()) {
+        LinkedHashMap<String, AAAActivityObject> portionMap = dataManager.getPortionMap();
+        for (Map.Entry<String, AAAActivityObject> entry : portionMap.entrySet()) {
             entry.getValue().activeState = false;
         }
     }

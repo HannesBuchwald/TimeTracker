@@ -13,9 +13,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.hdm.app.timetracker.datastorage.AAObject;
-import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.main.MainActivity;
 
 import java.io.BufferedReader;
@@ -399,14 +399,14 @@ public class FileLoader {
         Gson gson = new Gson();
         String json = gson.toJson(jsonString);
         Log.d(TAG, json.toString());
-        Type collectionType = new TypeToken<Collection<AAObject>>(){}.getType();
-        Collection<AAObject> list = gson.fromJson(jsonString, collectionType);
+        Type collectionType = new TypeToken<Collection<ActivityObject>>(){}.getType();
+        Collection<ActivityObject> list = gson.fromJson(jsonString, collectionType);
 
         String imgPath = enviroment.toString() + "/" + IMAGE_FOLDER;
 
         if(list != null) {
             // Iterate through the hole list
-            for(AAObject object : list) {
+            for(ActivityObject object : list) {
 
                 String objectImgPath = imgPath + object.getImageName();
 
@@ -425,7 +425,7 @@ public class FileLoader {
             }
 
         }
-        Log.d(TAG, "Size " + DataManager.getInstance().getAaObjectMap().size());
+        Log.d(TAG, "Size " + DataManager.getInstance().getObjectMap().size());
     }
 
 
@@ -453,7 +453,7 @@ public class FileLoader {
         if (DEBUGMODE) Log.d(TAG, "jasonString " + jsonString);
 
         MyJsonParser jParser = new MyJsonParser();
-        ArrayList<ActivityObject> list = jParser.createObjectFromJson(object, jsonString);
+        ArrayList<AAAActivityObject> list = jParser.createObjectFromJson(object, jsonString);
 
 
         if (list == null) {
@@ -467,39 +467,39 @@ public class FileLoader {
         if (list != null) {
 
             for (int i = 0; i < list.size(); i++) {
-                ActivityObject activityObject = list.get(i);
+                AAAActivityObject AAAActivityObject = list.get(i);
 
-                if(DEBUGMODE) Log.d(TAG, "imageName " + activityObject.imageName);
-                String objectImgPath = imgPath + activityObject.imageName;
+                if(DEBUGMODE) Log.d(TAG, "imageName " + AAAActivityObject.imageName);
+                String objectImgPath = imgPath + AAAActivityObject.imageName;
 
                 // check if Image is in externalFolder available
                 // if not than save it from asset to external load again
                 if (!isExternalFileExists(objectImgPath)) {
                     // Save Image from Asset to External
-                    copyFileFromAssetToExternal(activityObject.imageName, imgPath);
+                    copyFileFromAssetToExternal(AAAActivityObject.imageName, imgPath);
                 }
 
                 DataManager.getInstance().imageMap.put(
-                        activityObject.imageName,
+                        AAAActivityObject.imageName,
                         BitmapFactory.decodeFile(objectImgPath, options));
 
 
                 switch (object) {
                     case ACTIVITIES:
-                        DataManager.getInstance().setActivityObject(activityObject);
+                        DataManager.getInstance().setActivityObject(AAAActivityObject);
                         break;
                     case PORTIONS:
-                        DataManager.getInstance().setPortionObject(activityObject);
+                        DataManager.getInstance().setPortionObject(AAAActivityObject);
                         break;
                     case FOOD:
-                        DataManager.getInstance().setFoodObject(activityObject);
+                        DataManager.getInstance().setFoodObject(AAAActivityObject);
                         break;
 
                     default:
                         break;
                 }
 
-                ActivityObject o = DataManager.getInstance().getActivityObject(activityObject.title);
+                AAAActivityObject o = DataManager.getInstance().getActivityObject(AAAActivityObject.title);
 
                 if(o!=null) {
                     if(DEBUGMODE) Log.d(TAG, "sizzeee " + o.imageName + " " + o.title);

@@ -1,96 +1,64 @@
 package org.hdm.app.timetracker.datastorage;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
-
 /**
- * Created by Hannes on 27.05.2016.
+ * Created by Hannes on 24.10.2016.
  */
-
-public class ActivityObject extends Object {
-
-    private static final String TAG = "ActivityObject";
+public class ActivityObject {
 
     // General Parameter
-    public String title = null;
-    public String _id = null;
-    public String item = null;
-    public String group_activity = "";
-    public String externalWork = "";
-
-//    public String sub_activity = "";
-//    public boolean sub_category = false;
-
-    public String imageName = "";
-    public ArrayList<TimeFrame> timeFrameList = null;
+    private String _id = null;
+    private String title = null;
+    private String imageName = null;
+    private String externalWork = "";
+    private String group_activity = "";
+    private String item = null;
 
 
-    // Dynamic parameters
-    public boolean activeState = false;
-    public int count = 0;
-
-    public String author = null;
-
-    public Date startTime = null;
-    public Date endTime = null;
-    public String service = "";
-
-    public String portion = "";
-    public List<String> food = new ArrayList<>();
 
 
-    public ActivityObject() {
-        timeFrameList = new ArrayList<>();
+    public String get_id() {
+        return _id;
     }
-
-    public ActivityObject(String name) {
-        title = name;
-        timeFrameList = new ArrayList<>();
-    }
-
-    // All Activities
-    public void saveTimeStamp(String editor) {
-        TimeFrame timeFrame = new TimeFrame();
-        timeFrame.startTime = this.startTime;
-        timeFrame.endTime = this.endTime;
-
-        timeFrame.contractWork = this.service;
-        timeFrame.author = editor;
-
-        timeFrame.portion = this.portion;
-        timeFrame.food = this.food;
-
-        this.timeFrameList.add(timeFrame);
-
-        this.startTime = null;
-        this.endTime = null;
-        this.service = null;
-        this.author = null;
-        this.portion = null;
-        this.food = new ArrayList<>();
-
-        if(DEBUGMODE) Log.d(TAG, "timeFrame " + timeFrame.contractWork + " " + timeFrame.startTime + " " + timeFrame.endTime);
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
 
-
-    public void saveTimeStamp(String author, Date startTime, Date endTime) {
-
-        TimeFrame timeFrame = new TimeFrame();
-        timeFrame.startTime = startTime;
-        timeFrame.endTime = endTime;
-        timeFrame.author = author;
-        timeFrame.contractWork = this.service;
-        timeFrame.portion = this.portion;
-        timeFrame.food = this.food;
-
-        this.timeFrameList.add(timeFrame);
-
-
+    public String getTitle() {
+        return title;
     }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    public String getImageName() {
+        return imageName;
+    }
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+
+    public String getExternalWork() {
+        return externalWork;
+    }
+    public void setExternalWork(String externalWork) {
+        this.externalWork = externalWork;
+    }
+
+
+    public String getGroup_activity() {
+        return group_activity;
+    }
+    public void setGroup_activity(String group_activity) {
+        this.group_activity = group_activity;
+    }
+
+
+    public String getItem() {return item;}
+    public void setItem(String item) {
+        this.item = item;
+    }
+
 }

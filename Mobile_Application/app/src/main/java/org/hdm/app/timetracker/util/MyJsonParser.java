@@ -6,7 +6,7 @@ import android.util.Log;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.hdm.app.timetracker.datastorage.ActivityObject;
+import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.ActivityObjectMap;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class MyJsonParser {
     public MyJsonParser() {}
 
 
-    public ArrayList<ActivityObject> createObjectFromJson(String objects, String jsonString) {
+    public ArrayList<AAAActivityObject> createObjectFromJson(String objects, String jsonString) {
 
         if(jsonString != null && objects != null) {
 
@@ -34,7 +34,7 @@ public class MyJsonParser {
             Log.d(TAG,"string  " + jsonString.toString());
             ActivityObjectMap activityObjectMap = objectMapper.readValue(jsonString, ActivityObjectMap.class);
             ArrayList arrayList = activityObjectMap.get(objects);
-            ActivityObject a =(ActivityObject) arrayList.get(1);
+            AAAActivityObject a =(AAAActivityObject) arrayList.get(1);
             if(DEBUGMODE) Log.d(TAG,"object " + a.title + " done");
             return arrayList;
         } catch (JsonParseException e) {
