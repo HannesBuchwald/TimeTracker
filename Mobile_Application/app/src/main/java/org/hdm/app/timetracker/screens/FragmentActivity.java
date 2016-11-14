@@ -58,8 +58,8 @@ public class FragmentActivity extends BaseFragemnt implements
 
 
     private boolean externalWork;
-    private int shortClickCounter = Variables.getInstance().shortClickCounter;
-    private String currentShortClickTitle = "";
+    private int shortClickCounter = var.shortClickCounter;
+    private String currentShortClickID = "";
     private Runnable updateRemainingTimeRunnable;
     private Timer tmr;
     private Handler handler = new Handler();
@@ -130,31 +130,58 @@ public class FragmentActivity extends BaseFragemnt implements
      ***********************/
 
 
-    // Listener from the ActiveActivityObjectList
+    // Listener from the ActiveObjectList
     @Override
-    public void shortClickOnActiveItem(String id, View_Holder holder) {
-        handleItemsClick(id, true);
+    public void shortClickOnActiveItem(String id) {
+        handleShortItemsClick(id);
     }
 
+
+
     @Override
-    public void longClickOnActiveItem(String id, View_Holder holder) {
+    public void longClickOnActiveItem(String id) {
         handleItemsClick(id, false);
     }
 
 
     /**
      * Listener from the ActivityObjectList
-     * Handled the click on an Activity
      */
     @Override
-    public void shortClickOnObjectItem(String id, View_Holder holder) {
-        handleItemsClick(id, true);
+    public void shortClickOnObjectItem(String id) {
+        handleShortItemsClick(id);
     }
 
     @Override
     public void longClickOnObjectItem(String id) {
         handleItemsClick(id, false);
     }
+
+
+
+    private void handleShortItemsClick(String id) {
+
+        if (id.equals(currentShortClickID)) shortClickCounter--;
+        currentShortClickID = id;
+
+        if (shortClickCounter <= 1) {
+            shortClickCounter = var.shortClickCounter;
+            currentShortClickID = "";
+
+            handleItemsClick(id, true);
+        }
+
+        // Reset the shortClickCounter
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                shortClickCounter = var.shortClickCounter;
+                currentShortClickID = "";
+            }
+        }, var.shortClickCounterResetTime);
+    }
+
 
 
     private void handleItemsClick(String id, boolean externalWork) {
@@ -192,17 +219,17 @@ public class FragmentActivity extends BaseFragemnt implements
 
     private void handleShortClickkkkkk(String title, View_Holder holder) {
 
-        if(DEBUGMODE) Log.d(TAG, "title1 " + title + " " + currentShortClickTitle + " " + shortClickCounter);
+        if(DEBUGMODE) Log.d(TAG, "title1 " + title + " " + currentShortClickID + " " + shortClickCounter);
 
 
-        if (title.equals(currentShortClickTitle)) shortClickCounter--;
-        currentShortClickTitle = title;
-        if(DEBUGMODE) Log.d(TAG, "title3 " + title + " " + currentShortClickTitle + " " + shortClickCounter);
+        if (title.equals(currentShortClickID)) shortClickCounter--;
+        currentShortClickID = title;
+        if(DEBUGMODE) Log.d(TAG, "title3 " + title + " " + currentShortClickID + " " + shortClickCounter);
 
 
         if (shortClickCounter <= 1) {
             shortClickCounter = var.shortClickCounter;
-            currentShortClickTitle = "";
+            currentShortClickID = "";
 
 
             // is clicked from ActiveListItem
@@ -239,7 +266,7 @@ public class FragmentActivity extends BaseFragemnt implements
             @Override
             public void run() {
                 shortClickCounter = var.shortClickCounter;
-                currentShortClickTitle = "";
+                currentShortClickID = "";
             }
         }, var.shortClickCounterResetTime);
 

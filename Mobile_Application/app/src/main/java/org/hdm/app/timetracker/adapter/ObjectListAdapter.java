@@ -138,7 +138,7 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void didClickOnView(View view, String title, View_Holder holder) {
-        if(listener != null) listener.shortClickOnObjectItem(title, holder);
+        if(listener != null) listener.shortClickOnObjectItem(title);
     }
 
 

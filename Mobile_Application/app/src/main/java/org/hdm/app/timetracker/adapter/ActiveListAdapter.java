@@ -145,13 +145,13 @@ public class ActiveListAdapter extends RecyclerView.Adapter<View_Holder> impleme
 
     @Override
     public void didClickOnView(View view, String s, View_Holder holder) {
-        if (listener != null) listener.shortClickOnActiveItem(s, holder);
+        if (listener != null) listener.shortClickOnActiveItem(s);
     }
 
 
     @Override
     public void didLongClickOnView(View view, String s, View_Holder holder) {
-        if (listener != null) listener.longClickOnActiveItem(s, holder);
+        if (listener != null) listener.longClickOnActiveItem(s);
 
     }
 
