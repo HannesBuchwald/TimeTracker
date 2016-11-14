@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.AAAActivityObject;
@@ -46,7 +47,7 @@ public class FragmentActivity extends BaseFragemnt implements
         ActiveActivityListOnClickListener {
 
     private final String TAG = "FragmentActivity";
-
+    private String textNoExternalWork = "Function External-Work not available";
 
     private View view;
     private RecyclerView recyclerView;
@@ -168,7 +169,12 @@ public class FragmentActivity extends BaseFragemnt implements
             shortClickCounter = var.shortClickCounter;
             currentShortClickID = "";
 
-            handleItemsClick(id, true);
+            // check if external Work is enabled
+            if(dataManager.getObject(id).getExternalWork().contains(EXTERNALWORK)){
+                handleItemsClick(id, true);
+            } else {
+                showText(textNoExternalWork);
+            }
         }
 
         // Reset the shortClickCounter
@@ -181,6 +187,7 @@ public class FragmentActivity extends BaseFragemnt implements
             }
         }, var.shortClickCounterResetTime);
     }
+
 
 
 
@@ -210,6 +217,8 @@ public class FragmentActivity extends BaseFragemnt implements
         updateActiveList();
         updateObjectList();
     }
+
+
 
 
 
@@ -675,5 +684,16 @@ public class FragmentActivity extends BaseFragemnt implements
 
     public void flip() {
          listener.flip();
+    }
+
+
+
+    private void showText(String text) {
+        if(var.showText) {
+            Toast.makeText(getActivity(),
+                    text,
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 }

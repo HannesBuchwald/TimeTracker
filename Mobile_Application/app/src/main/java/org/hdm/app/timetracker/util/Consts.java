@@ -36,6 +36,9 @@ public final class Consts {
     public final static String GRAY = "gray";
     public final static String TRANSPARENT = "transparent";
 
+    public final static String EXTERNALWORK = "Yes";
+
+
 
 
     /**

@@ -339,23 +339,6 @@ public class DataManager {
 
 
 
-    /***********
-     * Singelton pattern
-     ***********/
-
-    public static void init() {
-        if (instance == null) {
-            instance = new DataManager();
-
-        }
-    }
-
-    public static DataManager getInstance() {
-        if (instance == null) {
-            instance = new DataManager();
-        }
-        return instance;
-    }
 
 
 
@@ -373,6 +356,7 @@ public class DataManager {
         }
         return 03;
     }
+
 
 
     public ActiveObject createActiveObject(String id, boolean externalWork) {
@@ -464,4 +448,27 @@ public class DataManager {
         logMap = new HashMap<String, Stamp>();
 
     }
+
+
+
+
+
+    /***********
+     * Singelton pattern
+     ***********/
+
+    public static void init() {
+        if (instance == null) {
+            instance = new DataManager();
+
+        }
+    }
+
+    public static DataManager getInstance() {
+        if (instance == null) {
+            instance = new DataManager();
+        }
+        return instance;
+    }
+
 }

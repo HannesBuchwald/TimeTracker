@@ -154,7 +154,7 @@ public class Variables {
     public boolean editableMode = true;
 
     public int shortClickCounter = 3;
-    public long shortClickCounterResetTime = 4000;
+    public long shortClickCounterResetTime = 4000;  //ms
 
 
     /**
@@ -182,9 +182,27 @@ public class Variables {
      * Device WifiState flag
      */
     public boolean wifiState = false;
+
+    /**
+     * Device Bluetooth flag
+     */
     public boolean bluetoothState = false;
+
+
+    /**
+     * Device Screen Off
+     */
     public int screenOffTimeout = 1;
+
+    /**
+     * Device Display brightness
+     */
     public int displayBrightness = 100;
+
+    /**
+     * Device Show toast messages to comunicate with user
+     */
+    public boolean showText = true;
 
 
     /***********
