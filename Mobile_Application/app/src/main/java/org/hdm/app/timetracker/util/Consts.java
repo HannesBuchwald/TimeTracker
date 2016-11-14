@@ -38,6 +38,9 @@ public final class Consts {
 
     public final static String EXTERNALWORK = "Yes";
 
+    public static final String USER = "User";
+    public static final String ADMIN = "Admin";
+    public static final String EATING_ACTIVITY = "Eating + Drinking";
 
 
 

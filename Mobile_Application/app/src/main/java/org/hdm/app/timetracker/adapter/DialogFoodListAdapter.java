@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.AAAActivityObject;
+import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
@@ -17,6 +18,8 @@ import org.hdm.app.timetracker.util.View_Holder;
 import java.util.List;
 
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+import static org.hdm.app.timetracker.util.Consts.GREEN;
+import static org.hdm.app.timetracker.util.Consts.WHITE;
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -24,18 +27,18 @@ import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 public class DialogFoodListAdapter extends RecyclerView.Adapter<View_Holder> implements
         ViewHolderListener {
 
-    private final String TAG = "ObjectListAdapter";
-
+    private final String TAG = "DialogFoodListAdapter";
     public List<String> list = null;
+
     private DialogPortionListOnClickListener listener;
     public Variables var = Variables.getInstance();
     public DataManager dataManager = DataManager.getInstance();
-    public String activeTime;
-    public boolean leave;
+    public List<String> activeFoodList;
 
 
-    public DialogFoodListAdapter(List<String> activityObject) {
+    public DialogFoodListAdapter(List<String> activityObject, List<String> activeFood) {
         this.list = activityObject;
+        this.activeFoodList = activeFood;
     }
 
 
@@ -55,13 +58,18 @@ public class DialogFoodListAdapter extends RecyclerView.Adapter<View_Holder> imp
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        AAAActivityObject object = dataManager.getFoodObject((list.get(position)));
+        ActivityObject object = dataManager.foodMap.get((list.get(position)));
         holder.setListener(this);
-        holder.title.setText(object.title);
-        holder.id = object._id;
-        if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
-        holder.setBackground(object.activeState);
-        if(DEBUGMODE) Log.d(TAG, "position " + position + " " + object.title + " "+ object.activeState);
+        holder.title.setText(object.getTitle());
+        holder.id = object.get_id();
+        if(dataManager.imageMap.get(object.getImageName()) != null )
+            holder.imageView.setImageBitmap((dataManager.imageMap.get(object.getImageName())));
+
+        if(activeFoodList.contains(object.get_id())) {
+            holder.setBackground(GREEN);
+        } else {
+            holder.setBackground(WHITE);
+        }
     }
 
 
@@ -110,13 +118,13 @@ public class DialogFoodListAdapter extends RecyclerView.Adapter<View_Holder> imp
     @Override
     public void didClickOnView(View view, String title, View_Holder holder) {
 
-        if(listener != null) listener.didClickOnPortionListItem(title, holder);
+        if(listener != null) listener.didClickOnPortionListItem(title);
 
     }
 
 
     @Override
     public void didLongClickOnView(View view, String title, View_Holder holder) {
-        if(listener != null) listener.didLongClickOnPortionListItem(title, holder);
+        if(listener != null) listener.didLongClickOnPortionListItem(title);
     }
 }

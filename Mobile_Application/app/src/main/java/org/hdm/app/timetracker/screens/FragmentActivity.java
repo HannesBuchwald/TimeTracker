@@ -25,6 +25,7 @@ import org.hdm.app.timetracker.listener.ActiveActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
 import org.hdm.app.timetracker.adapter.ObjectListAdapter;
 import org.hdm.app.timetracker.adapter.ActiveListAdapter;
+import org.hdm.app.timetracker.util.Consts;
 import org.hdm.app.timetracker.util.Variables;
 import org.hdm.app.timetracker.util.View_Holder;
 
@@ -64,6 +65,7 @@ public class FragmentActivity extends BaseFragemnt implements
     private Runnable updateRemainingTimeRunnable;
     private Timer tmr;
     private Handler handler = new Handler();
+    public Stamp stamp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -191,25 +193,40 @@ public class FragmentActivity extends BaseFragemnt implements
 
 
 
-    private void handleItemsClick(String id, boolean externalWork) {
+    private void handleItemsClick(String id, boolean contractWork) {
 
-        if(DEBUGMODE) Log.d(TAG, "clickkkk " + id + " " + externalWork);
+        if(DEBUGMODE) Log.d(TAG, "clickkkk " + id + " " + contractWork);
+
+        //ToDo implement Editable Mode
 
         LinkedHashMap<String, ActiveObject> activeList =  dataManager.getActiveMap();
 
         // Activity is already active
-        if(dataManager.getActiveMap().containsKey(id)) {
+        if(activeList.containsKey(id)) {
 
             ActiveObject activeObject = activeList.get(id);
             activeObject.endTime = Calendar.getInstance().getTime();
 
-            //ToDo add all variables to activeObject
+            // convert ActiveObject to Stamp
+            stamp = dataManager.convertActiveObjectToStamp(activeObject);
 
-            dataManager.addActivityToLogList(activeObject); // add Activity to LogList
+            //ToDo open Portion and Food Dialogs and add result to stamp
+            if (stamp.a01_activity.equals(EATING_ACTIVITY)) {
+                DialogPortionFragment dFragment = new DialogPortionFragment(this, stamp, activeObject.startTime);
+                FragmentManager fm = getFragmentManager();
+                dFragment.show(fm, "Dialog Fragment");
+            } else {
+
+                // add Activity to LogList
+                dataManager.addToLogMap(activeObject.startTime, stamp);
+            }
+
             activeList.remove(id); // delete Activity from active List
 
         } else if(activeList.size() < var.maxRecordedActivity){
-            activeList.put(id, dataManager.createActiveObject(id, externalWork));
+
+            ActiveObject activeObject = dataManager.createActiveObject(id, contractWork);
+            activeList.put(id, activeObject);
         }
 
         dataManager.setActiveMap(activeList);
@@ -360,9 +377,9 @@ public class FragmentActivity extends BaseFragemnt implements
 
             if (AAAActivityObject.title.equals("Eating + Drinking")) {
 
-                DialogPortionFragment dFragment = new DialogPortionFragment(this, AAAActivityObject);
-                FragmentManager fm = getFragmentManager();
-                dFragment.show(fm, "Dialog Fragment");
+//                DialogPortionFragment dFragment = new DialogPortionFragment(this, AAAActivityObject);
+//                FragmentManager fm = getFragmentManager();
+//                dFragment.show(fm, "Dialog Fragment");
 
             } else {
                 // Save Timestamp and SubCategory in AAAActivityObject
@@ -511,9 +528,9 @@ public class FragmentActivity extends BaseFragemnt implements
 
             if (AAAActivityObject.title.equals("Eating + Drinking")) {
 
-                DialogPortionFragment dFragment = new DialogPortionFragment(this, AAAActivityObject);
-                FragmentManager fm = getFragmentManager();
-                dFragment.show(fm, "Dialog Fragment");
+//                DialogPortionFragment dFragment = new DialogPortionFragment(this, AAAActivityObject);
+//                FragmentManager fm = getFragmentManager();
+//                dFragment.show(fm, "Dialog Fragment");
 
             } else {
                 // Save Timestamp and SubCategory in AAAActivityObject

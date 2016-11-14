@@ -14,8 +14,6 @@ public class ActivityObject {
     private String item = null;
 
 
-
-
     public String get_id() {
         return _id;
     }

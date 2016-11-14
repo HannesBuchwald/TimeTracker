@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.AAAActivityObject;
+import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
@@ -17,6 +18,8 @@ import org.hdm.app.timetracker.util.View_Holder;
 import java.util.List;
 
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+import static org.hdm.app.timetracker.util.Consts.GREEN;
+import static org.hdm.app.timetracker.util.Consts.WHITE;
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -24,18 +27,18 @@ import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 public class DialogPortionListAdapter extends RecyclerView.Adapter<View_Holder> implements
         ViewHolderListener {
 
-    private final String TAG = "ObjectListAdapter";
+    private final String TAG = "DialogPortionListAdapter";
 
     public List<String> list = null;
     private DialogPortionListOnClickListener listener;
     public Variables var = Variables.getInstance();
     public DataManager dataManager = DataManager.getInstance();
-    public String activeTime;
-    public boolean leave;
+    public String activePortion;
 
 
-    public DialogPortionListAdapter(List<String> activityObject) {
+    public DialogPortionListAdapter(List<String> activityObject, String activePortion) {
         this.list = activityObject;
+        this.activePortion = activePortion;
     }
 
 
@@ -54,14 +57,22 @@ public class DialogPortionListAdapter extends RecyclerView.Adapter<View_Holder> 
 
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
-        //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        AAAActivityObject object = dataManager.getPortionObject((list.get(position)));
+
+
+        ActivityObject object = dataManager.portionMap.get((list.get(position)));
         holder.setListener(this);
-        holder.title.setText(object.title);
-        holder.id = object._id;
-        if(dataManager.imageMap.get(object.imageName) != null ) holder.imageView.setImageBitmap((dataManager.imageMap.get(object.imageName)));
-        holder.setBackground(object.activeState);
-        if(DEBUGMODE) Log.d(TAG, "position " + position + " " + object.title + " "+ object.activeState);
+        holder.title.setText(object.getTitle());
+        holder.id = object.get_id();
+
+        if(dataManager.imageMap.get(object.getImageName()) != null ) {
+            holder.imageView.setImageBitmap((dataManager.imageMap.get(object.getImageName())));
+        }
+
+        if(object.get_id().equals(activePortion)) {
+            holder.setBackground(GREEN);
+        } else {
+            holder.setBackground(WHITE);
+        }
     }
 
 
@@ -95,12 +106,7 @@ public class DialogPortionListAdapter extends RecyclerView.Adapter<View_Holder> 
 
 
 
-    // Remove a RecyclerView item containing a specified Daata object
-    public void remove(AAAActivityObject AAAActivityObject) {
-        int position = list.indexOf(AAAActivityObject);
-        list.remove(position);
-        notifyItemRemoved(position);
-    }
+
 
 
     public void setListener (DialogPortionListOnClickListener listener) {this.listener = listener;}
@@ -109,14 +115,14 @@ public class DialogPortionListAdapter extends RecyclerView.Adapter<View_Holder> 
 
     @Override
     public void didClickOnView(View view, String title, View_Holder holder) {
-
-        if(listener != null) listener.didClickOnPortionListItem(title, holder);
-
+//        if(listener != null) listener.didClickOnPortionListItem(title);
     }
 
 
     @Override
     public void didLongClickOnView(View view, String title, View_Holder holder) {
-        if(listener != null) listener.didLongClickOnPortionListItem(title, holder);
+        if(listener != null) listener.didLongClickOnPortionListItem(title);
+        Log.d(TAG, "PortionClick " + title);
+
     }
 }
