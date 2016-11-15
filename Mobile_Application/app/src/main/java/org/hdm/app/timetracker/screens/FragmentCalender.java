@@ -197,7 +197,7 @@ public class FragmentCalender extends BaseFragemnt implements
 
 
     @Override
-    public void didOnClickAddBtn(View_Holder holder) {
+    public void didClickOnAddBtn(View_Holder holder) {
         if (DEBUGMODE) Log.d(TAG, "holder " + holder.id);
         var.selectedTime = holder.id;
         listener.flip();

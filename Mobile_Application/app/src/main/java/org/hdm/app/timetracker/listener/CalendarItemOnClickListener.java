@@ -8,6 +8,6 @@ import org.hdm.app.timetracker.util.View_Holder;
 public interface CalendarItemOnClickListener {
 
     public void didOnClick(String time, String s, View_Holder holder);
-    public void didOnClickAddBtn(View_Holder holder);
+    public void didClickOnAddBtn(View_Holder holder);
     public void setCalendarTitle(String s);
 }

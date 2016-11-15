@@ -64,19 +64,19 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
 
-        // TimeFrame
+        // set RowItem
         String title = list.get(position).toString();
         int date = Integer.parseInt(title.substring(8, 10));
 
         holder.id = title;
         holder.setListener(this);
 
-        // display addButttn
         setAddButtonVisibility(holder);
         setBackground(holder, date);
         setTitle(holder, title);
 
 
+        // ?
         String calendarTitleDay = list.get(position).toString().substring(0, 3);
         String calendarTitleDate = list.get(position).toString().substring(8, 10);
         if(DEBUGMODE) Log.d(TAG, "calendarTitle " + list.get(position));
@@ -84,8 +84,8 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
 
         // Init RowItemContent
-        resAdapter = new CalendarItemListAdapter(context,
-                (ArrayList) calendarMap.get(list.get(position).toString()));
+        resAdapter = new CalendarItemListAdapter(
+                context, (ArrayList) calendarMap.get(list.get(position)));
 
         resAdapter.setListener(this);
         resAdapter.time = list.get(position).toString();
@@ -94,7 +94,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         holder.rv_content.setLayoutManager(new LinearLayoutManager(context));
         holder.rv_content.setLayoutManager(new StaggeredGridLayoutManager(
                 CALENDARITEMROW, StaggeredGridLayoutManager.HORIZONTAL));
-
     }
 
 
@@ -180,14 +179,13 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
     @Override
     public void didClickOnView(View view, String s, View_Holder holder) {
-        if(DEBUGMODE) Log.d(TAG, "holder " + holder.id);
     }
 
 
     @Override
     public void didLongClickOnView(View view, String s, View_Holder view_holder) {
         if(DEBUGMODE) Log.d(TAG, "holder ");
-        if (listener != null) listener.didOnClickAddBtn(view_holder);
+        if (listener != null) listener.didClickOnAddBtn(view_holder);
 
     }
 
@@ -209,7 +207,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
 
     @Override
-    public void didOnClickAddBtn(View_Holder holder) {
+    public void didClickOnAddBtn(View_Holder holder) {
 
     }
 

@@ -161,11 +161,11 @@ public class View_Holder extends RecyclerView.ViewHolder implements
             case GRAY:
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                     cv.setCardBackgroundColor(Color.GRAY);
-                    iv_cancel.setVisibility(View.VISIBLE);
+                    iv_cancel.setVisibility(View.GONE);
 
                 } else {
                     cv.setCardBackgroundColor(cv.getResources().getColor(R.color.gray));
-                    iv_cancel.setVisibility(View.VISIBLE);
+                    iv_cancel.setVisibility(View.GONE);
                 }
                 break;
 

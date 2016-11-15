@@ -1,6 +1,7 @@
 package org.hdm.app.timetracker.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
+import org.hdm.app.timetracker.datastorage.ActiveObject;
+import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.CalendarItemOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 import org.hdm.app.timetracker.util.Variables;
@@ -15,7 +18,11 @@ import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+
 import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
+import static org.hdm.app.timetracker.util.Consts.GRAY;
+import static org.hdm.app.timetracker.util.Consts.RED;
+import static org.hdm.app.timetracker.util.Consts.TRANSPARENT;
 
 /**
  * Created by Hannes on 27.05.2016.
@@ -27,23 +34,20 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
     private Context context;
 
 
-
-    public ArrayList list;
+    public ArrayList<ActiveObject> list;
     private CalendarItemOnClickListener listener;
     private View v;
     public String time = "";
     public Variables var = Variables.getInstance();
-
+    private DataManager dataManager = DataManager.getInstance();
 
 
     public CalendarItemListAdapter(Context context, ArrayList recActivityTitles) {
         this.context = context;
         list = recActivityTitles;
         int size = list.size();
-        if(DEBUGMODE) Log.d(TAG, "List " + size);
+        if (DEBUGMODE) Log.d(TAG, "List " + size);
     }
-
-
 
 
     @Override
@@ -55,34 +59,23 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
     }
 
 
-
-
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
-        //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        holder.setListener(this);
-        if(holder.imageView != null) {
+        if (holder.imageView != null) {
 
-            String title = (String) list.get(position);
-            String externalWork = title.substring(0, 4);
+            ActiveObject aObject = list.get(position);
+            holder.setListener(this);
+            holder.title.setText(aObject.title);
+            holder.id = aObject.id;
+            setImg(holder, aObject);
+            setBackground(holder, aObject);
 
-            Log.d(TAG, "XXXX " + title + " " + externalWork);
-//            ActiveObject dataa =(ActiveObject) data.get(title.substring(4));
-
-//            AAAActivityObject dataa =(AAAActivityObject) data.get(list.get(position));
-//            if(DataManager.getInstance().imageMap.get(dataa.imageName) != null )
-//                holder.imageView.setImageBitmap(DataManager.getInstance().imageMap.get(dataa.imageName));
-//            holder.title.setText(title);
-
-
-            if(externalWork.contains("Y")) {
-                holder.setCalendarItemBackground(var.editable,"");
-            } else {
-                holder.setCalendarItemBackground(var.editable);
-            }
-//            if(var.editable) holder.setCalendarItemBackground(var.editable);
         }
     }
+
+
+
+
 
 
 
@@ -90,7 +83,6 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
     public long getItemId(int position) {
         return super.getItemId(position);
     }
-
 
 
     @Override
@@ -115,15 +107,9 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
     }
 
 
-
-
-
-
-
-    public void setListener (CalendarItemOnClickListener listener) {
+    public void setListener(CalendarItemOnClickListener listener) {
         this.listener = listener;
     }
-
 
 
     @Override
@@ -131,11 +117,28 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
     }
 
 
-
     @Override
     public void didLongClickOnView(View view, String s, View_Holder view_holder) {
-            if(var.editable) remove(s);
-            if(listener!=null) listener.didOnClick(time, s, view_holder);
+//        if (var.editable) remove(s);
+        if (listener != null) listener.didOnClick(time, s, view_holder);
+    }
+
+
+    private void setImg(View_Holder holder, ActiveObject aObject) {
+        Bitmap image = dataManager.imageMap.get(dataManager.getObject(aObject.id).getImageName());
+        if (image != null) holder.imageView.setImageBitmap(image);
+    }
+
+
+    private void setBackground(View_Holder holder, ActiveObject aObject) {
+
+        if (var.editable) {
+            holder.setBackground(RED);
+        } else if (aObject.contractWork) {
+            holder.setBackground(GRAY);
+        } else {
+            holder.setBackground(TRANSPARENT);
+        }
     }
 
 }
