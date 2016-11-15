@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
+import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.main.MainActivity;
 
 import java.io.BufferedReader;
@@ -27,7 +28,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Properties;
 
 import static org.hdm.app.timetracker.util.Consts.*;
@@ -449,16 +453,19 @@ public class FileLoader {
 
     public void saveLogsOnExternal(String fileName) {
 
-//        MyJsonParser parser = new MyJsonParser();
-//        String logFile = parser.createLogJsonFromActivityObjects();
-
         String path = enviroment.toString() + "/" + LOGS_FOLDER;
+
+        ArrayList<Stamp> arList = new ArrayList();
+        for(LinkedHashMap.Entry<Date,Stamp> map :
+                DataManager.getInstance().logMap.entrySet()){
+            arList.add(map.getValue());
+        }
+
         Gson gson = new Gson();
-        String s = gson.toJson(DataManager.getInstance().logList);
+        String s = gson.toJson(arList);
         writeStringOnExternal(s, fileName, path);
         DataManager.getInstance().lastLog = s;
         if(DEBUGMODE) Log.d(TAG, "logFile " + s);
-
     }
 
 

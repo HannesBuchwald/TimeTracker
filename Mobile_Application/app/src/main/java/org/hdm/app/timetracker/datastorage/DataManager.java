@@ -39,7 +39,7 @@ public class DataManager {
 
     private LinkedHashMap<String, ActiveObject> activeMap = new LinkedHashMap<>();
     public LinkedHashMap<String, ArrayList<ActiveObject>> calenderMap = new LinkedHashMap<>();
-    private LinkedHashMap<Date, Stamp> logMap = new LinkedHashMap<>();
+    public LinkedHashMap<Date, Stamp> logMap = new LinkedHashMap<>();
 
 
 
@@ -303,6 +303,8 @@ public class DataManager {
     }
 
 
+
+
     public void addToCalendarMap(ActiveObject activeObject) {
 
         // find current TimeSlot
@@ -319,10 +321,10 @@ public class DataManager {
         firstDate.setSeconds(0);
         firstDate.setMinutes(firstMin);
 
-
+        // for Testing purpouse
 //        Calendar cal = Calendar.getInstance();
-//        // cal.add(Calendar.HOUR, 2); // for Testing purpouse
-//        Date currentDate = cal.getTime();
+//        cal.add(Calendar.HOUR, 2);
+//        activeObject.endTime = cal.getTime();
 
 
         if(DEBUGMODE) Log.d(TAG, "time1 " + activeObject.startTime);
@@ -375,8 +377,8 @@ public class DataManager {
 
     public void initMaps() {
 
-        objectMap = new LinkedHashMap<String, ActivityObject>();
-        imageMap = new LinkedHashMap<String, Bitmap>();
+        objectMap = new LinkedHashMap<>();
+        imageMap = new LinkedHashMap<>();
         activeMap = new LinkedHashMap<>();
         logMap = new LinkedHashMap<>();
 

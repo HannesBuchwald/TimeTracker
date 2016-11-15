@@ -121,6 +121,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
         addActiveFoodListToStamp(activeFoodList);
         dataManager.addToLogMap(activeObject.startTime, stamp);
+        dataManager.addToCalendarMap(activeObject);
         resetActiveFoodList();
         this.dismiss();
         if (var.editable) fragmentActivity.flip();

@@ -81,6 +81,8 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
         resetPortionItemState();
         if(!clickFlag) {
             Log.d(TAG, "onPause DialogFragment" );
+            dataManager.addToLogMap(activeObject.startTime, stamp);
+            dataManager.addToCalendarMap(activeObject);
             if (var.editable) fragmentActivity.flip();
         }
         if (this != null) this.dismiss();

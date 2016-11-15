@@ -89,7 +89,7 @@ public class MainActivity extends Activity implements PreferenceListener {
     protected void onResume() {
         super.onResume();
 
-//        initSaveCurrentState();
+        initSaveCurrentState();
 
         if(DEBUGMODE) {
             SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);
@@ -364,15 +364,15 @@ public class MainActivity extends Activity implements PreferenceListener {
      */
     private void saveLogFile() {
 
-//        String currentDate = Calendar.getInstance().getTime().toString();
-//        int size = currentDate.length();
-//        String year = currentDate.substring(size - 4, size);
-//        String date = currentDate.substring(4, 19);
-//        if (DEBUGMODE) Log.d(TAG, "User ID:" + var.user_ID);
-//        String fileName = var.user_ID + "_" + year + "_" + date + "_activities.txt";
-//        fileName = fileName.replaceAll(" ", "_");
-//        if (DEBUGMODE) Log.d(TAG, "currentDate " + fileName);
-//        new FileLoader(this).saveLogsOnExternal(fileName);
+        String currentDate = Calendar.getInstance().getTime().toString();
+        int size = currentDate.length();
+        String year = currentDate.substring(size - 4, size);
+        String date = currentDate.substring(4, 19);
+        if (DEBUGMODE) Log.d(TAG, "User ID:" + var.user_ID);
+        String fileName = var.user_ID + "_" + year + "_" + date + "_activities.txt";
+        fileName = fileName.replaceAll(" ", "_");
+        if (DEBUGMODE) Log.d(TAG, "currentDate " + fileName);
+        new FileLoader(this).saveLogsOnExternal(fileName);
     }
 
 
