@@ -105,9 +105,8 @@ public class FragmentCalender extends BaseFragemnt implements
     }
 
     private void initCalenderList() {
-        data = DataManager.getInstance().activityMap;
         calendar = DataManager.getInstance().calenderMap;
-        adapter = new CalendarListAdapter(getActivity(), data, calendar);
+        adapter = new CalendarListAdapter(getActivity(), calendar);
         if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + "Calendar " + data);
         if(DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + "Calendar " + calendar);
 
@@ -131,7 +130,7 @@ public class FragmentCalender extends BaseFragemnt implements
 
         if (var.editable) {
             // Delete Entry in CalendarMap
-            dataManager.deleteCalenderMapEntry(time, s);
+//            dataManager.deleteCalenderMapEntry(time, s);
 
             // Delete Entry in AAAActivityObject TimeFrame
 //            ArrayList<TimeFrame> list = dataManager.getActivityObject(s.substring(4)).timeFrameList;

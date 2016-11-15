@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.AAAActivityObject;
-import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.CalendarItemOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 import org.hdm.app.timetracker.util.Variables;
@@ -26,7 +24,6 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
         ViewHolderListener {
 
     private final String TAG = "CalendarItemListAdapter";
-    private final LinkedHashMap data;
     private Context context;
 
 
@@ -39,9 +36,8 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
 
 
 
-    public CalendarItemListAdapter(Context context, LinkedHashMap data, ArrayList recActivityTitles) {
+    public CalendarItemListAdapter(Context context, ArrayList recActivityTitles) {
         this.context = context;
-        this.data = data;
         list = recActivityTitles;
         int size = list.size();
         if(DEBUGMODE) Log.d(TAG, "List " + size);
@@ -71,12 +67,12 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
             String externalWork = title.substring(0, 4);
 
             Log.d(TAG, "XXXX " + title + " " + externalWork);
-            AAAActivityObject dataa =(AAAActivityObject) data.get(title.substring(4));
+//            ActiveObject dataa =(ActiveObject) data.get(title.substring(4));
 
 //            AAAActivityObject dataa =(AAAActivityObject) data.get(list.get(position));
-            if(DataManager.getInstance().imageMap.get(dataa.imageName) != null )
-                holder.imageView.setImageBitmap(DataManager.getInstance().imageMap.get(dataa.imageName));
-            holder.title.setText(title);
+//            if(DataManager.getInstance().imageMap.get(dataa.imageName) != null )
+//                holder.imageView.setImageBitmap(DataManager.getInstance().imageMap.get(dataa.imageName));
+//            holder.title.setText(title);
 
 
             if(externalWork.contains("Y")) {
@@ -107,14 +103,6 @@ public class CalendarItemListAdapter extends RecyclerView.Adapter<View_Holder> i
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-
-
-    // Insert a new item to the RecyclerView on a predefined position
-    public void insert(int position, AAAActivityObject AAAActivityObject) {
-        list.add(position, AAAActivityObject);
-        notifyItemInserted(position);
-    }
-
 
 
     // Remove a RecyclerView item containing a specified Daata object

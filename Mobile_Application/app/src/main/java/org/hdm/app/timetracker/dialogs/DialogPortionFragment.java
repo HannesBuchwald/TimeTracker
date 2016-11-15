@@ -36,7 +36,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
     private static final String TAG = "DialogPortionFragment";
     private static final String TITLE = "Choose a Portion";
-    private final Date startTime;
+    private final ActiveObject activeObject;
 
     private DialogPortionListAdapter portionAdapter;
     private RecyclerView recyclerView;
@@ -47,6 +47,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     public DataManager dataManager = DataManager.getInstance();
     private View view;
     private FragmentActivity fragmentActivity;
+
     private Button btnDialogFood;
 
     private String activePortion = "";
@@ -54,10 +55,10 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
 
 
-    public DialogPortionFragment(FragmentActivity fragmentActivity, Stamp stamp, Date startTime) {
+    public DialogPortionFragment(FragmentActivity fragmentActivity, Stamp stamp, ActiveObject startTime) {
         this.stamp = stamp;
         this.fragmentActivity = fragmentActivity;
-        this.startTime = startTime;
+        this.activeObject = startTime;
     }
 
 
@@ -87,6 +88,7 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     }
 
 
+
     private void initLayout() {
 
         getDialog().setTitle(TITLE);
@@ -108,16 +110,43 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
     }
 
 
+
+    /**
+     * Listen on the Activity Click
+     * @param id
+     */
     @Override
-    public void didClickOnPortionListItem(String title) {
+    public void didClickOnPortionListItem(String id) {
     }
 
+
+    /**
+     * Listen on the Activity Click
+     * @param id
+     */
     @Override
     public void didLongClickOnPortionListItem(String id) {
         handleObjectClick(id);
     }
 
 
+    /**
+     * Listen on the OK Button Click
+     * @param v
+     * @return
+     */
+    @Override
+    public boolean onLongClick(View v) {
+
+        // pass onto next Dialog
+        clickFlag = true;
+        DialogFoodFragment dFoodFragment = new DialogFoodFragment(fragmentActivity, stamp, activeObject);
+        FragmentManager fm = getFragmentManager();
+        dFoodFragment.show(fm, "Food Fragment");
+        resetPortionItemState();
+        this.dismiss();
+        return true;
+    }
 
 
 
@@ -142,26 +171,17 @@ public class DialogPortionFragment extends DialogFragment implements DialogPorti
 
 
 
-    @Override
-    public boolean onLongClick(View v) {
-
-        // pass onto next Dialog
-        clickFlag = true;
-        DialogFoodFragment dFoodFragment = new DialogFoodFragment(fragmentActivity, stamp, startTime);
-        FragmentManager fm = getFragmentManager();
-        dFoodFragment.show(fm, "Food Fragment");
-        resetPortionItemState();
-        this.dismiss();
-        return true;
-    }
-
-    private void resetPortionItemState() {
-        activePortion = "";
-    }
-
-    // Update Adapter
+    /**
+     *     Update Adapter
+     */
     private void updateAdapter() {
         portionAdapter.activePortion = activePortion;
         portionAdapter.notifyDataSetChanged();
+    }
+
+
+    private void resetPortionItemState() {
+        activePortion = "";
+        portionAdapter.activePortion = "";
     }
 }

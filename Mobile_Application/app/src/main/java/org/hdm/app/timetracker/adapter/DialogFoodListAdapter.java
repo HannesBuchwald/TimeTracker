@@ -1,13 +1,11 @@
 package org.hdm.app.timetracker.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
@@ -17,7 +15,6 @@ import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.List;
 
-import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 import static org.hdm.app.timetracker.util.Consts.GREEN;
 import static org.hdm.app.timetracker.util.Consts.WHITE;
 
@@ -99,15 +96,6 @@ public class DialogFoodListAdapter extends RecyclerView.Adapter<View_Holder> imp
     public void insert(int position, String activityObject) {
         list.add(position, activityObject);
         notifyItemInserted(position);
-    }
-
-
-
-    // Remove a RecyclerView item containing a specified Daata object
-    public void remove(AAAActivityObject AAAActivityObject) {
-        int position = list.indexOf(AAAActivityObject);
-        list.remove(position);
-        notifyItemRemoved(position);
     }
 
 

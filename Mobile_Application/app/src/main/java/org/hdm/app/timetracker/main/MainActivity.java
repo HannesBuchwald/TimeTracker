@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.AAAActivityObject;
+import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.listener.PreferenceListener;
@@ -37,7 +37,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -68,7 +67,7 @@ public class MainActivity extends Activity implements PreferenceListener {
         initConfiguration();
         loadConfigurationFromExternal();
         initCalendar();
-        loadSavedObjectState();
+//        loadSavedObjectState();
         initVariables();
         initDeviceModies();
         initLayout();
@@ -80,8 +79,8 @@ public class MainActivity extends Activity implements PreferenceListener {
         super.onStop();
         var.editableMode = false;
         var.backPress = false;
-        saveLogFile();
-        saveCurrentState();
+//        saveLogFile();
+//        saveCurrentState();
         if (timer != null) timer.cancel();
     }
 
@@ -89,7 +88,8 @@ public class MainActivity extends Activity implements PreferenceListener {
     @Override
     protected void onResume() {
         super.onResume();
-        initSaveCurrentState();
+
+//        initSaveCurrentState();
 
         if(DEBUGMODE) {
             SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);
@@ -253,7 +253,6 @@ public class MainActivity extends Activity implements PreferenceListener {
                 time = -1;
         }
 
-
         android.provider.Settings.System.putInt(getContentResolver(),
                 Settings.System.SCREEN_OFF_TIMEOUT, time);
     }
@@ -261,7 +260,6 @@ public class MainActivity extends Activity implements PreferenceListener {
 
     /*
      * Init CalendarList with new Entries
-     *
      * @param calendar current Time in Date
      */
     public void initCalenderMap(Date currentTime) {
@@ -365,15 +363,16 @@ public class MainActivity extends Activity implements PreferenceListener {
      * Save the current activities State on local storage as json format
      */
     private void saveLogFile() {
-        String currentDate = Calendar.getInstance().getTime().toString();
-        int size = currentDate.length();
-        String year = currentDate.substring(size - 4, size);
-        String date = currentDate.substring(4, 19);
-        if (DEBUGMODE) Log.d(TAG, "User ID:" + var.user_ID);
-        String fileName = var.user_ID + "_" + year + "_" + date + "_activities.txt";
-        fileName = fileName.replaceAll(" ", "_");
-        if (DEBUGMODE) Log.d(TAG, "currentDate " + fileName);
-        new FileLoader(this).saveLogsOnExternal(fileName);
+
+//        String currentDate = Calendar.getInstance().getTime().toString();
+//        int size = currentDate.length();
+//        String year = currentDate.substring(size - 4, size);
+//        String date = currentDate.substring(4, 19);
+//        if (DEBUGMODE) Log.d(TAG, "User ID:" + var.user_ID);
+//        String fileName = var.user_ID + "_" + year + "_" + date + "_activities.txt";
+//        fileName = fileName.replaceAll(" ", "_");
+//        if (DEBUGMODE) Log.d(TAG, "currentDate " + fileName);
+//        new FileLoader(this).saveLogsOnExternal(fileName);
     }
 
 
@@ -388,21 +387,21 @@ public class MainActivity extends Activity implements PreferenceListener {
 
 
         // Save ObjectActivity Map
-        Map<String, AAAActivityObject> map = dataManager.getObjectMappp();
+        LinkedHashMap<String, ActivityObject> map = dataManager.getObjectMap();
         String json = gson.toJson(map);
         prefsEditor.putString(ACTIVITY_STATE, json);
 
 
         // Save ActiveList
-        ArrayList<String> activeList = dataManager.activeList;
-        json = gson.toJson(activeList);
-        prefsEditor.putString(ACTIVE_LIST, json);
+//        ArrayList<String> activeList = dataManager.activeList;
+//        json = gson.toJson(activeList);
+//        prefsEditor.putString(ACTIVE_LIST, json);
 
 
         // Save CalendarMap
-        LinkedHashMap<String, ArrayList<String>> calendarMap = dataManager.calenderMap;
-        json = gson.toJson(calendarMap);
-        prefsEditor.putString(CALENDAR_MAP, json);
+//        LinkedHashMap<String, ArrayList<String>> calendarMap = dataManager.calenderMap;
+//        json = gson.toJson(calendarMap);
+//        prefsEditor.putString(CALENDAR_MAP, json);
 
 
         List<Stamp> logList = dataManager.logList;
@@ -430,6 +429,7 @@ public class MainActivity extends Activity implements PreferenceListener {
      * Load the stored current states after the app is opened
      */
     private void loadSavedObjectState() {
+
         Gson gson = new Gson();
 
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
@@ -479,10 +479,10 @@ public class MainActivity extends Activity implements PreferenceListener {
             String json = mPrefs.getString(ACTIVITY_STATE, "");
             if (DEBUGMODE) Log.d(TAG, "Jsonnnnnn " + json);
 
-            Type typeOfHashMap = new TypeToken<LinkedHashMap<String, AAAActivityObject>>() {
+            Type typeOfHashMap = new TypeToken<LinkedHashMap<String, ActivityObject>>() {
             }.getType();
-            LinkedHashMap<String, AAAActivityObject> newMap = gson.fromJson(json, typeOfHashMap); // This type must match TypeToken
-            dataManager.activityMap = newMap;
+            LinkedHashMap<String, ActivityObject> newMap = gson.fromJson(json, typeOfHashMap); // This type must match TypeToken
+            dataManager.objectMap = newMap;
         }
 
 
@@ -491,7 +491,7 @@ public class MainActivity extends Activity implements PreferenceListener {
             Type type = new TypeToken<List<String>>() {
             }.getType();
             ArrayList<String> activeList = gson.fromJson(json, type);
-            dataManager.activeList = activeList;
+//            dataManager.activeList = activeList;
         }
 
         if (mPrefs.contains(CALENDAR_MAP)) {
@@ -500,7 +500,7 @@ public class MainActivity extends Activity implements PreferenceListener {
             Type type = new TypeToken<LinkedHashMap<String, ArrayList<String>>>() {
             }.getType();
             LinkedHashMap<String, ArrayList<String>> calendarMap = gson.fromJson(json, type);
-            dataManager.calenderMap = calendarMap;
+//            dataManager.calenderMap = calendarMap;
             if (DEBUGMODE) Log.d(TAG, "Jsonnnnnnnnnn " + dataManager.calenderMap);
             if (DEBUGMODE)
                 Log.d(TAG, "Jsonnnnnn " + dataManager.calenderMap.size());
@@ -515,9 +515,9 @@ public class MainActivity extends Activity implements PreferenceListener {
         }
 
 
-        if (dataManager.activeList != null) {
-            Variables.getInstance().activeCount = dataManager.activeList.size();
-        }
+//        if (dataManager.activeList != null) {
+//            Variables.getInstance().activeCount = dataManager.activeList.size();
+//        }
     }
 
 
@@ -635,6 +635,6 @@ public class MainActivity extends Activity implements PreferenceListener {
 
         if (DEBUGMODE)
             Log.d(TAG, "size " + var.coloredDates.size() + " // " + var.dateArray.size());
-        initCalenderMap(var.dateArray.get(0));
+            initCalenderMap(var.dateArray.get(0));
     }
 }

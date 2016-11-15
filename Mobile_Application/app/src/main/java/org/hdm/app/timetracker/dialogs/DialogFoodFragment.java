@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.adapter.DialogFoodListAdapter;
+import org.hdm.app.timetracker.datastorage.ActiveObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.datastorage.Stamp;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
@@ -34,7 +35,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
 
     private static final String TAG = "DialogFoodFragment";
     private static final String TITLE = "Choose a Portion";
-    private final Date startTime;
+    private final ActiveObject activeObject;
 
     private DialogFoodListAdapter foodAdapter;
     private Stamp stamp;
@@ -51,11 +52,11 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
     private FragmentActivity fragmentActivity;
 
 
-    public DialogFoodFragment(FragmentActivity fragmentActivity, Stamp stamp, Date startTime) {
+    public DialogFoodFragment(FragmentActivity fragmentActivity, Stamp stamp, ActiveObject activeObject) {
 
         this.stamp = stamp;
         this.fragmentActivity = fragmentActivity;
-        this.startTime = startTime;
+        this.activeObject = activeObject;
     }
 
 
@@ -119,7 +120,7 @@ public class DialogFoodFragment extends DialogFragment implements DialogPortionL
         fragmentActivity.stamp = stamp;
 
         addActiveFoodListToStamp(activeFoodList);
-        dataManager.addToLogMap(startTime, stamp);
+        dataManager.addToLogMap(activeObject.startTime, stamp);
         resetActiveFoodList();
         this.dismiss();
         if (var.editable) fragmentActivity.flip();

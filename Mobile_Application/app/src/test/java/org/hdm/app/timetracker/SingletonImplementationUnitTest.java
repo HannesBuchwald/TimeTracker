@@ -1,6 +1,5 @@
 package org.hdm.app.timetracker;
 
-import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.junit.Test;
 

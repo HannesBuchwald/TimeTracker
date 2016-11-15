@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.listener.CalendarItemOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
 import org.hdm.app.timetracker.util.Variables;
@@ -34,7 +33,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
 
     private LinkedHashMap calendarMap;
-    public LinkedHashMap data;
     public ArrayList list;
     private CalendarItemOnClickListener listener;
     private View v;
@@ -46,9 +44,8 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
     private CalendarItemListAdapter resAdapter;
 
 
-    public CalendarListAdapter(Activity activity, LinkedHashMap data, LinkedHashMap calendar) {
+    public CalendarListAdapter(Activity activity, LinkedHashMap calendar) {
         this.context = activity;
-        this.data = data;
         this.calendarMap = calendar;
         list = new ArrayList(calendar.keySet());
         // removeStrings();
@@ -66,22 +63,49 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
 
     @Override
     public void onBindViewHolder(View_Holder holder, int position) {
-        //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
 
-
+        // TimeFrame
         String title = list.get(position).toString();
-        holder.id = title;
-        holder.setListener(this);
-        if(DEBUGMODE) Log.d(TAG, "title " + title);
-
         int date = Integer.parseInt(title.substring(8, 10));
 
+        holder.id = title;
+        holder.setListener(this);
+
+        // display addButttn
+        setAddButtonVisibility(holder);
+        setBackground(holder, date);
+        setTitle(holder, title);
+
+
+        String calendarTitleDay = list.get(position).toString().substring(0, 3);
+        String calendarTitleDate = list.get(position).toString().substring(8, 10);
+        if(DEBUGMODE) Log.d(TAG, "calendarTitle " + list.get(position));
+        if (listener != null) listener.setCalendarTitle(calendarTitleDate + ". " + calendarTitleDay);
+
+
+        // Init RowItemContent
+        resAdapter = new CalendarItemListAdapter(context,
+                (ArrayList) calendarMap.get(list.get(position).toString()));
+
+        resAdapter.setListener(this);
+        resAdapter.time = list.get(position).toString();
+
+        holder.rv_content.setAdapter(resAdapter);
+        holder.rv_content.setLayoutManager(new LinearLayoutManager(context));
+        holder.rv_content.setLayoutManager(new StaggeredGridLayoutManager(
+                CALENDARITEMROW, StaggeredGridLayoutManager.HORIZONTAL));
+
+    }
+
+
+
+
+    private void setTitle(View_Holder holder, String title) {
         // Display only Hours and Minutes
         // Cut away the first 14 characters
         title = title.substring(11);
         // Cut away all characters after item 5
         title = title.substring(0, 5);
-
 
         if (!title.contains("00")) {
             String subTitle = title;
@@ -89,24 +113,12 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         } else {
             holder.title.setText(title);
         }
+    }
 
-        // Init RowItemContent
-        resAdapter = new CalendarItemListAdapter(context,
-                data,
-                (ArrayList) calendarMap.get(list.get(position).toString()));
-        resAdapter.setListener(this);
-        resAdapter.time = list.get(position).toString();
-        holder.rv_content.setAdapter(resAdapter);
-        holder.rv_content.setLayoutManager(new LinearLayoutManager(context));
-        holder.rv_content.setLayoutManager(new StaggeredGridLayoutManager(
-                CALENDARITEMROW, StaggeredGridLayoutManager.HORIZONTAL));
 
-        if (var.editable) {
-            if (holder.btn_add != null) holder.btn_add.setVisibility(View.VISIBLE);
-        } else {
-            if (holder.btn_add != null) holder.btn_add.setVisibility(View.GONE);
-        }
 
+
+    private void setBackground(View_Holder holder, int date) {
         if (holder.iv_background_top != null) {
 
             boolean colored = false;
@@ -125,12 +137,21 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
                 holder.iv_background_top.setVisibility(View.INVISIBLE);
             }
         }
-
-        String calendarTitleDay = list.get(position).toString().substring(0, 3);
-        String calendarTitleDate = list.get(position).toString().substring(8, 10);
-        if(DEBUGMODE) Log.d(TAG, "calendarTitle " + list.get(position));
-        if (listener != null) listener.setCalendarTitle(calendarTitleDate + ". " + calendarTitleDay);
     }
+
+
+
+    private void setAddButtonVisibility(View_Holder holder) {
+        if (var.editable) {
+            if (holder.btn_add != null) holder.btn_add.setVisibility(View.VISIBLE);
+        } else {
+            if (holder.btn_add != null) holder.btn_add.setVisibility(View.GONE);
+        }
+    }
+
+
+
+
 
 
     @Override
@@ -150,20 +171,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<View_Holder> imple
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-
-    // Insert a new item to the RecyclerView on a predefined position
-    public void insert(int position, AAAActivityObject AAAActivityObject) {
-        list.add(position, AAAActivityObject);
-        notifyItemInserted(position);
-    }
-
-
-    // Remove a RecyclerView item containing a specified Daata object
-    public void remove(AAAActivityObject AAAActivityObject) {
-        int position = list.indexOf(AAAActivityObject);
-        list.remove(position);
-        notifyItemRemoved(position);
-    }
 
 
     public void setListener(CalendarItemOnClickListener listener) {

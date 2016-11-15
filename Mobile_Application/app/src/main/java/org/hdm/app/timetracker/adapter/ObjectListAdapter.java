@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import org.hdm.app.timetracker.R;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.ActiveObject;
-import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.ActivityListOnClickListener;
 import org.hdm.app.timetracker.listener.ViewHolderListener;
@@ -120,14 +119,6 @@ public class ObjectListAdapter extends RecyclerView.Adapter<View_Holder> impleme
         notifyItemInserted(position);
     }
 
-
-
-    // Remove a RecyclerView item containing a specified Daata object
-    public void remove(AAAActivityObject AAAActivityObject) {
-        int position = list.indexOf(AAAActivityObject);
-        list.remove(position);
-        notifyItemRemoved(position);
-    }
 
 
     public void setListener (ActivityListOnClickListener listener) {

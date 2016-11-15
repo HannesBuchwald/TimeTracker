@@ -26,45 +26,24 @@ public class DataManager {
 
 
 
-
-    // In this Map are all the Activity Objects stored
-    // It is used as DataBase from every Screen
-    public LinkedHashMap<String, AAAActivityObject> activityMap = new LinkedHashMap<>();
-
-
-
-    // In this map is stored the activitys for Calender list
-    public LinkedHashMap<String, ArrayList<String>> calenderMap = new LinkedHashMap<>();
-    public ArrayList<String> activeList = new ArrayList<>();
     public List<Stamp> logList = new ArrayList<>();
     public String lastLog = "";
+    // In this map is stored the activitys for Calender list
 
 
     // New Maps
-    private LinkedHashMap<String, ActivityObject> objectMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, ActivityObject> objectMap = new LinkedHashMap<>();
     public LinkedHashMap<String, ActivityObject> portionMap = new LinkedHashMap<>();
     public LinkedHashMap<String, ActivityObject> foodMap = new LinkedHashMap<>();
-
-    private LinkedHashMap<String, ActiveObject> activeMap = new LinkedHashMap<>();
-    private LinkedHashMap<Date, Stamp> logMap = new LinkedHashMap<>();
-
     public HashMap<String, Bitmap> imageMap = new HashMap<>();
 
+    private LinkedHashMap<String, ActiveObject> activeMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, ArrayList<ActiveObject>> calenderMap = new LinkedHashMap<>();
+    private LinkedHashMap<Date, Stamp> logMap = new LinkedHashMap<>();
 
 
 
-    public LinkedHashMap<String, ActiveObject> getActiveMap() {
-        return activeMap;
-    }
 
-    public ActiveObject getActiveObject(String id) {
-        return activeMap.get(id);
-    }
-
-    public void setActiveMap(LinkedHashMap<String, ActiveObject> activeMap) {
-        this.activeMap = activeMap;
-        if(DEBUGMODE) Log.d(TAG, "activeList " + activeMap.size());
-    }
 
 
 
@@ -73,21 +52,10 @@ public class DataManager {
     public ActivityObject getObject(String key) {
         return objectMap.get(key);
     }
-
-
     public LinkedHashMap<String, ActivityObject> getObjectMap() {
         return objectMap;
     }
-
-
-    public void setObjectMap(LinkedHashMap<String, ActivityObject> objectMap) {
-        this.objectMap = objectMap;
-    }
-
-
-
     public int addObjectToActivityConfigurationMap(ActivityObject activityObject) {
-
         String id = activityObject.get_id();
         if (id != null && objectMap != null) {
 
@@ -102,6 +70,22 @@ public class DataManager {
 
 
 
+    public LinkedHashMap<String, ActiveObject> getActiveMap() {
+        return activeMap;
+    }
+    public ActiveObject getActiveObject(String id) {
+        return activeMap.get(id);
+    }
+    public void setActiveMap(LinkedHashMap<String, ActiveObject> activeMap) {
+        this.activeMap = activeMap;
+        if(DEBUGMODE) Log.d(TAG, "activeList " + activeMap.size());
+    }
+
+
+
+    public LinkedHashMap getPortionMap() {
+        return portionMap;
+    }
     public int addObjectToPortionMap(ActivityObject activityObject) {
 
         String id = activityObject.get_id();
@@ -117,6 +101,9 @@ public class DataManager {
     }
 
 
+    public LinkedHashMap getFoodMap() {
+        return foodMap;
+    }
     public int addObjectToFoodMap(ActivityObject activityObject) {
 
         String id = activityObject.get_id();
@@ -133,167 +120,16 @@ public class DataManager {
 
 
 
-    public boolean createActivityObject(String name, AAAActivityObject AAAActivityObject) {
-        if(name != null) {
-            if(!activityMap.containsKey(name)) {
-
-                if(AAAActivityObject != null) {
-                    activityMap.put(name, AAAActivityObject);
-                } else {
-                    activityMap.put(name, new AAAActivityObject(name));
-                }
-                return true;
-            }
-        }
-        return false;
-    }
 
 
 
 
-
-
-
-    public boolean setActivityObject(AAAActivityObject AAAActivityObject) {
-
-        String title = AAAActivityObject.title;
-        if (title != null && activityMap != null) {
-
-            if(!activityMap.containsKey(title)) {
-                createActivityObject(title, AAAActivityObject);
-            }
-            activityMap.put(title, AAAActivityObject);
-            if(DEBUGMODE && AAAActivityObject.timeFrameList.size()>1) {
-                Log.d(TAG, "key:" + AAAActivityObject.timeFrameList.get(AAAActivityObject.timeFrameList.size()-1).startTime);
-            }
-            return true;
-            }
-        return false;
-    }
-
-
-
-    public AAAActivityObject getActivityObject(String id) {
-        if(id != null && activityMap.containsKey(id)) {
-            return activityMap.get(id);
-        }
-        return null;
-    }
-
-
-
-
-    public LinkedHashMap getObjectMappp() {
-        return activityMap;
-    }
-
-
-
-
-
-//    public boolean createPortionObject(String name, AAAActivityObject AAAActivityObject) {
-//        if(name != null) {
-//            if(!portionMap.containsKey(name)) {
-//
-//                if(AAAActivityObject != null) {
-//                    portionMap.put(name, AAAActivityObject);
-//                } else {
-//                    portionMap.put(name, new AAAActivityObject(name));
-//                }
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    public boolean setPortionObject(AAAActivityObject AAAActivityObject) {
-//
-//        String title = AAAActivityObject.title;
-//        if (title != null && portionMap != null) {
-//
-//            if(!portionMap.containsKey(title)) {
-//                createPortionObject(title, AAAActivityObject);
-//            }
-//            portionMap.put(title, AAAActivityObject);
-////            if(DEBUGMODE && AAAActivityObject.timeFrameList.size()>1) {
-////                Log.d(TAG, "key:" + AAAActivityObject.timeFrameList.get(AAAActivityObject.timeFrameList.size()-1).startTime);
-////            }
-//            return true;
-//        }
-//        return false;
-//    }
-
-//    public AAAActivityObject getPortionObject(String name) {
-//        if(name != null && portionMap.containsKey(name)) {
-//            return portionMap.get(name);
-//        }
-//        return null;
-//    }
-
-    public LinkedHashMap getPortionMap() {
-        return portionMap;
-    }
-
-
-
-
-
-
-//    public boolean createFoodObject(String name, AAAActivityObject AAAActivityObject) {
-//        if(name != null) {
-//            if(!foodMap.containsKey(name)) {
-//
-//                if(AAAActivityObject != null) {
-//                    foodMap.put(name, AAAActivityObject);
-//                } else {
-//                    foodMap.put(name, new AAAActivityObject(name));
-//                }
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    public boolean setFoodObject(AAAActivityObject AAAActivityObject) {
-//
-//        String title = AAAActivityObject.title;
-//        if (title != null && foodMap != null) {
-//
-//            if(!foodMap.containsKey(title)) {
-//                createFoodObject(title, AAAActivityObject);
-//            }
-//            foodMap.put(title, AAAActivityObject);
-//            if(DEBUGMODE && AAAActivityObject.timeFrameList.size()>1) {
-//                Log.d(TAG, "key:" + AAAActivityObject.timeFrameList.get(AAAActivityObject.timeFrameList.size()-1).startTime);
-//            }
-//            return true;
-//        }
-//        return false;
-//    }
-
-//    public AAAActivityObject getFoodObject(String name) {
-//        if(name != null && foodMap.containsKey(name)) {
-//            return foodMap.get(name);
-//        }
-//        return null;
-//    }
-
-    public LinkedHashMap getFoodMap() {
-        return foodMap;
-    }
-
-
-
-
-
-
-
-    public boolean setCalenderMapEntry(String key, String activity) {
+    public boolean setCalenderMapEntry(String key, ActiveObject activity) {
 
         // check if key is not null
         if (key != null) {
 
-            ArrayList<String> list = null;
+            ArrayList<ActiveObject> list = null;
 
             if(activity != null && calenderMap.containsKey(key)) {
                 list = calenderMap.get(key);
@@ -301,7 +137,7 @@ public class DataManager {
                 if(list.contains(activity)) return true;
                 list.add(activity);
             } else {
-                list = new ArrayList<String>();
+                list = new ArrayList<ActiveObject>();
             }
             calenderMap.put(key, list);
             if (DEBUGMODE) {
@@ -316,14 +152,14 @@ public class DataManager {
     }
 
 
-    public boolean setActivityToCalendarList(String key, String activity) {
+    public boolean addActivityToCalendarList(String key, ActiveObject activity) {
 
         // check if key is not null
         if (key != null && activity != null) {
 
             if(calenderMap.containsKey(key)) {
 
-                ArrayList<String> list = calenderMap.get(key);
+                ArrayList<ActiveObject> list = calenderMap.get(key);
                 // do not add enty if list contains already activitys
                 if (list.contains(activity)) return false;
                 list.add(activity);
@@ -340,12 +176,12 @@ public class DataManager {
 
 
 
-    public boolean deleteCalenderMapEntry(String key, String activity){
+    public boolean deleteCalenderMapEntry(String key, ActiveObject activity){
 
         if(key != null && activity != null) {
 
             if(calenderMap.containsKey(key)) {
-                ArrayList<String> list = calenderMap.get(key);
+                ArrayList<ActiveObject> list = calenderMap.get(key);
                 if(DEBUGMODE) Log.d(TAG, "listSize before: " + list.size() + " " + list.toString());
 
 
@@ -358,22 +194,6 @@ public class DataManager {
 
         return false;
     }
-
-    public LinkedHashMap<String, ArrayList<String>> getCalendarMap() {
-        return calenderMap;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -413,10 +233,6 @@ public class DataManager {
     }
 
 
-
-
-
-
     public Stamp convertActiveObjectToStamp(ActiveObject activeObject) {
         Stamp stamp = new Stamp();
         String date =  activeObject.startTime.toString();
@@ -438,8 +254,6 @@ public class DataManager {
 
         return stamp;
     }
-
-
 
 
     private String convertBooleanToString(boolean contractWork) {
@@ -478,10 +292,82 @@ public class DataManager {
     }
 
 
+    /**
+     * Add Stamp Object to LogMap
+     *
+     * @param key       Key to find the Value again
+     * @param value     Object where all the values are written in
+     */
+    public void addToLogMap(Date key, Stamp value) {
+        if(key!= null && value != null) logMap.put(key, value);
+    }
 
 
-    public void addToLogMap(Date id, Stamp stamp) {
-        if(id!= null && stamp != null) logMap.put(id, stamp);
+    public void addToCalendarMap(ActiveObject activeObject) {
+
+        // find current TimeSlot
+        int startMin = activeObject.startTime.getMinutes();
+        int firstMin = 0;
+        if (startMin > Variables.getInstance().timeFrame) firstMin = Variables.getInstance().timeFrame;
+
+
+        Calendar calFirstTimeSlot = Calendar.getInstance();
+        calFirstTimeSlot.setTime(activeObject.startTime);
+        Date firstDate = calFirstTimeSlot.getTime();
+
+        // Set Current TimeSlot
+        firstDate.setSeconds(0);
+        firstDate.setMinutes(firstMin);
+
+
+//        Calendar cal = Calendar.getInstance();
+//        // cal.add(Calendar.HOUR, 2); // for Testing purpouse
+//        Date currentDate = cal.getTime();
+
+
+        if(DEBUGMODE) Log.d(TAG, "time1 " + activeObject.startTime);
+
+        // Calculate recording Time in min
+        long diff = activeObject.endTime.getTime() - activeObject.startTime.getTime();
+        long seconds = diff / 1000;
+        long minutes = seconds / 60;
+
+//        if (minutes >= Variables.getInstance().minRecordingTime) {
+
+
+            // Add Activity to CalendarMap
+            addActivityToCalendarList(firstDate.toString(), activeObject);
+
+            if (DEBUGMODE)
+                Log.d(TAG, "time2; " + activeObject.startTime + " || startTime; " + firstDate);
+
+            calFirstTimeSlot.setTime(firstDate);
+            calFirstTimeSlot.add(Calendar.MINUTE, Variables.getInstance().timeFrame);
+            firstDate = calFirstTimeSlot.getTime();
+
+            if (DEBUGMODE)
+                Log.d(TAG, "time3; " + activeObject.startTime + " || startTime; " + firstDate);
+
+            while (firstDate.before(activeObject.endTime)) {
+
+                addActivityToCalendarList(firstDate.toString(), activeObject);
+
+                // Count FirstDate + 30 min
+                calFirstTimeSlot.setTime(firstDate);
+                calFirstTimeSlot.add(Calendar.MINUTE, Variables.getInstance().timeFrame);
+                firstDate = calFirstTimeSlot.getTime();
+
+                if (DEBUGMODE) { Log.d(TAG, "time4; " +
+                        activeObject.startTime +
+                        " || startTime; " +
+                        firstDate +
+                        " || currentTime; " +
+                        activeObject.endTime);
+                }
+
+            }
+
+//        }
     }
 
 
@@ -519,5 +405,7 @@ public class DataManager {
         }
         return instance;
     }
+
+
 
 }

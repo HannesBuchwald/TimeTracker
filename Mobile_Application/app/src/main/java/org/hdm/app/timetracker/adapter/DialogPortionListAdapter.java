@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.hdm.app.timetracker.R;
-import org.hdm.app.timetracker.datastorage.AAAActivityObject;
 import org.hdm.app.timetracker.datastorage.ActivityObject;
 import org.hdm.app.timetracker.datastorage.DataManager;
 import org.hdm.app.timetracker.listener.DialogPortionListOnClickListener;
@@ -17,7 +16,6 @@ import org.hdm.app.timetracker.util.View_Holder;
 
 import java.util.List;
 
-import static org.hdm.app.timetracker.util.Consts.DEBUGMODE;
 import static org.hdm.app.timetracker.util.Consts.GREEN;
 import static org.hdm.app.timetracker.util.Consts.WHITE;
 

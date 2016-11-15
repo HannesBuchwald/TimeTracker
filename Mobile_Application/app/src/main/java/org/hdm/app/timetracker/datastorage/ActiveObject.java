@@ -17,7 +17,4 @@ public class ActiveObject {
     public boolean contractWork;
     public String author = "";
     public String delete = "";
-
-    public String portion = "";
-    public List<String> food;
 }
