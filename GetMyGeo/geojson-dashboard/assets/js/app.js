@@ -1,6 +1,10 @@
     var config = {
       //geojson: "https://web.fulcrumapp.com/shares/a5c8e07368efde43.geojson",
-      geojson: "assets/data/test.geojson",
+      geojson: "assets/data/test4.geojson",
+      //geojson: "http://localhost:3000/",
+      //geojson: "https://api.myjson.com/bins/163qx7",
+      //geojson: "http://getmygeo-164608.appspot.com",
+
       //title: "Geo TimeTracker",
       layerName: "Person",
       hoverProperty: "species_sim",
