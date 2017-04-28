@@ -2,7 +2,7 @@
 *.apk
 *.ap_
 
-# Files for the Dalvik VM
+# Files for the ART/Dalvik VM
 *.dex
 
 # Java class files
@@ -11,10 +11,12 @@
 # Generated files
 bin/
 gen/
+out/
 
 # Gradle files
 .gradle/
 build/
+
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -31,25 +33,10 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# OSX
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+# Intellij
+*.iml
+.idea/
 
-# Node
-node_modules
-npm-debug.log
-app/Sambia/.idea/misc.xml
-Dokumentation/~$Project_TimeTrecker_2016_Feature+BugReport.ods
+# Keystore files
+*.jks
+.gitignore

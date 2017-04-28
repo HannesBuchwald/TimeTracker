@@ -1,0 +1,46 @@
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/holo_green_light"
+    >
+
+
+    <org.hdm.app.timetracker.views.MenuView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/frag_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:elevation="20dp"
+        android:background="@drawable/myrect"
+        />
+
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rv_calender"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ECEFF1"
+        android:layout_below="@+id/frag_menu"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbarSize="10dp"
+        />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@android:drawable/ic_menu_edit"
+        android:background="@android:color/holo_red_light"/>
+
+</RelativeLayout>

@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+
+    >
+
+
+    <ImageView
+        android:id="@+id/iv_background_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_blue_light"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/iv_background_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="79dp"
+        android:background="@android:color/holo_blue_light"
+        android:visibility="gone"/>
+
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="right"
+        android:paddingRight="10dp"
+        android:text="Title"
+        android:textSize="18sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="70dp"
+            android:paddingRight="10dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="11dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+               >
+
+            <android.support.v7.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rv_calender_item_content"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp" />
+
+
+
+
+                <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/btn_calendar_row_add"
+                    android:layout_weight="5"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:innerRadius="0dp"
+                    android:shape="ring"
+                    app:cardCornerRadius="25dp"
+                    app:cardBackgroundColor="@color/transparent"
+                    app:cardElevation="0dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center"
+                        android:text="+"
+                        android:textColor="@android:color/black"
+                        android:textSize="30sp"/>
+                    >
+
+                    </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+</RelativeLayout>
