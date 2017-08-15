@@ -12,7 +12,7 @@ TimeTracker App is an Android Application to track daily activities.
 
 ## License
 
-    The application is are under GNU AGPLv3 License.
+    The application is are under GNU GPLv3 License.
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
