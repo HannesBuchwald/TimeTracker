@@ -9,6 +9,7 @@ TimeTracker App is an Android Application to track daily activities.
 ## Team
 
 - Hannes Buchwald ([hannes@timetracker.cc](mailto:hannes@timetracker.cc))
+- Thomas Daum ([thomas@timetracker.cc](mailto:thomas@timetracker.cc))
 
 ## License
 
